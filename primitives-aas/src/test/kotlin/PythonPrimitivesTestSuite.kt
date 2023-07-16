@@ -1,27 +1,22 @@
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.util.concurrent.CompletableFuture
+import java.math.BigInteger
 import java.util.concurrent.ExecutorService
 
 abstract class PythonPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
 
-    private val numOfPrimitives: Int = 27
-    private val startingPort = 8080
-    private val maxPort = startingPort + numOfPrimitives
+
+    private lateinit var startingPort: BigInteger
+    private lateinit var maxPort: BigInteger
     private lateinit var serverProcess: Process
 
     override fun getActivePorts(): Set<Int> =
-        (startingPort until maxPort).toSet()
+        (startingPort.toInt() until maxPort.toInt() + 1).toSet()
 
     private fun ExecutorService.pythonModuleExec(moduleName: String, healthCheck: String): Process {
         val process = ProcessBuilder("python", "-m", moduleName).start()
-        Runtime.getRuntime().addShutdownHook(Thread { 
-            if (process.isAlive) {
-                process.destroyForcibly()
-                process.waitFor()
-            }
+        Runtime.getRuntime().addShutdownHook(Thread {
+            print("closed")
+            process.destroyForcibly()
+            process.waitFor()
         })
         val healthCheckPattern = healthCheck.toRegex()
         submit {
@@ -29,14 +24,29 @@ abstract class PythonPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
                 it.forEach(System.err::println)
             }
         }
+
         val healthy = process.inputStream.bufferedReader().lineSequence().firstOrNull {
-            it.matches(healthCheckPattern)
+            if(it.matches(healthCheckPattern)) {
+                val ports = "[0-9]+".toRegex().findAll(it).map {num -> num.value.toBigInteger() }
+                startingPort = ports.first()
+                maxPort = ports.last()
+                true
+            } else false
         }
-        return if (healthy != null) process else error("Message here")
+        submit {
+            process.inputStream.bufferedReader().useLines {
+                it.forEach(System.out::println)
+            }
+        }
+        return if (healthy != null) process else error("Failed to start ml-lib server")
     }
 
     override fun beforeEach() {
-        serverProcess = executor.pythonModuleExec("prolog_primitives.ml_lib", "^Servers listening from \\d+ to \\d+")
+        startingPort = BigInteger.valueOf(8080)
+        maxPort = BigInteger.valueOf(8106)
+        serverProcess = executor.pythonModuleExec(
+           "prolog_primitives.ml_lib",
+            "^Servers listening from \\d+ to \\d+")
         super.beforeEach()
     }
 

@@ -3,8 +3,6 @@ package it.unibo.tuprolog.primitives.server.session.event.impl
 import it.unibo.tuprolog.core.Clause
 import it.unibo.tuprolog.primitives.GeneratorMsg
 import it.unibo.tuprolog.primitives.SubResponseMsg
-import it.unibo.tuprolog.primitives.messages.StructMsg
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
 import it.unibo.tuprolog.primitives.parsers.deserializers.deserializeAsClause
 import it.unibo.tuprolog.primitives.parsers.serializers.distribuited.buildInspectKbMsg
 import it.unibo.tuprolog.primitives.server.session.Session

@@ -1,8 +1,5 @@
 import it.unibo.tuprolog.dsl.theory.logicProgramming
 import it.unibo.tuprolog.primitives.client.PrimitiveClientFactory
-import io.grpc.Server
-import it.unibo.tuprolog.primitives.server.PrimitiveServerFactory
-import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
 import it.unibo.tuprolog.solve.MutableSolver
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.channel.InputChannel
@@ -12,7 +9,8 @@ import it.unibo.tuprolog.solve.library.Runtime
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import kotlin.test.*
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 
 abstract class AbstractPrimitivesTestSuite {
 

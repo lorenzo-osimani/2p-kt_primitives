@@ -3,7 +3,6 @@ package it.unibo.tuprolog.primitives.parsers.serializers
 import it.unibo.tuprolog.primitives.ErrorMsg
 import it.unibo.tuprolog.primitives.errors.*
 import it.unibo.tuprolog.primitives.parsers.ParsingException
-import it.unibo.tuprolog.primitives.parsers.serializers.distribuited.serialize
 import it.unibo.tuprolog.solve.exception.*
 import it.unibo.tuprolog.solve.exception.error.*
 import it.unibo.tuprolog.solve.exception.warning.InitializationIssue

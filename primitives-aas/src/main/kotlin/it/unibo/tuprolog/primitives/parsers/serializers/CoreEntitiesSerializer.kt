@@ -5,7 +5,6 @@ import it.unibo.tuprolog.primitives.messages.ArgumentMsg
 import it.unibo.tuprolog.primitives.messages.SignatureMsg
 import it.unibo.tuprolog.primitives.messages.StructMsg
 import it.unibo.tuprolog.solve.Signature
-import org.gciatto.kt.math.BigDecimal
 
 fun Term.serialize(): ArgumentMsg {
     val builder = ArgumentMsg.newBuilder()

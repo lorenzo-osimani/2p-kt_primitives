@@ -4,8 +4,6 @@ import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
 import it.unibo.tuprolog.primitives.server.session.Session
-import it.unibo.tuprolog.solve.sideffects.SideEffect
-import org.intellij.lang.annotations.Subst
 
 val filterKBPrimitive = DistributedPrimitiveWrapper("filterKB", 2) { request ->
         val arg1: Term = request.arguments[0]

@@ -1,18 +1,12 @@
 package it.unibo.tuprolog.primitives.client
 
 import io.grpc.stub.StreamObserver
-import it.unibo.tuprolog.core.Struct
-import it.unibo.tuprolog.core.operators.OperatorSet
 import it.unibo.tuprolog.primitives.InspectKbMsg
 import it.unibo.tuprolog.primitives.ReadLineMsg
 import it.unibo.tuprolog.primitives.SolverMsg
 import it.unibo.tuprolog.primitives.SubSolveRequest
 import it.unibo.tuprolog.primitives.client.impl.SessionSolverImpl
-import it.unibo.tuprolog.primitives.server.session.event.impl.GetEvent
 import it.unibo.tuprolog.solve.ExecutionContext
-import it.unibo.tuprolog.solve.data.CustomDataStore
-import it.unibo.tuprolog.solve.flags.FlagStore
-import it.unibo.tuprolog.unify.Unificator
 
 interface SessionSolver {
 

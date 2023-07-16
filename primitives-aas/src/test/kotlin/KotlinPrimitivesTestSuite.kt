@@ -1,11 +1,9 @@
 import io.grpc.Server
 import it.unibo.tuprolog.primitives.server.PrimitiveServerFactory
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.Mutex
 import java.util.concurrent.CountDownLatch
-import kotlin.test.*
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 
 abstract class KotlinPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
 
@@ -35,6 +33,7 @@ abstract class KotlinPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
     override fun afterEach() {
         activeServices.values.forEach {
             it.shutdownNow()
+            it.awaitTermination()
         }
         activeServices.clear()
         super.afterEach()

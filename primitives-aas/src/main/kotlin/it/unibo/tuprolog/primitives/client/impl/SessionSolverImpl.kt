@@ -14,9 +14,7 @@ import it.unibo.tuprolog.primitives.parsers.serializers.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.Solution
 import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.Runtime
 import it.unibo.tuprolog.solve.primitive.Solve
-import it.unibo.tuprolog.solve.sideffects.SideEffectsBuilder
 
 class SessionSolverImpl(
     private val responseObserver: StreamObserver<SolverMsg>,

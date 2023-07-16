@@ -4,15 +4,13 @@ import it.unibo.tuprolog.core.Clause
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.operators.OperatorSet
 import it.unibo.tuprolog.primitives.*
-import it.unibo.tuprolog.primitives.messages.*
+import it.unibo.tuprolog.primitives.messages.ChannelsMsg
+import it.unibo.tuprolog.primitives.messages.LogicStacktraceMsg
+import it.unibo.tuprolog.primitives.messages.StructMsg
 import it.unibo.tuprolog.solve.ExecutionContext
-import it.unibo.tuprolog.solve.channel.Channel
-import it.unibo.tuprolog.solve.channel.ChannelStore
-import it.unibo.tuprolog.solve.channel.InputChannel
-import it.unibo.tuprolog.solve.channel.InputStore
-import it.unibo.tuprolog.solve.library.Runtime
 import it.unibo.tuprolog.solve.data.CustomDataStore
 import it.unibo.tuprolog.solve.flags.FlagStore
+import it.unibo.tuprolog.solve.library.Runtime
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.unify.Unificator
 

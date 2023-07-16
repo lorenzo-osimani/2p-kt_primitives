@@ -345,11 +345,13 @@ abstract class SideEffect {
                         messages.containsKey(it.key)
                     }.map {
                         messages[it.key]!!.forEach {
-                            msg -> it.value.write(msg)
+                            msg ->
+                                it.value.write(msg)
                         }
                         it.toPair()
                     }
-                ))
+                )
+            )
     }
 
     abstract class AlterCustomData(open val data: Map<String, Any>, open val reset: Boolean = false) : SideEffect()

@@ -1,19 +1,11 @@
-import it.unibo.tuprolog.core.Struct
-import it.unibo.tuprolog.dsl.theory.logicProgramming
-import it.unibo.tuprolog.primitives.client.PrimitiveClientFactory
 import examples.innestedPrimitive
 import examples.ntPrimitive
 import examples.readerPrimitive
 import examples.throwablePrimitive
-import it.unibo.tuprolog.primitives.server.PrimitiveServerFactory
+import it.unibo.tuprolog.core.Struct
+import it.unibo.tuprolog.dsl.theory.logicProgramming
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.channel.InputChannel
 import it.unibo.tuprolog.solve.channel.InputStore
-import it.unibo.tuprolog.solve.library.Library
-import it.unibo.tuprolog.solve.library.Runtime
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import kotlin.test.*
 
 class TestBasicPrimitives: KotlinPrimitivesTestSuite() {

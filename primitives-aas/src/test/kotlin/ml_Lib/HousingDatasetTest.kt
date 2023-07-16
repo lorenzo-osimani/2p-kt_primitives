@@ -61,12 +61,12 @@ class HousingDatasetTest: PythonPrimitivesTestSuite() {
         logicProgramming {
             solver.appendStaticKb(Theory.Companion.of(
                 rule {
-                    "createModel"("NInput", "NOutput", G) `if` (
+                    "createModel"("NInput", "NOutput", E) `if` (
                         "input_layer"("NInput", A) and
-                            "dense_layer"(A, 100, "relu", B) and
-                            "dense_layer"(B, 50, "relu", C) and
-                            "output_layer"(C, "NOutput", "relu", F) and
-                            "neural_network"(F, G)
+                            "dense_layer"(A, 128, "relu", B) and
+                            "dense_layer"(B, 64, "relu", C) and
+                            "output_layer"(C, "NOutput", "linear", D) and
+                            "neural_network"(D, E)
                         )
                 },
                 rule {
@@ -80,7 +80,7 @@ class HousingDatasetTest: PythonPrimitivesTestSuite() {
                     "train_cv"("Dataset", "LearnParams", "AllPerformances") `if` (
                         "findall"(
                             "Performance",
-                            "train_cv_fold"("Dataset", 10, "LearnParams", "Performance"),
+                            "train_cv_fold"("Dataset", 5, "LearnParams", "Performance"),
                             "AllPerformances"
                         ) /* and
                             "mean"("AllPerformances", "AveragePerformance")*/
@@ -107,7 +107,7 @@ class HousingDatasetTest: PythonPrimitivesTestSuite() {
                 rule {
                     "test"("NN", "ValidationSet", "Performance") `if` (
                         "predict"("NN", "ValidationSet", "ActualPredictions") and
-                            "mse"("ActualPredictions", "ValidationSet", "Performance")
+                            "mae"("ActualPredictions", "ValidationSet", "Performance")
                         )
                 },
                 //Computes the Performance of the provided NN against the provided ValidationSet
