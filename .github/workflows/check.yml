@@ -43,7 +43,7 @@ jobs:
 #         - zulu
     runs-on: ${{ matrix.os }}
     name: Run tests via ${{ matrix.jdk-dist }} JDK v${{ matrix.java-version }}, on ${{ matrix.os }}
-    timeout-minutes: 60
+    timeout-minutes: 40
     concurrency:
       group: ${{ github.workflow }}-build-jvm-${{ matrix.os }}-${{ matrix.jdk-dist }}-${{ matrix.java-version }}-${{ github.event.number || github.ref }}
       cancel-in-progress: true
