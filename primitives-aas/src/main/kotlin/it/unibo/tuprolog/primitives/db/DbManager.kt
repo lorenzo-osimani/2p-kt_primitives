@@ -11,12 +11,20 @@ interface DbManager {
         val libraryName: String = ""
     )
 
-    fun addPrimitive(signature: Signature, url: String = "localhost",
-                     port: Int = 8080, libraryName: String = "") =
+    fun addPrimitive(
+        signature: Signature,
+        url: String = "localhost",
+        port: Int = 8080,
+        libraryName: String = ""
+    ) =
         addPrimitive(signature.name, signature.arity, url, port, libraryName)
 
-    fun addPrimitive(functor: String, arity: Int,
-        url: String = "localhost", port: Int = 8080, libraryName: String = ""
+    fun addPrimitive(
+        functor: String,
+        arity: Int,
+        url: String = "localhost",
+        port: Int = 8080,
+        libraryName: String = ""
     )
 
     fun getPrimitive(signature: Signature): Pair<String, Int>? = getPrimitive(signature.name, signature.arity)
@@ -34,11 +42,12 @@ interface DbManager {
         private var manager: DbManager? = null
 
         private const val port = 27017
-        private const val DB_USER="app_user"
-        private val DB_PASS="app_password"
-        //val URL_DOCKER = "mongodb://${DB_USER}:${DB_PASS}@mongodb"
+        private const val DB_USER = "app_user"
+        private val DB_PASS = "app_password"
+
+        // val URL_DOCKER = "mongodb://${DB_USER}:${DB_PASS}@mongodb"
         const val URL_LOCAL = "mongodb://localhost"
-        //val URL_DOCKER_LOCAL = "mongodb://${DB_USER}:${DB_PASS}@0.0.0.0"
+        // val URL_DOCKER_LOCAL = "mongodb://${DB_USER}:${DB_PASS}@0.0.0.0"
 
         init {
             try {
@@ -47,10 +56,9 @@ interface DbManager {
         }
 
         fun get(): DbManager {
-            if(manager != null)
+            if (manager != null) {
                 return manager!!
-            else throw IllegalStateException("Must be initialized first")
+            } else throw IllegalStateException("Must be initialized first")
         }
-
     }
 }

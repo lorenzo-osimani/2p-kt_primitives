@@ -19,7 +19,7 @@ import it.unibo.tuprolog.solve.primitive.Solve
 class SessionSolverImpl(
     private val responseObserver: StreamObserver<SolverMsg>,
     private val actualContext: ExecutionContext
-): SessionSolver {
+) : SessionSolver {
 
     private val sessionSolver: Solver = actualContext.createSolver()
 
@@ -48,51 +48,54 @@ class SessionSolverImpl(
     }
 
     override fun inspectKb(id: String, event: InspectKbMsg) {
-        if(!theoryIterator.containsKey(id)) {
-            val inspectedKB = when(event.kbType) {
+        if (!theoryIterator.containsKey(id)) {
+            val inspectedKB = when (event.kbType) {
                 InspectKbMsg.KbType.STATIC -> sessionSolver.staticKb
                 InspectKbMsg.KbType.DYNAMIC -> sessionSolver.dynamicKb
                 InspectKbMsg.KbType.BOTH -> sessionSolver.staticKb + sessionSolver.dynamicKb
                 else -> throw IllegalArgumentException()
             }
             val filters = event.filtersList.map { filter ->
-                when(filter.type) {
+                when (filter.type) {
                     InspectKbMsg.FilterType.CONTAINS_FUNCTOR -> {
-                        {clause: Clause ->
+                        { clause: Clause ->
                             clause.bodyItems.any {
                                 it.isStruct && it.castToStruct().functor == filter.argument
-                            }}
+                            } 
+                        }
                     }
                     InspectKbMsg.FilterType.CONTAINS_TERM -> {
-                        {clause: Clause ->
+                        { clause: Clause ->
                             clause.bodyItems.any {
                                 it.structurallyEquals(Term.parse(filter.argument))
-                            }}
+                            } 
+                        }
                     }
                     InspectKbMsg.FilterType.STARTS_WITH -> {
                         { clause: Clause ->
-                            if(clause.head != null)
+                            if (clause.head != null) {
                                 clause.head!!.toString().startsWith(filter.argument, true)
-                            else false
+                            } else false
                         }
                     }
                     else -> throw IllegalArgumentException()
                 }
             }
             val iterator = inspectedKB.filter {
-                filters.all {filter -> filter(it) }
+                filters.all { filter -> filter(it) }
             }
             theoryIterator[id] =
-                if(event.maxClauses.toInt() == -1)
+                if (event.maxClauses.toInt() == -1) {
                     iterator.iterator()
-                else
+                } else {
                     iterator.take(event.maxClauses.toInt()).iterator()
+                }
         }
 
         responseObserver.onNext(
             buildClauseMsg(
                 id,
-                if(theoryIterator[id]!!.hasNext()) {
+                if (theoryIterator[id]!!.hasNext()) {
                     theoryIterator[id]!!.next()
                 } else {
                     theoryIterator.remove(id)

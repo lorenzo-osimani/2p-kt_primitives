@@ -12,10 +12,12 @@ fun ExecutionContextMsg.deserialize(
     val source = this
     return object : DummyContext() {
         override val procedure = source.procedure.deserialize(scope)
-        override val substitution = Substitution.of(source.substitutionsMap.map
-        {
-            Pair(deserializeVar(it.key, scope), it.value.deserialize(scope))
-        }.toMap())
+        override val substitution = Substitution.of(
+            source.substitutionsMap.map
+            {
+                Pair(deserializeVar(it.key, scope), it.value.deserialize(scope))
+            }.toMap()
+        )
         override val startTime = source.startTime
         override val endTime = source.endTime
         override val remainingTime = source.remainingTime
@@ -23,8 +25,3 @@ fun ExecutionContextMsg.deserialize(
         override val maxDuration = source.maxDuration
     }
 }
-
-
-
-
-

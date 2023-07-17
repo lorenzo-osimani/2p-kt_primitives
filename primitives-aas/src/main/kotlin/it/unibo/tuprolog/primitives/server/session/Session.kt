@@ -17,7 +17,6 @@ interface Session {
      */
     fun readLine(channelName: String): String
 
-
     enum class KbType {
         STATIC,
         DYNAMIC

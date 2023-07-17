@@ -25,7 +25,7 @@ sealed interface DistributedSolution {
     class Yes(
         override val query: Struct,
         override val substitution: Substitution = Substitution.empty()
-    ): DistributedSolution {
+    ) : DistributedSolution {
         override val exception: DistributedError? = null
 
         override val solvedQuery: Struct? = substitution.applyTo(query)?.castToStruct()
@@ -38,7 +38,7 @@ sealed interface DistributedSolution {
     /** A type representing a failed solution */
     class No(
         override val query: Struct
-    ): DistributedSolution {
+    ) : DistributedSolution {
         override val substitution: Substitution = Substitution.failed()
 
         override val exception: DistributedError? = null
@@ -54,7 +54,7 @@ sealed interface DistributedSolution {
     class Halt(
         override val query: Struct,
         error: DistributedError
-    ): DistributedSolution {
+    ) : DistributedSolution {
         override val substitution: Substitution = Substitution.failed()
 
         override val exception: DistributedError = error
@@ -88,7 +88,5 @@ sealed interface DistributedSolution {
             error: DistributedError
         ): DistributedSolution =
             Halt(query, error)
-
     }
-
 }

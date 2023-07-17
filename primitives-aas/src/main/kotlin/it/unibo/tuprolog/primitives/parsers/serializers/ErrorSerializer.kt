@@ -15,20 +15,23 @@ fun ResolutionException.serialize(): ErrorMsg {
     }
     this.cause?.let {
         builder.setCause(
-            if(it is ResolutionException) it.serialize()
-            else ErrorMsg.newBuilder().setMessage(it.message ).build()
-        )}
+            if (it is ResolutionException) it.serialize()
+            else ErrorMsg.newBuilder().setMessage(it.message).build()
+        )
+    }
     return when (this) {
         is LogicError -> this.serialize(builder)
         is Warning -> this.serialize(builder)
         is HaltException ->
             builder.setHaltException(
                 HaltExceptionMsg.newBuilder()
-                    .setExitStatus(this.exitStatus)).build()
+                    .setExitStatus(this.exitStatus)
+            ).build()
         is TimeOutException ->
             builder.setTimeoutException(
                 TimeOutExceptionMsg.newBuilder()
-                    .setExceededDuration(this.exceededDuration)).build()
+                    .setExceededDuration(this.exceededDuration)
+            ).build()
         else -> builder.setResolutionException(ResolutionExceptionMsg.getDefaultInstance()).build()
     }
 }
@@ -96,14 +99,16 @@ fun LogicError.serialize(builder: ErrorMsg.Builder): ErrorMsg {
 }
 
 fun Warning.serialize(builder: ErrorMsg.Builder): ErrorMsg =
-    when(this) {
+    when (this) {
         is InitializationIssue ->
             builder.setInitializationIssue(
                 InitializationIssueMsg.newBuilder()
-                    .setGoal(this.goal.serialize())).build()
+                    .setGoal(this.goal.serialize())
+            ).build()
         is MissingPredicate ->
             builder.setMissingPredicate(
                 MissingPredicateMsg.newBuilder()
-                    .setSignature(this.signature.serialize())).build()
+                    .setSignature(this.signature.serialize())
+            ).build()
         else -> throw ParsingException(this)
     }

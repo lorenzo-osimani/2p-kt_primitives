@@ -29,11 +29,13 @@ object PrimitiveServerFactory {
             .executor(executor)
             .build()
         genericPrimitive!!.start()
-        //DbManager.get().addPrimitive(service.signature, port = port, libraryName =  libraryName)
-        Runtime.getRuntime().addShutdownHook(Thread {
-            //DbManager.get().deletePrimitive(service.signature, libraryName)
-            genericPrimitive.shutdownNow()
-        })
+        // DbManager.get().addPrimitive(service.signature, port = port, libraryName =  libraryName)
+        Runtime.getRuntime().addShutdownHook(
+            Thread {
+                // DbManager.get().deletePrimitive(service.signature, libraryName)
+                genericPrimitive.shutdownNow()
+            }
+        )
         println("${service.signature.name} of $libraryName listening on port $port")
         return genericPrimitive
     }

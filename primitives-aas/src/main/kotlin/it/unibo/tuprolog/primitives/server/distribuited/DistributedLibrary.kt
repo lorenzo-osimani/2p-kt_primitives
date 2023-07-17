@@ -18,7 +18,7 @@ data class DistributedRuntime(
         get() = libraries.map { it.alias }
 
     companion object {
-         fun of(libraries: Iterable<DistributedLibrary>) =
-             DistributedRuntime(libraries)
+        fun of(libraries: Iterable<DistributedLibrary>) =
+            DistributedRuntime(libraries)
     }
 }

@@ -16,7 +16,7 @@ data class DistributedRequest(
     val arguments: List<Term>,
     val context: DistributedExecutionContext,
     private val session: ServerSession
-): Session {
+) : Session {
 
     val query: Struct by lazy { signature withArgs arguments }
 
@@ -25,7 +25,8 @@ data class DistributedRequest(
         vararg sideEffect: SideEffect
     ) = DistributedResponse(
         if (condition) DistributedSolution.yes(query) else DistributedSolution.no(query),
-        sideEffect.asList())
+        sideEffect.asList()
+    )
 
     fun replySuccess(
         vararg sideEffect: SideEffect
@@ -33,7 +34,6 @@ data class DistributedRequest(
         DistributedSolution.yes(query),
         sideEffect.asList()
     )
-
 
     fun replySuccess(
         substitution: Substitution.Unifier,
@@ -54,7 +54,7 @@ data class DistributedRequest(
         e: DistributedError,
         vararg sideEffect: SideEffect
     ) = DistributedResponse(
-            DistributedSolution.halt(query, e),
+        DistributedSolution.halt(query, e),
         sideEffect.asList()
     )
 

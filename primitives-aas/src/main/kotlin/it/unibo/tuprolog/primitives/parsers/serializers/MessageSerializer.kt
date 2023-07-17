@@ -33,7 +33,8 @@ fun buildLineMsg(id: String, channelName: String, line: String): SolverMsg {
     return SolverMsg.newBuilder().setResponse(
         SubResponseMsg.newBuilder().setId(id).setLine(
             if (line.isBlank()) builder.setFailed(true)
-            else builder.setContent(line))
+            else builder.setContent(line)
+        )
     ).build()
 }
 
@@ -56,7 +57,6 @@ fun buildCustomDataStoreResponse(id: String, content: CustomDataStore): SolverMs
             )
         )
     ).build()
-
 
 fun buildUnificatorResponse(id: String, content: Unificator): SolverMsg =
     SolverMsg.newBuilder().setResponse(
@@ -106,16 +106,17 @@ fun buildChannelResponse(id: String, names: List<String>): SolverMsg =
 fun buildSubSolveSolutionMsg(id: String, response: Solve.Response, hasNext: Boolean = true): SolverMsg =
     SolverMsg.newBuilder().setResponse(
         SubResponseMsg.newBuilder().setId(id).setSolution(
-            response.serialize(hasNext)))
+            response.serialize(hasNext)
+        )
+    )
         .build()
 
 fun buildClauseMsg(id: String, clause: Clause?): SolverMsg {
     val builder = SubResponseMsg.newBuilder().setId(id)
-    if(clause != null)
+    if (clause != null) {
         builder.setClause(clause.serialize())
-    else
+    } else {
         builder.setClause(StructMsg.getDefaultInstance())
+    }
     return SolverMsg.newBuilder().setResponse(builder).build()
 }
-
-

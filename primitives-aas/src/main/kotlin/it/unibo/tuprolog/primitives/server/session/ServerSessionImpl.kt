@@ -7,17 +7,17 @@ import it.unibo.tuprolog.core.operators.OperatorSet
 import it.unibo.tuprolog.primitives.GeneratorMsg
 import it.unibo.tuprolog.primitives.RequestMsg
 import it.unibo.tuprolog.primitives.SolverMsg
-import it.unibo.tuprolog.primitives.utils.idGenerator
 import it.unibo.tuprolog.primitives.parsers.deserializers.distribuited.deserializeAsDistributed
 import it.unibo.tuprolog.primitives.parsers.serializers.distribuited.serialize
+import it.unibo.tuprolog.primitives.server.distribuited.DistributedRuntime
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitive
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedResponse
-import it.unibo.tuprolog.primitives.server.distribuited.DistributedRuntime
 import it.unibo.tuprolog.primitives.server.session.event.SubRequestEvent
 import it.unibo.tuprolog.primitives.server.session.event.impl.GetEvent
-import it.unibo.tuprolog.primitives.server.session.event.impl.SingleInspectKbEvent
 import it.unibo.tuprolog.primitives.server.session.event.impl.ReadLineEvent
+import it.unibo.tuprolog.primitives.server.session.event.impl.SingleInspectKbEvent
 import it.unibo.tuprolog.primitives.server.session.event.impl.SingleSubSolveEvent
+import it.unibo.tuprolog.primitives.utils.idGenerator
 import it.unibo.tuprolog.solve.data.CustomDataStore
 import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.unify.Unificator
@@ -30,7 +30,7 @@ class ServerSessionImpl(
     primitive: DistributedPrimitive,
     request: RequestMsg,
     private val responseObserver: StreamObserver<GeneratorMsg>,
-): ServerSession {
+) : ServerSession {
 
     private val stream: Iterator<DistributedResponse>
     private val ongoingSubRequests: MutableList<SubRequestEvent> = mutableListOf()
@@ -63,7 +63,7 @@ class ServerSessionImpl(
     }
 
     override fun subSolve(query: Struct, timeout: Long): Sequence<DistributedResponse> =
-        object: Iterator<DistributedResponse> {
+        object : Iterator<DistributedResponse> {
             val id: String = idGenerator()
             private var hasNext: Boolean = true
 
@@ -90,7 +90,7 @@ class ServerSessionImpl(
         maxClauses: Long,
         vararg filters: Pair<Session.KbFilter, String>
     ): Sequence<Clause?> =
-        object: Iterator<Clause?> {
+        object : Iterator<Clause?> {
             private val id = idGenerator()
             private var hasNext: Boolean = true
 
@@ -119,7 +119,6 @@ class ServerSessionImpl(
         enqueueRequestAndAwait(
             GetEvent.ofUnificator(idGenerator())
         )
-
 
     override fun getLibraries(): DistributedRuntime =
         enqueueRequestAndAwait(
@@ -152,10 +151,10 @@ class ServerSessionImpl(
         val result = request.awaitResult().also {
             ongoingSubRequests.remove(request)
         }
-        return if(result is T)
+        return if (result is T) {
             result
-        else
+        } else {
             throw TypeCastException()
+        }
     }
-
 }

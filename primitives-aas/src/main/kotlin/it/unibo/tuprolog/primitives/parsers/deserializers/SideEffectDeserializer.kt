@@ -9,14 +9,14 @@ import it.unibo.tuprolog.solve.library.Runtime
 import it.unibo.tuprolog.solve.sideffects.SideEffect
 
 fun SideEffectMsg.deserialize(): SideEffect {
-    when(this.msgCase) {
+    when (this.msgCase) {
         SideEffectMsg.MsgCase.CLAUSES -> {
             val effect = this.clauses
             val clauses = effect.clausesList
                 .map { it.deserialize().castToClause() }
-            when(effect.kbType) {
+            when (effect.kbType) {
                 SetClausesOfKBMsg.KbType.STATIC -> {
-                    when(effect.operationType) {
+                    when (effect.operationType) {
                         SetClausesOfKBMsg.OpType.RESET ->
                             return SideEffect.ResetStaticKb(clauses)
                         SetClausesOfKBMsg.OpType.ADD ->
@@ -27,7 +27,7 @@ fun SideEffectMsg.deserialize(): SideEffect {
                     }
                 }
                 SetClausesOfKBMsg.KbType.DYNAMIC -> {
-                    when(effect.operationType) {
+                    when (effect.operationType) {
                         SetClausesOfKBMsg.OpType.RESET ->
                             return SideEffect.ResetDynamicKb(clauses)
                         SetClausesOfKBMsg.OpType.ADD ->
@@ -45,7 +45,7 @@ fun SideEffectMsg.deserialize(): SideEffect {
             val flags = effect.flagsMap.map {
                 Pair(it.key, it.value.deserialize())
             }.toMap()
-            when(effect.operationType) {
+            when (effect.operationType) {
                 AlterFlagsMsg.OpType.RESET ->
                     return SideEffect.ResetFlags(flags)
                 AlterFlagsMsg.OpType.SET ->
@@ -57,22 +57,21 @@ fun SideEffectMsg.deserialize(): SideEffect {
         }
         SideEffectMsg.MsgCase.RUNTIME -> {
             val effect = this.runtime
-            when(effect.operationType) {
+            when (effect.operationType) {
                 AlterRuntimeMsg.OpType.LOAD ->
                     return SideEffect.LoadLibrary(Library.of(effect.getLibraries(0)))
                 AlterRuntimeMsg.OpType.UNLOAD ->
                     return SideEffect.UnloadLibraries(effect.librariesList)
-                //To Solve
+                // To Solve
                 AlterRuntimeMsg.OpType.RESET ->
                     return SideEffect.ResetRuntime(Runtime.empty())
                 else -> {}
             }
-
         }
         SideEffectMsg.MsgCase.OPERATORS -> {
             val effect = this.operators
             val operators = effect.operatorsList.map { it.deserialize() }
-            when(effect.operationType) {
+            when (effect.operationType) {
                 AlterOperatorsMsg.OpType.SET ->
                     return SideEffect.SetOperators(operators)
                 AlterOperatorsMsg.OpType.RESET ->
@@ -84,8 +83,8 @@ fun SideEffectMsg.deserialize(): SideEffect {
         }
         SideEffectMsg.MsgCase.CHANNELS -> {
             val effect = this.channels
-            if(effect.hasClose()) {
-                when(effect.close.channelType) {
+            if (effect.hasClose()) {
+                when (effect.close.channelType) {
                     AlterChannelsMsg.ChannelType.INPUT -> {
                         return SideEffect.CloseInputChannels(effect.close.channelsList)
                     }
@@ -95,12 +94,15 @@ fun SideEffectMsg.deserialize(): SideEffect {
                     else -> {}
                 }
             } else if (effect.hasModify()) {
-                when(effect.modify.channelType) {
+                when (effect.modify.channelType) {
                     AlterChannelsMsg.ChannelType.INPUT -> {
                         val inputs = effect.modify.channelsMap.map {
-                            Pair(it.key, InputChannel.of(it.value)
-                            ) }.toMap()
-                        when(effect.modify.opType) {
+                            Pair(
+                                it.key,
+                                InputChannel.of(it.value)
+                            )
+                        }.toMap()
+                        when (effect.modify.opType) {
                             AlterChannelsMsg.ModifyChannels.OpType.OPEN -> {
                                 return SideEffect.OpenInputChannels(inputs)
                             }
@@ -112,9 +114,10 @@ fun SideEffectMsg.deserialize(): SideEffect {
                     }
                     AlterChannelsMsg.ChannelType.OUTPUT -> {
                         val outputs = effect.modify.channelsMap.map {
-                            Pair(it.key, OutputChannel.of<String> {  }) }
+                            Pair(it.key, OutputChannel.of<String> { })
+                        }
                             .toMap()
-                        when(effect.modify.opType) {
+                        when (effect.modify.opType) {
                             AlterChannelsMsg.ModifyChannels.OpType.OPEN -> {
                                 return SideEffect.OpenOutputChannels(outputs)
                             }
@@ -130,12 +133,13 @@ fun SideEffectMsg.deserialize(): SideEffect {
                 return SideEffect.WriteOnOutputChannels(
                     effect.write.messagesMap.mapValues {
                         it.value.messageList
-                    })
+                    }
+                )
             }
         }
         SideEffectMsg.MsgCase.CUSTOMDATA -> {
             val effect = this.customData
-            when(effect.type) {
+            when (effect.type) {
                 AlterCustomDataMsg.OpType.SET_PERSISTENT ->
                     return SideEffect.SetPersistentData(effect.dataMap)
                 AlterCustomDataMsg.OpType.SET_DURABLE ->

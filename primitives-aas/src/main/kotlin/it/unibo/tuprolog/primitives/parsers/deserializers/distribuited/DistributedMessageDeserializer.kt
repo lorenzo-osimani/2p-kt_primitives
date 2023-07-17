@@ -21,5 +21,3 @@ fun ResponseMsg.deserializeAsDistributed(scope: Scope = Scope.empty()): Distribu
         solution = this.solution.deserializeAsDistributed(scope),
         sideEffects = this.sideEffectsList.map { it.deserialize() }
     )
-
-

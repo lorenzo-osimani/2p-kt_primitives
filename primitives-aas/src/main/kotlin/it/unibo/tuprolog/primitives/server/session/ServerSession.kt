@@ -6,7 +6,7 @@ import it.unibo.tuprolog.primitives.RequestMsg
 import it.unibo.tuprolog.primitives.SolverMsg
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitive
 
-interface ServerSession: Session, ContextRequester {
+interface ServerSession : Session, ContextRequester {
 
     fun handleMessage(msg: SolverMsg)
 

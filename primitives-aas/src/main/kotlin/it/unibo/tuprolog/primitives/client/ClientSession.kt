@@ -7,7 +7,7 @@ import it.unibo.tuprolog.primitives.client.impl.ClientSessionImpl
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
 
-interface ClientSession: StreamObserver<GeneratorMsg> {
+interface ClientSession : StreamObserver<GeneratorMsg> {
 
     val solutionsQueue: Iterator<Solve.Response>
 
@@ -17,6 +17,5 @@ interface ClientSession: StreamObserver<GeneratorMsg> {
             channelBuilder: ManagedChannelBuilder<*>
         ): ClientSession =
             ClientSessionImpl(request, channelBuilder)
-
     }
 }

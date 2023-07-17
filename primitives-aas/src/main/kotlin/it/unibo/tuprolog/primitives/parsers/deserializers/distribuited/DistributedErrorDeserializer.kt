@@ -9,28 +9,36 @@ import it.unibo.tuprolog.primitives.server.distribuited.DistributedError
 import it.unibo.tuprolog.solve.exception.error.*
 
 fun ErrorMsg.deserializeAsDistributed(scope: Scope = Scope.empty()): DistributedError {
-    val message = if(this.hasMessage()) {
+    val message = if (this.hasMessage()) {
         this.message
     } else null
-    val cause = if(this.hasCause()) {
+    val cause = if (this.hasCause()) {
         this.cause.deserializeAsDistributed(scope)
     } else null
-    return when(this.errorCase) {
+    return when (this.errorCase) {
         ErrorMsg.ErrorCase.LOGICERROR -> {
             this.logicError.deserializeAsDistributed(message, cause)
         }
         ErrorMsg.ErrorCase.INITIALIZATIONISSUE -> {
             DistributedError.InitializationIssue(
-                message, cause, this.initializationIssue.goal.deserialize()
+                message,
+                cause,
+                this.initializationIssue.goal.deserialize()
             )
         }
         ErrorMsg.ErrorCase.MISSINGPREDICATE -> {
             DistributedError.MissingPredicate(
-                message, cause, this.missingPredicate.signature.deserialize())
+                message,
+                cause,
+                this.missingPredicate.signature.deserialize()
+            )
         }
         ErrorMsg.ErrorCase.HALTEXCEPTION -> {
             DistributedError.HaltException(
-                message, cause, this.haltException.exitStatus)
+                message,
+                cause,
+                this.haltException.exitStatus
+            )
         }
         ErrorMsg.ErrorCase.RESOLUTIONEXCEPTION -> {
             DistributedError.ResolutionException(message, cause)
@@ -48,10 +56,10 @@ fun LogicErrorMsg.deserializeAsDistributed(
     cause: Throwable?,
 ): DistributedError {
     val extraData =
-        if(this.extraData.isInitialized)
+        if (this.extraData.isInitialized) {
             this.extraData.deserialize()
-        else null
-    return when(this.errorCase) {
+        } else null
+    return when (this.errorCase) {
         LogicErrorMsg.ErrorCase.DOMAINERROR -> {
             val error = this.domainError
             DistributedError.DomainError(
@@ -128,7 +136,8 @@ fun LogicErrorMsg.deserializeAsDistributed(
                 message,
                 cause,
                 type.deserialize().castToStruct(),
-                extraData)
+                extraData
+            )
         }
     }
 }

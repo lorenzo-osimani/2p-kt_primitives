@@ -13,9 +13,11 @@ import it.unibo.tuprolog.unify.Unificator
 fun ExecutionContext.serialize(): ExecutionContextMsg =
     ExecutionContextMsg.newBuilder()
         .setProcedure(procedure?.serialize())
-        .putAllSubstitutions(substitution.map {
-            Pair(it.key.name, it.value.serialize())
-        }.toMap())
+        .putAllSubstitutions(
+            substitution.map {
+                Pair(it.key.name, it.value.serialize())
+            }.toMap()
+        )
         .setStartTime(startTime)
         .setEndTime(endTime)
         .setRemainingTime(remainingTime)
@@ -25,8 +27,11 @@ fun ExecutionContext.serialize(): ExecutionContextMsg =
 
 fun Unificator.serialize(): UnificatorMsg =
     UnificatorMsg.newBuilder()
-        .putAllUnificator(this.context.map {
-            Pair(it.key.name, it.value.serialize())}.toMap())
+        .putAllUnificator(
+            this.context.map {
+                Pair(it.key.name, it.value.serialize())
+            }.toMap()
+        )
         .build()
 
 fun Runtime.serialize(): LibrariesMsg =
@@ -64,7 +69,8 @@ fun OperatorSet.serialize(): OperatorSetMsg =
                     .setPriority(it.priority)
                     .setSpecifier(it.specifier.name)
                     .build()
-            }).build()
+            }
+        ).build()
 
 fun CustomDataStore.serialize(): CustomDataMsg =
     CustomDataMsg.newBuilder()

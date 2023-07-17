@@ -15,20 +15,21 @@ import it.unibo.tuprolog.solve.exception.warning.InitializationIssue
 import it.unibo.tuprolog.solve.exception.warning.MissingPredicate
 
 fun ErrorMsg.deserialize(scope: Scope = Scope.empty(), actualContext: ExecutionContext): ResolutionException {
-    val message = if(this.hasMessage()) {
+    val message = if (this.hasMessage()) {
         this.message
     } else null
-    val cause = if(this.hasCause()) {
+    val cause = if (this.hasCause()) {
         this.cause.deserialize(scope, actualContext)
     } else null
-    return when(this.errorCase) {
+    return when (this.errorCase) {
         ErrorMsg.ErrorCase.LOGICERROR -> {
             this.logicError.deserialize(message, cause, actualContext)
         }
         ErrorMsg.ErrorCase.INITIALIZATIONISSUE -> {
             InitializationIssue(
                 this.initializationIssue.goal.deserialize(),
-                cause, actualContext
+                cause,
+                actualContext
             )
         }
         ErrorMsg.ErrorCase.MISSINGPREDICATE -> {
@@ -50,14 +51,16 @@ fun ErrorMsg.deserialize(scope: Scope = Scope.empty(), actualContext: ExecutionC
 
 fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: ExecutionContext): LogicError {
     val extraData =
-        if(this.extraData != ArgumentMsg.getDefaultInstance())
+        if (this.extraData != ArgumentMsg.getDefaultInstance()) {
             this.extraData.deserialize()
-        else null
-    return when(this.errorCase) {
+        } else null
+    return when (this.errorCase) {
         LogicErrorMsg.ErrorCase.DOMAINERROR -> {
             val error = this.domainError
             DomainError(
-                message, cause, context,
+                message,
+                cause,
+                context,
                 DomainError.Expected.valueOf(error.expectedDomain),
                 error.culprit.deserialize(),
                 extraData
@@ -65,7 +68,9 @@ fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: Exec
         }
         LogicErrorMsg.ErrorCase.EVALUATIONERROR -> {
             EvaluationError(
-                message, cause, context,
+                message,
+                cause,
+                context,
                 EvaluationError.Type.valueOf(this.evaluationError.errorType),
                 extraData
             )
@@ -73,7 +78,9 @@ fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: Exec
         LogicErrorMsg.ErrorCase.EXISTENCEERROR -> {
             val error = this.existenceError
             ExistenceError(
-                message, cause, context,
+                message,
+                cause,
+                context,
                 ExistenceError.ObjectType.valueOf(error.expectedObject),
                 error.culprit.deserialize(),
                 extraData
@@ -81,7 +88,9 @@ fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: Exec
         }
         LogicErrorMsg.ErrorCase.INSTANTIATIONERROR -> {
             InstantiationError(
-                message, cause, context,
+                message,
+                cause,
+                context,
                 this.instantiationError.culprit.deserialize().castToVar(),
                 extraData
             )
@@ -89,7 +98,9 @@ fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: Exec
         LogicErrorMsg.ErrorCase.PERMISSIONERROR -> {
             val error = this.permissionError
             PermissionError(
-                message, cause, context,
+                message,
+                cause,
+                context,
                 PermissionError.Operation.valueOf(error.operation),
                 PermissionError.Permission.valueOf(error.permission),
                 this.permissionError.culprit.deserialize().castToVar(),
@@ -98,7 +109,9 @@ fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: Exec
         }
         LogicErrorMsg.ErrorCase.REPRESENTATIONERROR -> {
             RepresentationError(
-                message, cause, context,
+                message,
+                cause,
+                context,
                 RepresentationError.Limit.valueOf(this.representationError.limit),
                 extraData
             )
@@ -112,7 +125,9 @@ fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: Exec
         LogicErrorMsg.ErrorCase.TYPEERROR -> {
             val error = this.typeError
             TypeError(
-                message, cause, context,
+                message,
+                cause,
+                context,
                 TypeError.Expected.valueOf(error.expectedType),
                 this.typeError.culprit.deserialize(),
                 extraData
@@ -120,8 +135,12 @@ fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: Exec
         }
         else -> {
             LogicError.of(
-                message, cause, context,
-                type.deserialize().castToStruct(), extraData)
+                message,
+                cause,
+                context,
+                type.deserialize().castToStruct(),
+                extraData
+            )
         }
     }
 }

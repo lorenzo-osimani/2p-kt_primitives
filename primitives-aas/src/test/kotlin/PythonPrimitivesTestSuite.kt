@@ -14,7 +14,6 @@ abstract class PythonPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
     private fun ExecutorService.pythonModuleExec(moduleName: String, healthCheck: String): Process {
         val process = ProcessBuilder("python", "-m", moduleName).start()
         Runtime.getRuntime().addShutdownHook(Thread {
-            print("closed")
             process.destroyForcibly()
             process.waitFor()
         })

@@ -13,7 +13,7 @@ import it.unibo.tuprolog.theory.MutableTheory
 import it.unibo.tuprolog.theory.Theory
 import it.unibo.tuprolog.unify.Unificator
 
-open class DummyContext: ExecutionContext {
+open class DummyContext : ExecutionContext {
 
     override val unificator: Unificator = Unificator.default
 
@@ -82,5 +82,4 @@ open class DummyContext: ExecutionContext {
     override val inputChannels: InputStore = InputStore.fromStandard()
 
     override val outputChannels: OutputStore = OutputStore.fromStandard()
-
 }

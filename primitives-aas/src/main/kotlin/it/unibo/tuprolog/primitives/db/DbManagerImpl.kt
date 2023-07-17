@@ -5,7 +5,7 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import org.litote.kmongo.*
 
-class DbManagerImpl(url: String, port: Int): DbManager {
+class DbManagerImpl(url: String, port: Int) : DbManager {
     data class SerializedPrimitive(
         val functor: String,
         val arity: Int,
@@ -17,25 +17,33 @@ class DbManagerImpl(url: String, port: Int): DbManager {
     private val primitivesDB: MongoCollection<SerializedPrimitive>
 
     init {
-        val db = KMongo.createClient(ConnectionString("${url}:${port}"))
+        val db = KMongo.createClient(ConnectionString("$url:$port"))
             .getDatabase("primitives")
         primitivesDB = db.getCollection<SerializedPrimitive>()
     }
 
-    override fun addPrimitive(functor: String, arity: Int,
-                              url: String, port: Int, libraryName: String) {
+    override fun addPrimitive(
+        functor: String,
+        arity: Int,
+        url: String,
+        port: Int,
+        libraryName: String
+    ) {
         checkInitialization {
-            if(getPrimitive(functor, arity) == null)
+            if (getPrimitive(functor, arity) == null) {
                 primitivesDB.insertOne(SerializedPrimitive(functor, arity, url, port, libraryName))
-            else
-                //To choose between error and update
+            } else {
+                // To choose between error and update
                 primitivesDB.updateOne(
                     Filters.and(
                         SerializedPrimitive::functor eq functor,
                         SerializedPrimitive::arity eq arity,
-                        SerializedPrimitive::libraryName eq libraryName),
+                        SerializedPrimitive::libraryName eq libraryName
+                    ),
                     SetTo(SerializedPrimitive::url, url),
-                    SetTo(SerializedPrimitive::port, port))
+                    SetTo(SerializedPrimitive::port, port)
+                )
+            }
         }
     }
 
@@ -54,7 +62,8 @@ class DbManagerImpl(url: String, port: Int): DbManager {
             .deleteOne(
                 SerializedPrimitive::functor eq functor,
                 SerializedPrimitive::arity eq arity,
-                SerializedPrimitive::libraryName eq libraryName)
+                SerializedPrimitive::libraryName eq libraryName
+            )
     }
 
     override fun getLibrary(libraryName: String): Set<Pair<String, Int>> {

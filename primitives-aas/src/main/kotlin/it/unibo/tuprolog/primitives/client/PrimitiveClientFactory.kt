@@ -1,14 +1,11 @@
 package it.unibo.tuprolog.primitives.client
 
-import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
-import it.unibo.tuprolog.primitives.db.DbManager
 import it.unibo.tuprolog.primitives.GenericPrimitiveServiceGrpc
 import it.unibo.tuprolog.primitives.messages.EmptyMsg
 import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.Signature
-import it.unibo.tuprolog.solve.library.Library
 import it.unibo.tuprolog.solve.primitive.Primitive
 import it.unibo.tuprolog.solve.primitive.Solve
 import java.util.concurrent.TimeUnit

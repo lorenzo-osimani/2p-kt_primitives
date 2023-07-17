@@ -19,7 +19,7 @@ import it.unibo.tuprolog.solve.primitive.Solve
 import java.util.concurrent.LinkedBlockingDeque
 import java.util.concurrent.TimeUnit
 
-class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, channelBuilder: ManagedChannelBuilder<*>):
+class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, channelBuilder: ManagedChannelBuilder<*>) :
     ClientSession {
 
     private var closed = false
@@ -38,24 +38,23 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
     }
 
     override fun onNext(value: GeneratorMsg) {
-        if(value.hasResponse()) {
+        if (value.hasResponse()) {
             val response = value.response.deserialize(scope, request.context)
             queue.add(response)
-            if(!response.solution.isHalt and !value.response.solution.hasNext) {
+            if (!response.solution.isHalt and !value.response.solution.hasNext) {
                 this.onCompleted()
             }
-        }
-        else if(value.hasRequest()) {
+        } else if (value.hasRequest()) {
             val request = value.request
-            if(request.hasSubSolve())
+            if (request.hasSubSolve()) {
                 sessionSolver.solve(request.id, request.subSolve)
-            else if(request.hasReadLine())
+            } else if (request.hasReadLine()) {
                 sessionSolver.readLine(request.id, request.readLine)
-            else if(request.hasInspectKb())
+            } else if (request.hasInspectKb()) {
                 sessionSolver.inspectKb(request.id, request.inspectKb)
-            else if(request.hasGenericGet()) {
+            } else if (request.hasGenericGet()) {
                 val get = request.genericGet
-                when(get.element) {
+                when (get.element) {
                     GenericGetMsg.Element.LOGIC_STACKTRACE ->
                         sessionSolver.getLogicStackTrace(request.id)
                     GenericGetMsg.Element.CUSTOM_DATA_STORE ->
@@ -79,18 +78,20 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
     }
 
     private fun closeChannel() {
-        if(!channel.isShutdown) {
+        if (!channel.isShutdown) {
             channel.shutdownNow()
             channel.awaitTermination(3, TimeUnit.SECONDS)
         }
     }
 
-
     override fun onError(t: Throwable?) {
         queue.add(
-            request.replyException(ResolutionException(
-                context = request.context,
-                cause = t))
+            request.replyException(
+                ResolutionException(
+                    context = request.context,
+                    cause = t
+                )
+            )
         )
         closed = true
         closeChannel()
@@ -102,16 +103,15 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
     }
 
     override val solutionsQueue: Iterator<Solve.Response> =
-        object: Iterator<Solve.Response> {
+        object : Iterator<Solve.Response> {
             override fun hasNext(): Boolean = !closed
 
             override fun next(): Solve.Response {
                 responseStream.onNext(
                     SolverMsg.newBuilder().setNext(EmptyMsg.getDefaultInstance()).build()
                 )
-                
+
                 return queue.takeFirst()
             }
         }
-
 }

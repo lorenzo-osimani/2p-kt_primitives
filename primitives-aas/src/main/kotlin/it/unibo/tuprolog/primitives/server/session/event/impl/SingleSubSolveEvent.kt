@@ -15,7 +15,7 @@ class SingleSubSolveEvent(
     override val id: String,
     query: Struct,
     timeout: Long
-): SubRequestEvent {
+) : SubRequestEvent {
 
     override val message: GeneratorMsg = buildSubSolveMsg(query, id, timeout = timeout)
 
@@ -33,9 +33,10 @@ class SingleSubSolveEvent(
     }
 
     override fun signalResponse(msg: SubResponseMsg) {
-        if(msg.hasSolution())
+        if (msg.hasSolution()) {
             this.result.complete(msg.solution)
-        else
+        } else {
             throw IllegalArgumentException()
+        }
     }
 }

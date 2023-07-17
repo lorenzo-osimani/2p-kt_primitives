@@ -14,9 +14,11 @@ fun ExecutionContextMsg.deserializeAsDistributed(
 ): DistributedExecutionContext =
     DistributedExecutionContext(
         procedure = this.procedure.deserialize(scope),
-        substitution = Substitution.of(this.substitutionsMap.map {
-            Pair(deserializeVar(it.key, scope), it.value.deserialize(scope))
-        }.toMap()),
+        substitution = Substitution.of(
+            this.substitutionsMap.map {
+                Pair(deserializeVar(it.key, scope), it.value.deserialize(scope))
+            }.toMap()
+        ),
         startTime = this.startTime,
         endTime = this.endTime,
         remainingTime = this.remainingTime,
@@ -24,8 +26,3 @@ fun ExecutionContextMsg.deserializeAsDistributed(
         maxDuration = this.maxDuration,
         contextRequester = contextRequester
     )
-
-
-
-
-

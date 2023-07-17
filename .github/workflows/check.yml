@@ -61,6 +61,14 @@ jobs:
           java-version: ${{ matrix.java-version }}
           build-command: ./gradlew jvmMainClasses jvmTestClasses
           check-command: ./gradlew jvmTest
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            test-results/**/*.xml
+            test-results/**/*.trx
+            test-results/**/*.json
 
   test-js:
     strategy:
@@ -78,7 +86,7 @@ jobs:
     name: Run tests via NodeJS ${{ matrix.node-version }}, on ${{ matrix.os }}
     env:
       ORG_GRADLE_PROJECT_nodeVersion: ${{ matrix.node-version }}
-    timeout-minutes: 60
+    timeout-minutes: 40
     concurrency:
       group: ${{ github.workflow }}-build-js-${{ matrix.os }}-${{ matrix.node-version }}-${{ github.event.number || github.ref }}
       cancel-in-progress: true

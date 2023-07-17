@@ -47,14 +47,18 @@ data class DistributedExecutionContext(
     val outputStore: Set<String>
         get() = contextRequester.getOutputStoreAliases()
 
-    fun filterStaticKb(maxClauses: Long = -1,
-                       vararg filters: Pair<Session.KbFilter, String>): Sequence<Clause?> {
+    fun filterStaticKb(
+        maxClauses: Long = -1,
+        vararg filters: Pair<Session.KbFilter, String>
+    ): Sequence<Clause?> {
         return contextRequester.inspectKB(Session.KbType.STATIC, maxClauses, *filters)
-                .filterNotNull()
+            .filterNotNull()
     }
 
-    fun filterDynamicKb(maxClauses: Long = -1,
-                       vararg filters: Pair<Session.KbFilter, String>): Theory {
+    fun filterDynamicKb(
+        maxClauses: Long = -1,
+        vararg filters: Pair<Session.KbFilter, String>
+    ): Theory {
         return Theory.of(
             contextRequester.inspectKB(Session.KbType.DYNAMIC, maxClauses, *filters)
                 .filterNotNull().toList()
@@ -63,7 +67,7 @@ data class DistributedExecutionContext(
 
     fun toDummyContext(): ExecutionContext {
         val source = this
-        return object: DummyContext() {
+        return object : DummyContext() {
             override val procedure: Struct = source.procedure
             override val startTime: TimeInstant = source.startTime
             override val maxDuration: TimeDuration = source.maxDuration

@@ -13,27 +13,32 @@ fun DistributedError.serialize(): ErrorMsg {
     }
     this.cause?.let {
         builder.setCause(
-            if(it is DistributedError.ResolutionException) it.serialize()
-            else ErrorMsg.newBuilder().setMessage(it.message ).build()
-        )}
+            if (it is DistributedError.ResolutionException) it.serialize()
+            else ErrorMsg.newBuilder().setMessage(it.message).build()
+        )
+    }
     return when (this) {
         is DistributedError.LogicError -> this.serialize(builder)
         is DistributedError.InitializationIssue ->
             builder.setInitializationIssue(
                 InitializationIssueMsg.newBuilder()
-                    .setGoal(this.goal.serialize())).build()
+                    .setGoal(this.goal.serialize())
+            ).build()
         is DistributedError.MissingPredicate ->
             builder.setMissingPredicate(
                 MissingPredicateMsg.newBuilder()
-                    .setSignature(this.signature.serialize())).build()
+                    .setSignature(this.signature.serialize())
+            ).build()
         is DistributedError.HaltException ->
             builder.setHaltException(
                 HaltExceptionMsg.newBuilder()
-                    .setExitStatus(this.exitStatus)).build()
+                    .setExitStatus(this.exitStatus)
+            ).build()
         is DistributedError.TimeOutException ->
             builder.setTimeoutException(
                 TimeOutExceptionMsg.newBuilder()
-                    .setExceededDuration(this.exceededDuration)).build()
+                    .setExceededDuration(this.exceededDuration)
+            ).build()
         else -> builder.setResolutionException(ResolutionExceptionMsg.getDefaultInstance()).build()
     }
 }
@@ -41,7 +46,7 @@ fun DistributedError.serialize(): ErrorMsg {
 fun DistributedError.LogicError.serialize(builder: ErrorMsg.Builder): ErrorMsg {
     val logicErrorBuilder = LogicErrorMsg.newBuilder()
         .setType(this.type.serialize())
-    this.extraData?.let { logicErrorBuilder.setExtraData(it.serialize())}
+    this.extraData?.let { logicErrorBuilder.setExtraData(it.serialize()) }
     when (this) {
         is DistributedError.DomainError ->
             logicErrorBuilder.setDomainError(

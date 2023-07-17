@@ -18,11 +18,10 @@ fun SideEffect.serialize(): SideEffectMsg =
         else -> throw ParsingException(this)
     }
 
-
 fun SideEffect.SetClausesOfKb.serialize(): SideEffectMsg {
     val builder = SetClausesOfKBMsg.newBuilder()
         .addAllClauses(clauses.map { it.serialize() })
-    when(this) {
+    when (this) {
         is SideEffect.AddStaticClauses ->
             builder
                 .setKbType(SetClausesOfKBMsg.KbType.STATIC)
@@ -55,7 +54,7 @@ fun SideEffect.SetClausesOfKb.serialize(): SideEffectMsg {
 }
 
 fun SideEffect.AlterFlags.serialize(): SideEffectMsg {
-    val builder = when(this) {
+    val builder = when (this) {
         is SideEffect.AlterFlagsByEntries -> {
             val builder = AlterFlagsMsg.newBuilder()
                 .putAllFlags(this.flags.map { Pair(it.key, it.value.serialize()) }.toMap())
@@ -81,13 +80,13 @@ fun SideEffect.AlterFlags.serialize(): SideEffectMsg {
 
 fun SideEffect.AlterRuntime.serialize(): SideEffectMsg {
     val builder = AlterRuntimeMsg.newBuilder()
-    when(this) {
+    when (this) {
         is SideEffect.LoadLibrary ->
-           builder.setOperationType(AlterRuntimeMsg.OpType.LOAD)
-               .addAllLibraries(this.libraries.aliases)
+            builder.setOperationType(AlterRuntimeMsg.OpType.LOAD)
+                .addAllLibraries(this.libraries.aliases)
         is SideEffect.AddLibraries ->
-        builder.setOperationType(AlterRuntimeMsg.OpType.LOAD)
-            .addAllLibraries(this.libraries.aliases)
+            builder.setOperationType(AlterRuntimeMsg.OpType.LOAD)
+                .addAllLibraries(this.libraries.aliases)
         is SideEffect.UnloadLibraries ->
             builder.setOperationType(AlterRuntimeMsg.OpType.UNLOAD)
                 .addAllLibraries(this.aliases)
@@ -106,7 +105,7 @@ fun SideEffect.AlterRuntime.serialize(): SideEffectMsg {
 fun SideEffect.AlterOperators.serialize(): SideEffectMsg {
     val builder = AlterOperatorsMsg.newBuilder()
         .addAllOperators(this.operatorSet.serialize().operatorsList)
-    when(this) {
+    when (this) {
         is SideEffect.SetOperators ->
             builder.setOperationType(AlterOperatorsMsg.OpType.SET)
         is SideEffect.ResetOperators ->
@@ -121,29 +120,32 @@ fun SideEffect.AlterOperators.serialize(): SideEffectMsg {
 
 fun SideEffect.AlterChannels.serialize(): SideEffectMsg {
     val builder = AlterChannelsMsg.newBuilder()
-    when(this) {
+    when (this) {
         is SideEffect.AlterChannelsByName -> {
-            builder.setClose(CloseChannels.newBuilder()
-                .addAllChannels(this.names)
-                .setChannelType(
-                    when(this) {
-                        is SideEffect.CloseInputChannels ->
-                            AlterChannelsMsg.ChannelType.INPUT
-                        else ->
-                            AlterChannelsMsg.ChannelType.OUTPUT
-                    }
-                ))
+            builder.setClose(
+                CloseChannels.newBuilder()
+                    .addAllChannels(this.names)
+                    .setChannelType(
+                        when (this) {
+                            is SideEffect.CloseInputChannels ->
+                                AlterChannelsMsg.ChannelType.INPUT
+                            else ->
+                                AlterChannelsMsg.ChannelType.OUTPUT
+                        }
+                    )
+            )
         }
         is SideEffect.AlterInputChannels -> {
             builder.setModify(
                 ModifyChannels.newBuilder()
                     .putAllChannels(
                         this.inputChannels.map {
-                            Pair(it.key, "") //FIX
-                        }.toMap())
+                            Pair(it.key, "") // FIX
+                        }.toMap()
+                    )
                     .setChannelType(AlterChannelsMsg.ChannelType.INPUT)
                     .setOpType(
-                        when(this) {
+                        when (this) {
                             is SideEffect.OpenInputChannels ->
                                 AlterChannelsMsg.ModifyChannels.OpType.OPEN
                             else ->
@@ -157,11 +159,12 @@ fun SideEffect.AlterChannels.serialize(): SideEffectMsg {
                 ModifyChannels.newBuilder()
                     .putAllChannels(
                         this.outputChannels.map {
-                            Pair(it.key, "") //FIX
-                        }.toMap())
+                            Pair(it.key, "") // FIX
+                        }.toMap()
+                    )
                     .setChannelType(AlterChannelsMsg.ChannelType.OUTPUT)
                     .setOpType(
-                        when(this) {
+                        when (this) {
                             is SideEffect.OpenOutputChannels ->
                                 AlterChannelsMsg.ModifyChannels.OpType.OPEN
                             else ->
@@ -173,10 +176,12 @@ fun SideEffect.AlterChannels.serialize(): SideEffectMsg {
         is SideEffect.WriteOnOutputChannels -> {
             builder.setWrite(
                 WriteOnOutputChannelMsg.newBuilder()
-                    .putAllMessages(this.messages.mapValues {
-                        WriteOnOutputChannelMsg.Messages.newBuilder()
-                            .addAllMessage(it.value).build()
-                    })
+                    .putAllMessages(
+                        this.messages.mapValues {
+                            WriteOnOutputChannelMsg.Messages.newBuilder()
+                                .addAllMessage(it.value).build()
+                        }
+                    )
             )
         }
         else -> throw ParsingException(this)
@@ -187,10 +192,12 @@ fun SideEffect.AlterChannels.serialize(): SideEffectMsg {
 
 fun SideEffect.AlterCustomData.serialize(): SideEffectMsg {
     val builder = AlterCustomDataMsg.newBuilder()
-        .putAllData(this.data.map {
-            Pair(it.key, it.value.toString())
-        }.toMap())
-    when(this) {
+        .putAllData(
+            this.data.map {
+                Pair(it.key, it.value.toString())
+            }.toMap()
+        )
+    when (this) {
         is SideEffect.SetPersistentData ->
             builder.setType(AlterCustomDataMsg.OpType.SET_PERSISTENT)
         is SideEffect.SetDurableData ->
@@ -202,4 +209,3 @@ fun SideEffect.AlterCustomData.serialize(): SideEffectMsg {
     return SideEffectMsg.newBuilder()
         .setCustomData(builder).build()
 }
-

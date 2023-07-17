@@ -14,18 +14,19 @@ import it.unibo.tuprolog.theory.Theory
 import it.unibo.tuprolog.unify.Unificator
 
 fun ArgumentMsg.deserialize(scope: Scope = Scope.empty()): Term =
-    if(this.hasVar()) {
+    if (this.hasVar()) {
         deserializeVar(this.`var`, scope)
-    } else if(this.hasStruct()) {
+    } else if (this.hasStruct()) {
         this.struct.deserialize()
-    } else if(this.hasFlag()) {
+    } else if (this.hasFlag()) {
         Truth.of(this.flag)
-    } else if(this.hasNumeric()) {
+    } else if (this.hasNumeric()) {
         val value = this.numeric
-        if(value % 1 > 0)
+        if (value % 1 > 0) {
             Constant.parse(this.numeric.toString())
-        else
+        } else {
             Constant.parse(this.numeric.toInt().toString())
+        }
     } else {
         Atom.of(this.atom)
     }
@@ -37,10 +38,11 @@ fun StructMsg.deserialize(scope: Scope = Scope.empty()): Struct =
     Struct.of(this.functor, this.argumentsList.map { it.deserialize(scope) })
 
 fun StructMsg.deserializeAsClause(scope: Scope = Scope.empty()): Clause? =
-    if(this != StructMsg.getDefaultInstance())
+    if (this != StructMsg.getDefaultInstance()) {
         this.deserialize(scope).asClause()
-    else
+    } else {
         null
+    }
 
 fun SignatureMsg.deserialize(): Signature = Signature(this.name, this.arity)
 
@@ -55,9 +57,12 @@ fun CustomDataMsg.deserialize(): CustomDataStore = CustomDataStore.empty().copy(
 
 fun UnificatorMsg.deserialize(scope: Scope = Scope.empty()): Unificator =
     Unificator.naive(
-        Substitution.of(this.unificatorMap.map {
-            Pair(deserializeVar(it.key, scope), it.value.deserialize(scope))
-        }.toMap()))
+        Substitution.of(
+            this.unificatorMap.map {
+                Pair(deserializeVar(it.key, scope), it.value.deserialize(scope))
+            }.toMap()
+        )
+    )
 
 fun LogicStacktraceMsg.deserialize(scope: Scope = Scope.empty()): List<Struct> =
     this.logicStackTraceList.map {
@@ -68,17 +73,22 @@ fun FlagsMsg.deserialize(): FlagStore =
     FlagStore.of(
         this.flagsMap.map {
             Pair(it.key, it.value.deserialize())
-        }.toMap())
+        }.toMap()
+    )
 
 fun TheoryMsg.deserialize(): Theory =
-    Theory.of(this.clausesList.map {
-        it.deserialize().castToClause()
-    })
+    Theory.of(
+        this.clausesList.map {
+            it.deserialize().castToClause()
+        }
+    )
 
 fun OperatorSetMsg.deserialize(): OperatorSet =
-    OperatorSet(this.operatorsList.map {
-        it.deserialize()
-    })
+    OperatorSet(
+        this.operatorsList.map {
+            it.deserialize()
+        }
+    )
 
 fun LibrariesMsg.deserialize(): DistributedRuntime =
     DistributedRuntime.of(
@@ -93,4 +103,3 @@ fun LibraryMsg.deserialize(): DistributedRuntime.DistributedLibrary =
         this.clausesList.map { it.deserialize().asClause()!! }.toSet(),
         this.functionsSignaturesList.map { it.deserialize() }.toSet()
     )
-

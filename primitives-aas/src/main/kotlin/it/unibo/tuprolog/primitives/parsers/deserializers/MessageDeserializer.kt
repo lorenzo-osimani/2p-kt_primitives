@@ -21,6 +21,3 @@ fun ResponseMsg.deserialize(
     solution = this.solution.deserialize(scope, actualContext),
     sideEffects = this.sideEffectsList.map { it.deserialize() }
 )
-
-
-

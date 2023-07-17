@@ -15,7 +15,7 @@ class SingleInspectKbEvent(
     kbType: Session.KbType,
     maxClauses: Long,
     vararg filters: Pair<Session.KbFilter, String>
-): SubRequestEvent {
+) : SubRequestEvent {
 
     override val message: GeneratorMsg = buildInspectKbMsg(id, kbType, maxClauses, *filters)
 
@@ -29,11 +29,12 @@ class SingleInspectKbEvent(
     }
 
     override fun signalResponse(msg: SubResponseMsg) {
-        if(msg.hasClause())
-             this.result.complete(
-                 msg.clause.deserializeAsClause()
-             )
-        else
+        if (msg.hasClause()) {
+            this.result.complete(
+                msg.clause.deserializeAsClause()
+            )
+        } else {
             throw IllegalArgumentException()
+        }
     }
 }

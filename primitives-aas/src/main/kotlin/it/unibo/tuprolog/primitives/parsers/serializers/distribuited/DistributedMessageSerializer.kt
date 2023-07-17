@@ -13,20 +13,25 @@ fun DistributedResponse.serialize(hasNext: Boolean = true): ResponseMsg =
         .addAllSideEffects(sideEffects.map { it.serialize() })
         .build()
 
-fun buildSubSolveMsg(query: Struct, id: String,
-                     lazy: Boolean = true,
-                     timeout: Long = SolveOptions.MAX_TIMEOUT,
-                     limit: Int = SolveOptions.ALL_SOLUTIONS): GeneratorMsg =
+fun buildSubSolveMsg(
+    query: Struct,
+    id: String,
+    lazy: Boolean = true,
+    timeout: Long = SolveOptions.MAX_TIMEOUT,
+    limit: Int = SolveOptions.ALL_SOLUTIONS
+): GeneratorMsg =
     GeneratorMsg.newBuilder().setRequest(
         SubRequestMsg.newBuilder().setId(id).setSubSolve(
             SubSolveRequest.newBuilder().setQuery(query.serialize())
-                .setLazy(lazy).setTimeout(timeout).setLimit(limit))
+                .setLazy(lazy).setTimeout(timeout).setLimit(limit)
+        )
     ).build()
 
 fun buildReadLineMsg(id: String, channelName: String): GeneratorMsg =
     GeneratorMsg.newBuilder().setRequest(
         SubRequestMsg.newBuilder().setId(id).setReadLine(
-            ReadLineMsg.newBuilder().setChannelName(channelName))
+            ReadLineMsg.newBuilder().setChannelName(channelName)
+        )
     ).build()
 
 fun buildInspectKbMsg(
@@ -39,26 +44,31 @@ fun buildInspectKbMsg(
         SubRequestMsg.newBuilder().setId(id).setInspectKb(
             InspectKbMsg.newBuilder()
                 .setKbType(
-                    when(kbType) {
+                    when (kbType) {
                         Session.KbType.STATIC -> InspectKbMsg.KbType.STATIC
                         Session.KbType.DYNAMIC -> InspectKbMsg.KbType.DYNAMIC
-                    })
+                    }
+                )
                 .setMaxClauses(maxClauses)
-                .addAllFilters(filters.map {
-                    InspectKbMsg.FilterMsg.newBuilder()
-                        .setType(
-                            when(it.first) {
-                                Session.KbFilter.CONTAINS_TERM -> InspectKbMsg.FilterType.CONTAINS_TERM
-                                Session.KbFilter.CONTAINS_FUNCTOR -> InspectKbMsg.FilterType.CONTAINS_FUNCTOR
-                                Session.KbFilter.STARTS_WITH -> InspectKbMsg.FilterType.STARTS_WITH
-                            })
-                        .setArgument(it.second).build()}))
+                .addAllFilters(
+                    filters.map {
+                        InspectKbMsg.FilterMsg.newBuilder()
+                            .setType(
+                                when (it.first) {
+                                    Session.KbFilter.CONTAINS_TERM -> InspectKbMsg.FilterType.CONTAINS_TERM
+                                    Session.KbFilter.CONTAINS_FUNCTOR -> InspectKbMsg.FilterType.CONTAINS_FUNCTOR
+                                    Session.KbFilter.STARTS_WITH -> InspectKbMsg.FilterType.STARTS_WITH
+                                }
+                            )
+                            .setArgument(it.second).build()
+                    }
+                )
+        )
     ).build()
 
 fun buildGetMsg(id: String, type: GenericGetMsg.Element): GeneratorMsg =
     GeneratorMsg.newBuilder().setRequest(
         SubRequestMsg.newBuilder().setId(id).setGenericGet(
-            GenericGetMsg.newBuilder().setElement(type))
+            GenericGetMsg.newBuilder().setElement(type)
+        )
     ).build()
-
-

@@ -11,7 +11,7 @@ import kotlinx.coroutines.runBlocking
 class ReadLineEvent(
     override val id: String,
     channelName: String
-): SubRequestEvent {
+) : SubRequestEvent {
 
     override val message: GeneratorMsg = buildReadLineMsg(id, channelName)
 
@@ -21,15 +21,16 @@ class ReadLineEvent(
         val result = runBlocking {
             result.await()
         }
-        if(result.hasContent()) {
+        if (result.hasContent()) {
             return result.content
         } else throw Exception("ReadLine operation failed")
     }
 
     override fun signalResponse(msg: SubResponseMsg) {
-        if(msg.hasLine())
+        if (msg.hasLine()) {
             this.result.complete(msg.line)
-        else
+        } else {
             throw IllegalArgumentException()
+        }
     }
 }

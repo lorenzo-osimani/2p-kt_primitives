@@ -9,16 +9,19 @@ import it.unibo.tuprolog.primitives.server.distribuited.DistributedSolution
 
 fun SolutionMsg.deserializeAsDistributed(scope: Scope = Scope.empty()): DistributedSolution {
     val query = this.query.deserialize(scope)
-    return when(this.type) {
+    return when (this.type) {
         SolutionMsg.SolutionType.SUCCESS -> {
-            val substitution = Substitution.of(this.substitutionsMap.map {
-                Pair(scope.varOf(it.key),
-                    it.value.deserialize(scope))
-            }).asUnifier()
+            val substitution = Substitution.of(
+                this.substitutionsMap.map {
+                    Pair(
+                        scope.varOf(it.key),
+                        it.value.deserialize(scope)
+                    )
+                }
+            ).asUnifier()
             if (substitution != null) {
                 DistributedSolution.yes(query, substitution)
-            }
-            else DistributedSolution.yes(query)
+            } else DistributedSolution.yes(query)
         }
         SolutionMsg.SolutionType.FAIL -> {
             DistributedSolution.no(query)

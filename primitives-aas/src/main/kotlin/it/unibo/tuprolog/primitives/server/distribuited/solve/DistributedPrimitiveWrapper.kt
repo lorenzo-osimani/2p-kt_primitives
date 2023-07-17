@@ -8,6 +8,5 @@ class DistributedPrimitiveWrapper(
     val implementation: DistributedPrimitive
 ) {
 
-    val signature: Signature by lazy { Signature(name, arity)}
-
+    val signature: Signature by lazy { Signature(name, arity) }
 }

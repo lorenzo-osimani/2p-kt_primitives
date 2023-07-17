@@ -8,7 +8,7 @@ import it.unibo.tuprolog.solve.Signature
 
 fun Term.serialize(): ArgumentMsg {
     val builder = ArgumentMsg.newBuilder()
-    when(this) {
+    when (this) {
         is Var -> builder.setVar(this.name)
         is Truth -> builder.setFlag(this.isTrue)
         is Numeric -> builder.setNumeric(this.decimalValue.toDouble())
@@ -29,4 +29,3 @@ fun Struct.serialize(): StructMsg {
 
 fun Signature.serialize(): SignatureMsg =
     SignatureMsg.newBuilder().setName(this.name).setArity(this.arity).build()
-

@@ -16,10 +16,10 @@ import it.unibo.tuprolog.unify.Unificator
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 
-abstract class GetEvent <T: Any>(
+abstract class GetEvent<T : Any>(
     final override val id: String,
     type: GenericGetMsg.Element
-): SubRequestEvent {
+) : SubRequestEvent {
 
     override val message: GeneratorMsg = buildGetMsg(id, type)
 
@@ -33,10 +33,11 @@ abstract class GetEvent <T: Any>(
     }
 
     override fun signalResponse(msg: SubResponseMsg) {
-        if(msg.hasGenericGet())
+        if (msg.hasGenericGet()) {
             this.result.complete(msg.genericGet)
-        else
+        } else {
             throw IllegalArgumentException()
+        }
     }
 
     abstract fun handleResult(msg: GenericGetResponse): T
@@ -63,7 +64,7 @@ abstract class GetEvent <T: Any>(
                     msg.unificator.deserialize()
             }
 
-        //To Improve
+        // To Improve
         fun ofLibraries(id: String) =
             object : GetEvent<DistributedRuntime>(id, GenericGetMsg.Element.LIBRARIES) {
                 override fun handleResult(msg: GenericGetResponse): DistributedRuntime =

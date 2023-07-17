@@ -9,16 +9,19 @@ import it.unibo.tuprolog.solve.Solution
 
 fun SolutionMsg.deserialize(scope: Scope = Scope.empty(), actualContext: ExecutionContext): Solution {
     val query = this.query.deserialize(scope)
-    return when(this.type) {
+    return when (this.type) {
         SolutionMsg.SolutionType.SUCCESS -> {
-            val substitution = Substitution.of(this.substitutionsMap.map {
-                Pair(scope.varOf(it.key),
-                    it.value.deserialize(scope))
-            }).asUnifier()
+            val substitution = Substitution.of(
+                this.substitutionsMap.map {
+                    Pair(
+                        scope.varOf(it.key),
+                        it.value.deserialize(scope)
+                    )
+                }
+            ).asUnifier()
             if (substitution != null) {
                 Solution.yes(query, substitution)
-            }
-            else Solution.yes(query)
+            } else Solution.yes(query)
         }
         SolutionMsg.SolutionType.FAIL -> {
             Solution.no(query)
