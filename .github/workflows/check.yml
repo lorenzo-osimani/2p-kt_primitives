@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9.7'
+          python-version: '3.10'
       - name: Checkout
         uses: danysk/action-checkout@0.2.7
 
