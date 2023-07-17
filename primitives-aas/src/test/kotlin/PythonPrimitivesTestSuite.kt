@@ -25,6 +25,7 @@ abstract class PythonPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
         }
 
         val healthy = process.inputStream.bufferedReader().lineSequence().firstOrNull {
+            println(it)
             if(it.matches(healthCheckPattern)) {
                 val ports = "[0-9]+".toRegex().findAll(it).map {num -> num.value.toBigInteger() }
                 startingPort = ports.first()

@@ -61,14 +61,6 @@ jobs:
           java-version: ${{ matrix.java-version }}
           build-command: ./gradlew jvmMainClasses jvmTestClasses
           check-command: ./gradlew jvmTest
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
-        with:
-          files: |
-            test-results/**/*.xml
-            test-results/**/*.trx
-            test-results/**/*.json
 
   test-js:
     strategy:

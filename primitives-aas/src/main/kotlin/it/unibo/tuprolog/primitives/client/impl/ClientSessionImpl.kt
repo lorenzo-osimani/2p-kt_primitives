@@ -80,7 +80,7 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
     private fun closeChannel() {
         if (!channel.isShutdown) {
             channel.shutdownNow()
-            channel.awaitTermination(3, TimeUnit.SECONDS)
+            channel.awaitTermination(5, TimeUnit.SECONDS)
         }
     }
 
