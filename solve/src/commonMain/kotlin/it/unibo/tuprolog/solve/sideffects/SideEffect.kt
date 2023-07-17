@@ -346,7 +346,7 @@ abstract class SideEffect {
                     }.map {
                         messages[it.key]!!.forEach {
                             msg ->
-                                it.value.write(msg)
+                            it.value.write(msg)
                         }
                         it.toPair()
                     }
