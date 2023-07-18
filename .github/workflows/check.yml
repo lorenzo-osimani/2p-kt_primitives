@@ -59,7 +59,7 @@ jobs:
         with:
           java-distribution: ${{ matrix.jdk-dist }}
           java-version: ${{ matrix.java-version }}
-          build-command: ./gradlew jvmMainClasses jvmTestClasses
+          build-command: ./gradlew jvmMainClasses jvmTestClasses --stacktrace --warning-mode all
           check-command: ./gradlew jvmTest
 
   test-js:
