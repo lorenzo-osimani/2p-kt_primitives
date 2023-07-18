@@ -139,7 +139,7 @@ class HousingDatasetTest: PythonPrimitivesTestSuite() {
         )
         logicProgramming {
             val performancesVar = Var.of("AllPerformances")
-            solver.solve(
+            solver.solveOnce(
                 "getDataset"("Dataset") and
                     "preprocessing"("Dataset", csv.first().keys.map { Atom.of(it)}.dropLast(1), "Transformed") and
                     "train_cv"(
@@ -148,7 +148,7 @@ class HousingDatasetTest: PythonPrimitivesTestSuite() {
                             "max_epoch"(100), "loss"("mse")
                         ),
                         performancesVar)
-            ).toList().map {
+            ).let {
                 println(it)
                 assertTrue(it.isYes)
                 assertFalse(it.substitution[performancesVar]!!.castToList().isEmptyList)

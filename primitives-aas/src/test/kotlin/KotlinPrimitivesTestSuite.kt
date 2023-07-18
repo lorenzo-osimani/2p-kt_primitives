@@ -27,6 +27,7 @@ abstract class KotlinPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
                 System.err.println(e.cause)
                 System.err.println(e.message)
                 System.err.println(e.stackTrace)
+                throw e
             }
             latch.countDown()
             port++

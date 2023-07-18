@@ -24,7 +24,7 @@ object PrimitiveClientFactory {
         val signature = GenericPrimitiveServiceGrpc.newFutureStub(channel)
             .getSignature(EmptyMsg.getDefaultInstance()).get()
         channel.shutdown()
-        channel.awaitTermination(5, TimeUnit.SECONDS)
+        channel.awaitTermination(60, TimeUnit.SECONDS)
         return signature.deserialize() to Primitive(primitive(channelBuilder))
     }
 
