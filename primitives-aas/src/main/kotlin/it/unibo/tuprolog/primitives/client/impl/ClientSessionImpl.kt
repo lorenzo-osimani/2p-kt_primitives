@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, channelBuilder: ManagedChannelBuilder<*>) :
     ClientSession {
 
-    private var closed = false
+    private var closed: Boolean = false
 
     private val scope = Scope.of(request.query)
     private val sessionSolver: SessionSolver
@@ -39,11 +39,11 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
 
     override fun onNext(value: GeneratorMsg) {
         if (value.hasResponse()) {
-            val response = value.response.deserialize(scope, request.context)
-            queue.add(response)
-            if (!response.solution.isHalt and !value.response.solution.hasNext) {
+            if (!value.response.solution.hasNext) {
                 this.onCompleted()
             }
+            val response = value.response.deserialize(scope, request.context)
+            queue.add(response)
         } else if (value.hasRequest()) {
             val request = value.request
             if (request.hasSubSolve()) {
@@ -78,6 +78,7 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
     }
 
     private fun closeChannel() {
+        closed = true
         if (!channel.isShutdown) {
             channel.shutdownNow()
             channel.awaitTermination(60, TimeUnit.SECONDS)
@@ -93,24 +94,23 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
                 )
             )
         )
-        closed = true
         closeChannel()
     }
 
     override fun onCompleted() {
-        closed = true
+        responseStream.onCompleted()
         closeChannel()
     }
 
     override val solutionsQueue: Iterator<Solve.Response> =
         object : Iterator<Solve.Response> {
+
             override fun hasNext(): Boolean = !closed
 
             override fun next(): Solve.Response {
                 responseStream.onNext(
                     SolverMsg.newBuilder().setNext(EmptyMsg.getDefaultInstance()).build()
                 )
-
                 return queue.takeFirst()
             }
         }
