@@ -14,7 +14,7 @@ abstract class KotlinPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
 
     @BeforeTest
     override fun beforeEach() {
-        var port = 8080
+        var port = 8100
         val latch = CountDownLatch(primitives.size)
         primitives.forEach {
             val service = PrimitiveServerFactory.startService(it, port, "customLibrary")
