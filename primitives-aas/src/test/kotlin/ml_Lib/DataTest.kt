@@ -178,9 +178,10 @@ class DataTest() : PythonPrimitivesTestSuite() {
         logicProgramming {
             val query = "theory_to_dataset"(schemaName, K) and "cell"(K, 2, 2, Z)
             val solution = solver.solveList(query)
+            println(solution)
             assertEquals(1, solution.size)
             assertTrue(solution.first().isYes )
-            println(solution)
+
         }
     }
 

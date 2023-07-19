@@ -1,4 +1,5 @@
 import com.google.protobuf.gradle.id
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     application
@@ -57,14 +58,15 @@ protobuf {
 }
 
 tasks.create<Exec>("installPythonDependencies") {
-    commandLine = listOf("pip3", "install", "--upgrade", "prolog-primitives")
+    commandLine = listOf("python", "-m", "pip", "install", "--upgrade", "prolog-primitives")
     group = "verification"
     tasks.getByName("test").dependsOn(this)
 }
 
 tasks.named<Test>("test") {
     testLogging {
-        events("failed")
+        events(TestLogEvent.FAILED, TestLogEvent.STANDARD_OUT)
+        showStandardStreams = true
         setExceptionFormat("full")
     }
 }
