@@ -21,6 +21,7 @@ import it.unibo.tuprolog.primitives.utils.idGenerator
 import it.unibo.tuprolog.solve.data.CustomDataStore
 import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.unify.Unificator
+import kotlinx.coroutines.*
 
 /**
  * Represent the observer of a connection between the Primitive Server and a client,
@@ -40,7 +41,6 @@ class ServerSessionImpl(
             request.deserializeAsDistributed(this)
         ).iterator()
     }
-
     override fun handleMessage(msg: SolverMsg) {
         /** Handling Next Request */
         if (msg.hasNext()) {
@@ -48,7 +48,7 @@ class ServerSessionImpl(
             responseObserver.onNext(
                 GeneratorMsg.newBuilder().setResponse(solution).build()
             )
-            if (!stream.hasNext()) responseObserver.onCompleted()
+            if (!solution.solution.hasNext) responseObserver.onCompleted()
         }
         /** Handling SubRequest Event */
         else if (msg.hasResponse()) {
