@@ -154,9 +154,9 @@ class DataTest() : PythonPrimitivesTestSuite() {
         logicProgramming {
             val query = "theory_to_dataset"(schemaName, X) and "column"(X, 1, Z)
             val solution = solver.solveList(query)
+            println(solution)
             assertEquals(1, solution.size)
             assertTrue(solution.first().isYes )
-            println(solution)
         }
     }
 
@@ -166,9 +166,10 @@ class DataTest() : PythonPrimitivesTestSuite() {
         logicProgramming {
             val query = "theory_to_dataset"(schemaName, X) and "column"(X, Y, Z)
             val solution = solver.solveList(query)
+            println(solution)
             assertEquals(solver.solveList("attribute"(X, Y, Z)).size, solution.size)
             assertTrue(solution.first().isYes )
-            println(solution)
+
         }
     }
 

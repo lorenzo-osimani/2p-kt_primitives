@@ -21,7 +21,7 @@ class PredictorTest: PythonPrimitivesTestSuite() {
                     //fact { "attribute"(0, "greet", "integer") },
                     fact { "attribute"(1, "greet2", "real") },
                     fact { "attribute"(2, "odd", "real") },
-                    fact { "attribute"(2, "even", "integer") },
+                    fact { "attribute"(3, "even", "integer") },
                     fact { "schema_name"(schemaName) },
                     fact { "schema_target"(target) },
                     fact { schemaName(0, 0, 1) },
@@ -37,7 +37,7 @@ class PredictorTest: PythonPrimitivesTestSuite() {
                     rule { "createModel"(D) `if` (
                         "input_layer"(1, A) and
                             "dense_layer"(A, 10, "relu", B) and
-                            "output_layer"(B,2, "sigmoid", C) and
+                            "output_layer"(B,2, "relu", C) and
                             "neural_network"(C, D)
                         )},
                     rule { "getDataset"(X) `if` (
@@ -90,8 +90,7 @@ class PredictorTest: PythonPrimitivesTestSuite() {
             val query = "createModel"(X) and
                 "getDataset"(Y) and
                 "train"(X, Y, arrayOf(
-                    "max_epoch"(10), "batch_size"(10),
-                    "learning_rate"(0.00001), "loss"("cross_entropy")
+                    "max_epoch"(50), "loss"("cross_entropy")
                 ), W) and
                 "predict"(W, "row"(x), Z) and
                 "classify"(Z, "argmax", arrayOf("odd", "even"), A)

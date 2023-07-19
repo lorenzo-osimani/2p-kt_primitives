@@ -65,7 +65,7 @@ tasks.create<Exec>("installPythonDependencies") {
 
 tasks.named<Test>("test") {
     testLogging {
-        events(TestLogEvent.FAILED, TestLogEvent.STANDARD_OUT)
+        events(TestLogEvent.FAILED)
         showStandardStreams = true
         setExceptionFormat("full")
     }

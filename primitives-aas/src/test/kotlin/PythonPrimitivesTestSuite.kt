@@ -42,8 +42,8 @@ abstract class PythonPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
     }
 
     override fun beforeEach() {
-        startingPort = BigInteger.valueOf(8080)
-        maxPort = BigInteger.valueOf(8106)
+        startingPort = BigInteger.valueOf(8100)
+        maxPort = BigInteger.valueOf(8126)
         serverProcess = executor.pythonModuleExec(
            "prolog_primitives.ml_lib",
             "^Servers listening from \\d+ to \\d+")
