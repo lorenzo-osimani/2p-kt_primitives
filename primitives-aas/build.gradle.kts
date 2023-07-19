@@ -31,6 +31,7 @@ kotlin {
         }
 
         test {
+
             dependencies {
                 implementation("org.testng:testng:7.1.0")
                 implementation("com.github.pgreze:kotlin-process:1.4.1")
@@ -59,4 +60,11 @@ tasks.create<Exec>("installPythonDependencies") {
     commandLine = listOf("pip3", "install", "--upgrade", "prolog-primitives")
     group = "verification"
     tasks.getByName("test").dependsOn(this)
+}
+
+tasks.named<Test>("test") {
+    testLogging {
+        events("failed")
+        setExceptionFormat("full")
+    }
 }
