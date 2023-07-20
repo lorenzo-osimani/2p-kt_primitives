@@ -40,6 +40,7 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
     override fun onNext(value: GeneratorMsg) {
         if (value.hasResponse()) {
             if (!value.response.solution.hasNext) {
+                responseStream.onCompleted()
                 this.onCompleted()
             }
             val response = value.response.deserialize(scope, request.context)
@@ -98,7 +99,6 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
     }
 
     override fun onCompleted() {
-        responseStream.onCompleted()
         closeChannel()
     }
 
