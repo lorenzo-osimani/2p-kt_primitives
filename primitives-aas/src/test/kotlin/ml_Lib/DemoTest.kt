@@ -2,13 +2,11 @@ package ml_Lib
 
 import PythonPrimitivesTestSuite
 import it.unibo.tuprolog.core.*
-import it.unibo.tuprolog.core.parsing.parse
 import it.unibo.tuprolog.dsl.logicProgramming
-import it.unibo.tuprolog.primitives.parsers.serializers.serialize
 import it.unibo.tuprolog.theory.Theory
 import kotlin.test.*
 
-class HousingDatasetTest: PythonPrimitivesTestSuite() {
+class DemoTest: PythonPrimitivesTestSuite() {
 
     private fun readStrictCsv(path: String): List<Map<String, Number>> {
         val reader = javaClass.getResourceAsStream(path)!!.bufferedReader()
@@ -98,7 +96,7 @@ class HousingDatasetTest: PythonPrimitivesTestSuite() {
                 /* and computes its Performance over the provided ValidationSet. */
                 rule {
                     "train_validate"("TrainingSet", "ValidationSet", "LearnParams", "Performance") `if` (
-                        "createModel"(13, 1, "NN") and
+                        "createModel"(7, 1, "NN") and
                             "train"("NN","TrainingSet","LearnParams","TrainedNN") and
                             "test"("NN", "ValidationSet", "Performance")
                         )
@@ -124,24 +122,24 @@ class HousingDatasetTest: PythonPrimitivesTestSuite() {
         }
     }
 
-    private val schemaName = "housing"
-    val path = "/HousingData.csv"
+    private val schemaName = "autoMpg"
+    val path = "/auto-mpg.csv"
 
     @Test
     fun testDemo() {
+        val startingTime = System.currentTimeMillis()
         val csv = readStrictCsv(path)
-        println(csv.first().keys.map { Atom.of(it)})
         solver.appendStaticKb(
             fromCSVtoTheory(
                 schemaName,
                 csv,
-                arrayOf(csv.first().keys.last()))
+                arrayOf(csv.first().keys.first()))
         )
         logicProgramming {
             val performancesVar = Var.of("AllPerformances")
             solver.solveOnce(
                 "getDataset"("Dataset") and
-                    "preprocessing"("Dataset", csv.first().keys.map { Atom.of(it)}.dropLast(1), "Transformed") and
+                    "preprocessing"("Dataset", csv.first().keys.drop(1).map { Atom.of(it)}, "Transformed") and
                     "train_cv"(
                         "Transformed",
                         arrayOf(
@@ -154,5 +152,6 @@ class HousingDatasetTest: PythonPrimitivesTestSuite() {
                 assertFalse(it.substitution[performancesVar]!!.castToList().isEmptyList)
             }
         }
+        println("Execution time was ${(System.currentTimeMillis() - startingTime)/1000.0}")
     }
 }
