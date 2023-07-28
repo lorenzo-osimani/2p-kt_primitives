@@ -147,8 +147,8 @@ class ServerSessionImpl(
         )
 
     private inline fun <reified T> enqueueRequestAndAwait(request: SubRequestEvent): T {
-        responseObserver.onNext(request.message)
         ongoingSubRequests.add(request)
+        responseObserver.onNext(request.message)
         println("Awaiting msg")
         val result = request.awaitResult().also {
             ongoingSubRequests.remove(request)

@@ -22,7 +22,7 @@ jobs:
         uses: DanySK/build-check-deploy-gradle-action@2.2.1
         with:
           build-command: true
-          check-command: ./gradlew :primitives-aas:build
+          check-command: ./gradlew ktlintCheck
 
   test-jvm:
     strategy:
@@ -30,8 +30,8 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-#          - windows-latest
-#         - macos-latest
+          - windows-latest
+          - macos-latest
         java-version:
           - 11
           - 17
