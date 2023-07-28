@@ -1,14 +1,14 @@
-package ml_Lib
+
+package pythontests
 
 import PythonPrimitivesTestSuite
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.parsing.parse
 import it.unibo.tuprolog.dsl.theory.logicProgramming
-import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
 import it.unibo.tuprolog.theory.Theory
 import kotlin.test.*
 
-class DataTest() : PythonPrimitivesTestSuite() {
+class DataTest: PythonPrimitivesTestSuite() {
 
     val schemaName = "testSchema"
     private val target = "bye"

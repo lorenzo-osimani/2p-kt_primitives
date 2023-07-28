@@ -1,4 +1,4 @@
-package sideEffects
+package sideeffects
 
 import KotlinPrimitivesTestSuite
 import examples.customAssertPrimitive
@@ -42,3 +42,4 @@ class TestSideEffects: KotlinPrimitivesTestSuite() {
         }
     }
 }
+

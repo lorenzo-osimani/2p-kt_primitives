@@ -21,7 +21,6 @@ import it.unibo.tuprolog.primitives.utils.idGenerator
 import it.unibo.tuprolog.solve.data.CustomDataStore
 import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.unify.Unificator
-import kotlinx.coroutines.*
 
 /**
  * Represent the observer of a connection between the Primitive Server and a client,
@@ -71,12 +70,13 @@ class ServerSessionImpl(
                 hasNext
 
             override fun next(): DistributedResponse {
-                val request = SingleSubSolveEvent(id, query, timeout)
-
-                return enqueueRequestAndAwait<DistributedResponse>(request)
-                    .also {
-                        hasNext = request.hasNext()!!
-                    }
+                if(hasNext()) {
+                    val request = SingleSubSolveEvent(id, query, timeout)
+                    return enqueueRequestAndAwait<DistributedResponse>(request)
+                        .also {
+                            hasNext = request.hasNext()!!
+                        }
+                } else throw NoSuchElementException()
             }
         }.asSequence()
 
@@ -98,10 +98,11 @@ class ServerSessionImpl(
                 hasNext
 
             override fun next(): Clause? {
-                val request = SingleInspectKbEvent(id, kbType, maxClauses, *filters)
-
-                return enqueueRequestAndAwait<Clause?>(request)
-                    .also { hasNext = (it != null) }
+                if(hasNext()) {
+                    val request = SingleInspectKbEvent(id, kbType, maxClauses, *filters)
+                    return enqueueRequestAndAwait<Clause?>(request)
+                        .also { hasNext = (it != null) }
+                } else throw NoSuchElementException()
             }
         }.asSequence()
 

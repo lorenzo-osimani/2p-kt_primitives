@@ -1,7 +1,13 @@
 package it.unibo.tuprolog.primitives.parsers.deserializers
 
 import it.unibo.tuprolog.primitives.parsers.ParsingException
-import it.unibo.tuprolog.primitives.sideEffects.*
+import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg
+import it.unibo.tuprolog.primitives.sideEffects.AlterCustomDataMsg
+import it.unibo.tuprolog.primitives.sideEffects.AlterFlagsMsg
+import it.unibo.tuprolog.primitives.sideEffects.AlterOperatorsMsg
+import it.unibo.tuprolog.primitives.sideEffects.AlterRuntimeMsg
+import it.unibo.tuprolog.primitives.sideEffects.SetClausesOfKBMsg
+import it.unibo.tuprolog.primitives.sideEffects.SideEffectMsg
 import it.unibo.tuprolog.solve.channel.InputChannel
 import it.unibo.tuprolog.solve.channel.OutputChannel
 import it.unibo.tuprolog.solve.library.Library
@@ -62,7 +68,6 @@ fun SideEffectMsg.deserialize(): SideEffect {
                     return SideEffect.LoadLibrary(Library.of(effect.getLibraries(0)))
                 AlterRuntimeMsg.OpType.UNLOAD ->
                     return SideEffect.UnloadLibraries(effect.librariesList)
-                // To Solve
                 AlterRuntimeMsg.OpType.RESET ->
                     return SideEffect.ResetRuntime(Runtime.empty())
                 else -> {}

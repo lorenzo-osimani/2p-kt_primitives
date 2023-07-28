@@ -1,10 +1,8 @@
-package ml_Lib
 
-import AbstractPrimitivesTestSuite
+package pythontests
+
 import PythonPrimitivesTestSuite
-import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.dsl.theory.logicProgramming
-import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
 import it.unibo.tuprolog.theory.Theory
 import kotlin.test.*
 
@@ -130,3 +128,4 @@ class PredictorTest: PythonPrimitivesTestSuite() {
         }
     }
 }
+

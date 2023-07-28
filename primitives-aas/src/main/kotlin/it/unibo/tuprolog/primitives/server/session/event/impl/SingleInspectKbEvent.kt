@@ -34,7 +34,7 @@ class SingleInspectKbEvent(
                 msg.clause.deserializeAsClause()
             )
         } else {
-            throw IllegalArgumentException()
+            throw IllegalArgumentException("The argument received is not a InspectKb")
         }
     }
 }

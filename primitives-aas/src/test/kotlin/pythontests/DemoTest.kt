@@ -1,4 +1,5 @@
-package ml_Lib
+
+package pythontests
 
 import PythonPrimitivesTestSuite
 import it.unibo.tuprolog.core.*

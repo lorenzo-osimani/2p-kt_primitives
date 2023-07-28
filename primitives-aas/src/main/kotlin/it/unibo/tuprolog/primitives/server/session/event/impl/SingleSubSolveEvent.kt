@@ -36,7 +36,7 @@ class SingleSubSolveEvent(
         if (msg.hasSolution()) {
             this.result.complete(msg.solution)
         } else {
-            throw IllegalArgumentException()
+            throw IllegalArgumentException("The message received is not of a SubSolve")
         }
     }
 }

@@ -8,7 +8,7 @@ import it.unibo.tuprolog.primitives.server.distribuited.DistributedExecutionCont
 import it.unibo.tuprolog.primitives.server.distribuited.DistributedSolution
 import it.unibo.tuprolog.primitives.server.session.ServerSession
 import it.unibo.tuprolog.primitives.server.session.Session
-import it.unibo.tuprolog.solve.*
+import it.unibo.tuprolog.solve.Signature
 import it.unibo.tuprolog.solve.sideffects.SideEffect
 
 data class DistributedRequest(

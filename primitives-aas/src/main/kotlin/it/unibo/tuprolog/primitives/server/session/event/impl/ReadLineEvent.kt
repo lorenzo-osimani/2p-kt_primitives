@@ -7,6 +7,9 @@ import it.unibo.tuprolog.primitives.parsers.serializers.distribuited.buildReadLi
 import it.unibo.tuprolog.primitives.server.session.event.SubRequestEvent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
+import java.io.IOException
+
+const val END_OF_READ_EVENT = ""
 
 class ReadLineEvent(
     override val id: String,
@@ -23,14 +26,14 @@ class ReadLineEvent(
         }
         if (result.hasContent()) {
             return result.content
-        } else throw Exception("ReadLine operation failed")
+        } else return END_OF_READ_EVENT
     }
 
     override fun signalResponse(msg: SubResponseMsg) {
         if (msg.hasLine()) {
             this.result.complete(msg.line)
         } else {
-            throw IllegalArgumentException()
+            throw IllegalArgumentException("The message received is not of a ReadLine")
         }
     }
 }

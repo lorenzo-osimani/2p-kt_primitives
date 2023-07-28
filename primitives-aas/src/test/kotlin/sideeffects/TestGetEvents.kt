@@ -1,4 +1,4 @@
-package sideEffects
+package sideeffects
 
 import KotlinPrimitivesTestSuite
 import examples.filterKBPrimitive
@@ -45,3 +45,4 @@ class TestGetEvents: KotlinPrimitivesTestSuite() {
         }
     }
 }
+

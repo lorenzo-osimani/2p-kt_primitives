@@ -17,7 +17,9 @@ val customSumPrimitive = DistributedPrimitiveWrapper("customSum", 3) { request -
         when(arg3) {
             is Var ->
                 sequenceOf(request.replySuccess(
-                    Substitution.of(arg3, Numeric.of(arg1.castToNumeric().decimalValue + arg2.castToNumeric().decimalValue)))
+                    Substitution.of(arg3, Numeric.of(
+                        arg1.castToNumeric().decimalValue + arg2.castToNumeric().decimalValue)
+                    ))
                 )
             is Numeric -> {
                 if(arg1.castToNumeric().decimalValue + arg2.castToNumeric().decimalValue == arg3.decimalValue)

@@ -22,7 +22,7 @@ jobs:
         uses: DanySK/build-check-deploy-gradle-action@2.2.1
         with:
           build-command: true
-          check-command: ./gradlew build
+          check-command: ./gradlew :primitives-aas:build
 
   test-jvm:
     strategy:

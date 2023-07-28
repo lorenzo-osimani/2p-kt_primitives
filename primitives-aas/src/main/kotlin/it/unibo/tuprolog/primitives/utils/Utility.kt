@@ -5,3 +5,5 @@ private val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 fun idGenerator(): String {
     return List(STRING_LENGTH) { charPool.random() }.joinToString("")
 }
+
+const val TERMINATION_TIMEOUT: Long = 60

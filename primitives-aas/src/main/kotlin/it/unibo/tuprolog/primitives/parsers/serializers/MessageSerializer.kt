@@ -3,7 +3,12 @@ package it.unibo.tuprolog.primitives.parsers.serializers
 import it.unibo.tuprolog.core.Clause
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.operators.OperatorSet
-import it.unibo.tuprolog.primitives.*
+import it.unibo.tuprolog.primitives.LineMsg
+import it.unibo.tuprolog.primitives.RequestMsg
+import it.unibo.tuprolog.primitives.ResponseMsg
+import it.unibo.tuprolog.primitives.SolverMsg
+import it.unibo.tuprolog.primitives.SubResponseMsg
+import it.unibo.tuprolog.primitives.GenericGetResponse
 import it.unibo.tuprolog.primitives.messages.ChannelsMsg
 import it.unibo.tuprolog.primitives.messages.LogicStacktraceMsg
 import it.unibo.tuprolog.primitives.messages.StructMsg

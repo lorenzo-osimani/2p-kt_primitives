@@ -36,7 +36,7 @@ abstract class GetEvent<T : Any>(
         if (msg.hasGenericGet()) {
             this.result.complete(msg.genericGet)
         } else {
-            throw IllegalArgumentException()
+            throw IllegalArgumentException("The message received is not of a GetEvent")
         }
     }
 

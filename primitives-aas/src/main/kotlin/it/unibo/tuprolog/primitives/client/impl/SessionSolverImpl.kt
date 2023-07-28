@@ -9,8 +9,19 @@ import it.unibo.tuprolog.primitives.ReadLineMsg
 import it.unibo.tuprolog.primitives.SolverMsg
 import it.unibo.tuprolog.primitives.SubSolveRequest
 import it.unibo.tuprolog.primitives.client.SessionSolver
+import it.unibo.tuprolog.primitives.parsers.ParsingException
 import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
-import it.unibo.tuprolog.primitives.parsers.serializers.*
+import it.unibo.tuprolog.primitives.parsers.serializers.buildChannelResponse
+import it.unibo.tuprolog.primitives.parsers.serializers.buildClauseMsg
+import it.unibo.tuprolog.primitives.parsers.serializers.buildCustomDataStoreResponse
+import it.unibo.tuprolog.primitives.parsers.serializers.buildFlagStoreResponse
+import it.unibo.tuprolog.primitives.parsers.serializers.buildLibrariesResponse
+import it.unibo.tuprolog.primitives.parsers.serializers.buildLineMsg
+import it.unibo.tuprolog.primitives.parsers.serializers.buildLogicStackTraceResponse
+import it.unibo.tuprolog.primitives.parsers.serializers.buildOperatorsResponse
+import it.unibo.tuprolog.primitives.parsers.serializers.buildSubSolveSolutionMsg
+import it.unibo.tuprolog.primitives.parsers.serializers.buildUnificatorResponse
+import it.unibo.tuprolog.primitives.parsers.serializers.serialize
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.Solution
 import it.unibo.tuprolog.solve.Solver
@@ -53,7 +64,7 @@ class SessionSolverImpl(
                 InspectKbMsg.KbType.STATIC -> sessionSolver.staticKb
                 InspectKbMsg.KbType.DYNAMIC -> sessionSolver.dynamicKb
                 InspectKbMsg.KbType.BOTH -> sessionSolver.staticKb + sessionSolver.dynamicKb
-                else -> throw IllegalArgumentException()
+                else -> throw ParsingException(this)
             }
             val filters = event.filtersList.map { filter ->
                 when (filter.type) {
@@ -78,7 +89,7 @@ class SessionSolverImpl(
                             } else false
                         }
                     }
-                    else -> throw IllegalArgumentException()
+                    else -> throw ParsingException(this)
                 }
             }
             val iterator = inspectedKB.filter {

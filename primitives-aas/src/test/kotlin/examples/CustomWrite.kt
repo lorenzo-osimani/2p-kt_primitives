@@ -19,3 +19,4 @@ val customWritePrimitive = DistributedPrimitiveWrapper("customWrite", 2) { reque
         sequenceOf(request.replyFail())
     }
 }
+

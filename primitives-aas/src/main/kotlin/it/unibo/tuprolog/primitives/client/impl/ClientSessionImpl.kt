@@ -11,16 +11,20 @@ import it.unibo.tuprolog.primitives.SolverMsg
 import it.unibo.tuprolog.primitives.client.ClientSession
 import it.unibo.tuprolog.primitives.client.SessionSolver
 import it.unibo.tuprolog.primitives.messages.EmptyMsg
+import it.unibo.tuprolog.primitives.parsers.ParsingException
 import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
 import it.unibo.tuprolog.primitives.parsers.serializers.serialize
+import it.unibo.tuprolog.primitives.utils.TERMINATION_TIMEOUT
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.exception.ResolutionException
 import it.unibo.tuprolog.solve.primitive.Solve
 import java.util.concurrent.LinkedBlockingDeque
 import java.util.concurrent.TimeUnit
 
-class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, channelBuilder: ManagedChannelBuilder<*>) :
-    ClientSession {
+class ClientSessionImpl(
+    private val request: Solve.Request<ExecutionContext>,
+    channelBuilder: ManagedChannelBuilder<*>
+): ClientSession {
 
     private var closed: Boolean = false
 
@@ -43,8 +47,7 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
                 responseStream.onCompleted()
                 this.onCompleted()
             }
-            val response = value.response.deserialize(scope, request.context)
-            queue.add(response)
+            queue.add(value.response.deserialize(scope, request.context))
         } else if (value.hasRequest()) {
             val request = value.request
             if (request.hasSubSolve()) {
@@ -54,8 +57,7 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
             } else if (request.hasInspectKb()) {
                 sessionSolver.inspectKb(request.id, request.inspectKb)
             } else if (request.hasGenericGet()) {
-                val get = request.genericGet
-                when (get.element) {
+                when (request.genericGet.element) {
                     GenericGetMsg.Element.LOGIC_STACKTRACE ->
                         sessionSolver.getLogicStackTrace(request.id)
                     GenericGetMsg.Element.CUSTOM_DATA_STORE ->
@@ -72,7 +74,7 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
                         sessionSolver.getInputStoreAliases(request.id)
                     GenericGetMsg.Element.OUTPUT_CHANNELS ->
                         sessionSolver.getOutputStoreAliases(request.id)
-                    else -> throw IllegalStateException()
+                    else -> throw ParsingException(this)
                 }
             }
         }
@@ -82,7 +84,7 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
         closed = true
         if (!channel.isShutdown) {
             channel.shutdownNow()
-            channel.awaitTermination(60, TimeUnit.SECONDS)
+            channel.awaitTermination(TERMINATION_TIMEOUT, TimeUnit.SECONDS)
         }
     }
 
@@ -108,10 +110,12 @@ class ClientSessionImpl(private val request: Solve.Request<ExecutionContext>, ch
             override fun hasNext(): Boolean = !closed
 
             override fun next(): Solve.Response {
-                responseStream.onNext(
-                    SolverMsg.newBuilder().setNext(EmptyMsg.getDefaultInstance()).build()
-                )
-                return queue.takeFirst()
+                if(hasNext()) {
+                    responseStream.onNext(
+                        SolverMsg.newBuilder().setNext(EmptyMsg.getDefaultInstance()).build()
+                    )
+                    return queue.takeFirst()
+                } else throw NoSuchElementException()
             }
         }
 }

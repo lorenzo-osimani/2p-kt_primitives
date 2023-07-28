@@ -2,9 +2,16 @@ package it.unibo.tuprolog.primitives.parsers.serializers
 
 import it.unibo.tuprolog.primitives.messages.ArgumentMsg
 import it.unibo.tuprolog.primitives.parsers.ParsingException
-import it.unibo.tuprolog.primitives.sideEffects.*
 import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg.CloseChannels
 import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg.ModifyChannels
+import it.unibo.tuprolog.primitives.sideEffects.AlterFlagsMsg
+import it.unibo.tuprolog.primitives.sideEffects.AlterRuntimeMsg
+import it.unibo.tuprolog.primitives.sideEffects.SetClausesOfKBMsg
+import it.unibo.tuprolog.primitives.sideEffects.SideEffectMsg
+import it.unibo.tuprolog.primitives.sideEffects.AlterOperatorsMsg
+import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg
+import it.unibo.tuprolog.primitives.sideEffects.WriteOnOutputChannelMsg
+import it.unibo.tuprolog.primitives.sideEffects.AlterCustomDataMsg
 import it.unibo.tuprolog.solve.sideffects.SideEffect
 
 fun SideEffect.serialize(): SideEffectMsg =
@@ -65,14 +72,14 @@ fun SideEffect.AlterFlags.serialize(): SideEffectMsg {
                 is SideEffect.ResetFlags ->
                     builder
                         .setOperationType(AlterFlagsMsg.OpType.RESET)
-                else -> throw IllegalStateException()
+                else -> throw ParsingException(this)
             }
         }
         is SideEffect.AlterFlagsByName ->
             AlterFlagsMsg.newBuilder()
                 .putAllFlags(this.names.associateWith { ArgumentMsg.getDefaultInstance() })
                 .setOperationType(AlterFlagsMsg.OpType.CLEAR)
-        else -> throw IllegalStateException()
+        else -> throw ParsingException(this)
     }
     return SideEffectMsg.newBuilder()
         .setFlags(builder).build()
@@ -96,7 +103,7 @@ fun SideEffect.AlterRuntime.serialize(): SideEffectMsg {
         is SideEffect.ResetRuntime ->
             builder.setOperationType(AlterRuntimeMsg.OpType.RESET)
                 .addAllLibraries(this.libraries.aliases)
-        else -> throw IllegalStateException()
+        else -> throw ParsingException(this)
     }
     return SideEffectMsg.newBuilder()
         .setRuntime(builder).build()
@@ -112,7 +119,7 @@ fun SideEffect.AlterOperators.serialize(): SideEffectMsg {
             builder.setOperationType(AlterOperatorsMsg.OpType.RESET)
         is SideEffect.RemoveOperators ->
             builder.setOperationType(AlterOperatorsMsg.OpType.REMOVE)
-        else -> throw IllegalStateException()
+        else -> throw ParsingException(this)
     }
     return SideEffectMsg.newBuilder()
         .setOperators(builder).build()
@@ -204,7 +211,7 @@ fun SideEffect.AlterCustomData.serialize(): SideEffectMsg {
             builder.setType(AlterCustomDataMsg.OpType.SET_DURABLE)
         is SideEffect.SetEphemeralData ->
             builder.setType(AlterCustomDataMsg.OpType.SET_EPHEMERAL)
-        else -> throw IllegalStateException()
+        else -> throw ParsingException(this)
     }
     return SideEffectMsg.newBuilder()
         .setCustomData(builder).build()

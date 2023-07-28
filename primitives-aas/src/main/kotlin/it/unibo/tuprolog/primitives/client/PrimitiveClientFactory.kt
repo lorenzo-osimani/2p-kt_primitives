@@ -1,6 +1,7 @@
 package it.unibo.tuprolog.primitives.client
 
 import io.grpc.ManagedChannelBuilder
+import it.unibo.tuprolog.primitives.utils.TERMINATION_TIMEOUT
 import it.unibo.tuprolog.primitives.GenericPrimitiveServiceGrpc
 import it.unibo.tuprolog.primitives.messages.EmptyMsg
 import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
@@ -24,7 +25,7 @@ object PrimitiveClientFactory {
         val signature = GenericPrimitiveServiceGrpc.newFutureStub(channel)
             .getSignature(EmptyMsg.getDefaultInstance()).get()
         channel.shutdown()
-        channel.awaitTermination(60, TimeUnit.SECONDS)
+        channel.awaitTermination(TERMINATION_TIMEOUT, TimeUnit.SECONDS)
         return signature.deserialize() to Primitive(primitive(channelBuilder))
     }
 

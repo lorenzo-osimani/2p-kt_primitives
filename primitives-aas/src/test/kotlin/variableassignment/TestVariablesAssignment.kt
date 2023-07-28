@@ -1,4 +1,4 @@
-package variablesAssignment
+package variableassignment
 
 import KotlinPrimitivesTestSuite
 import examples.customSumPrimitive
@@ -52,3 +52,4 @@ class TestVariablesAssignment: KotlinPrimitivesTestSuite() {
     }
 
 }
+

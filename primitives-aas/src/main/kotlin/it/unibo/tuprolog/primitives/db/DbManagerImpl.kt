@@ -1,9 +1,16 @@
 package it.unibo.tuprolog.primitives.db
 
 import com.mongodb.ConnectionString
+import com.mongodb.MongoException
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
-import org.litote.kmongo.*
+import org.litote.kmongo.KMongo
+import org.litote.kmongo.SetTo
+import org.litote.kmongo.deleteOne
+import org.litote.kmongo.eq
+import org.litote.kmongo.find
+import org.litote.kmongo.updateOne
+import org.litote.kmongo.getCollection
 
 class DbManagerImpl(url: String, port: Int) : DbManager {
     data class SerializedPrimitive(
@@ -29,31 +36,29 @@ class DbManagerImpl(url: String, port: Int) : DbManager {
         port: Int,
         libraryName: String
     ) {
-        checkInitialization {
-            if (getPrimitive(functor, arity) == null) {
-                primitivesDB.insertOne(SerializedPrimitive(functor, arity, url, port, libraryName))
-            } else {
-                // To choose between error and update
-                primitivesDB.updateOne(
-                    Filters.and(
-                        SerializedPrimitive::functor eq functor,
-                        SerializedPrimitive::arity eq arity,
-                        SerializedPrimitive::libraryName eq libraryName
-                    ),
-                    SetTo(SerializedPrimitive::url, url),
-                    SetTo(SerializedPrimitive::port, port)
-                )
-            }
+        if (getPrimitive(functor, arity) == null) {
+            primitivesDB.insertOne(SerializedPrimitive(functor, arity, url, port, libraryName))
+        } else {
+            // To choose between error and update
+            primitivesDB.updateOne(
+                Filters.and(
+                    SerializedPrimitive::functor eq functor,
+                    SerializedPrimitive::arity eq arity,
+                    SerializedPrimitive::libraryName eq libraryName
+                ),
+                SetTo(SerializedPrimitive::url, url),
+                SetTo(SerializedPrimitive::port, port)
+            )
         }
     }
 
     override fun getPrimitive(functor: String, arity: Int): Pair<String, Int>? {
         val result =
             primitivesDB.find(SerializedPrimitive::functor eq functor, SerializedPrimitive::arity eq arity).first()
-        if (result != null) {
-            return Pair(result.url, result.port)
+        return if (result != null) {
+            Pair(result.url, result.port)
         } else {
-            return null
+            null
         }
     }
 
@@ -72,13 +77,5 @@ class DbManagerImpl(url: String, port: Int) : DbManager {
         return result.map {
             Pair(it.functor, it.arity)
         }.toSet()
-    }
-
-    private fun checkInitialization(op: () -> Unit) {
-        try {
-            op()
-        } catch (e: Exception) {
-            println(e)
-        }
     }
 }
