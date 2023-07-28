@@ -149,9 +149,11 @@ class ServerSessionImpl(
     private inline fun <reified T> enqueueRequestAndAwait(request: SubRequestEvent): T {
         responseObserver.onNext(request.message)
         ongoingSubRequests.add(request)
+        println("Awaiting msg")
         val result = request.awaitResult().also {
             ongoingSubRequests.remove(request)
         }
+        println("Response received")
         return if (result is T) {
             result
         } else {

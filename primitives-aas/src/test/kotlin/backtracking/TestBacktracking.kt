@@ -52,7 +52,7 @@ class TestBacktracking: KotlinPrimitivesTestSuite() {
         }
     }
 
-    /** Testing SubSolve **/
+    /** Testing ReadLine **/
     @Test
     @Throws(Exception::class)
     fun testReadLine() {
