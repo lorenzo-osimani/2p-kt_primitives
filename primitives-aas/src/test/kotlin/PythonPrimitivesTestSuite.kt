@@ -2,8 +2,7 @@
 import java.math.BigInteger
 import java.util.concurrent.ExecutorService
 
-abstract class PythonPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
-
+abstract class PythonPrimitivesTestSuite : AbstractPrimitivesTestSuite() {
 
     private lateinit var startingPort: BigInteger
     private lateinit var maxPort: BigInteger
@@ -14,10 +13,12 @@ abstract class PythonPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
 
     private fun ExecutorService.pythonModuleExec(moduleName: String, healthCheck: String): Process {
         val process = ProcessBuilder("python", "-m", moduleName).start()
-        Runtime.getRuntime().addShutdownHook(Thread {
-            process.destroyForcibly()
-            process.waitFor()
-        })
+        Runtime.getRuntime().addShutdownHook(
+            Thread {
+                process.destroyForcibly()
+                process.waitFor()
+            }
+        )
         val healthCheckPattern = healthCheck.toRegex()
         submit {
             process.errorStream.bufferedReader().useLines {
@@ -27,8 +28,8 @@ abstract class PythonPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
 
         val healthy = process.inputStream.bufferedReader().lineSequence().firstOrNull {
             println(it)
-            if(it.matches(healthCheckPattern)) {
-                val ports = "[0-9]+".toRegex().findAll(it).map {num -> num.value.toBigInteger() }
+            if (it.matches(healthCheckPattern)) {
+                val ports = "[0-9]+".toRegex().findAll(it).map { num -> num.value.toBigInteger() }
                 startingPort = ports.first()
                 maxPort = ports.last()
                 true
@@ -46,8 +47,9 @@ abstract class PythonPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
         startingPort = BigInteger.valueOf(8100)
         maxPort = BigInteger.valueOf(8126)
         serverProcess = executor.pythonModuleExec(
-          "prolog_primitives.ml_lib",
-           "^Servers listening from \\d+ to \\d+")
+            "prolog_primitives.ml_lib",
+            "^Servers listening from \\d+ to \\d+"
+        )
         super.beforeEach()
     }
 

@@ -4,19 +4,23 @@ package pythontests
 import PythonPrimitivesTestSuite
 import it.unibo.tuprolog.dsl.theory.logicProgramming
 import it.unibo.tuprolog.theory.Theory
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Ignore
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-class PredictorTest: PythonPrimitivesTestSuite() {
+class PredictorTest : PythonPrimitivesTestSuite() {
 
     private val schemaName = "testSchema"
     private val target = arrayOf("odd", "even")
+
     @BeforeTest
     override fun beforeEach() {
         super.beforeEach()
         logicProgramming {
             solver.appendStaticKb(
                 Theory.of(
-                    //fact { "attribute"(0, "greet", "integer") },
                     fact { "attribute"(1, "greet2", "real") },
                     fact { "attribute"(2, "odd", "real") },
                     fact { "attribute"(3, "even", "integer") },
@@ -32,15 +36,19 @@ class PredictorTest: PythonPrimitivesTestSuite() {
                     fact { schemaName(7, 1, 0) },
                     fact { schemaName(8, 0, 1) },
                     fact { schemaName(9, 1, 0) },
-                    rule { "createModel"(D) `if` (
-                        "input_layer"(1, A) and
-                            "dense_layer"(A, 10, "relu", B) and
-                            "output_layer"(B,2, "relu", C) and
-                            "neural_network"(C, D)
-                        )},
-                    rule { "getDataset"(X) `if` (
-                        "theory_to_dataset"(schemaName, X)
-                    )}
+                    rule {
+                        "createModel"(D) `if`
+                            (
+                                "input_layer"(1, A) and
+                                    "dense_layer"(A, 10, "relu", B) and
+                                    "output_layer"(B, 2, "relu", C) and
+                                    "neural_network"(C, D)
+                                )
+                    },
+                    rule {
+                        "getDataset"(X) `if`
+                            ("theory_to_dataset"(schemaName, X))
+                    }
                 )
             )
         }
@@ -52,10 +60,17 @@ class PredictorTest: PythonPrimitivesTestSuite() {
         logicProgramming {
             val query = "createModel"(X) and
                 "getDataset"(Y) and
-                "train"(X, Y, arrayOf(
-                    "max_epoch"(5), "batch_size"(10),
-                    "learning_rate"(0.01), "loss"("cross_entropy")
-                ), W)
+                "train"(
+                    X,
+                    Y,
+                    arrayOf(
+                        "max_epoch"(5),
+                        "batch_size"(10),
+                        "learning_rate"(0.01),
+                        "loss"("cross_entropy")
+                    ),
+                    W
+                )
             val solution = solver.solveOnce(query)
             println(solution)
             assertTrue(solution.isYes)
@@ -68,10 +83,17 @@ class PredictorTest: PythonPrimitivesTestSuite() {
         logicProgramming {
             val query = "createModel"(X) and
                 "getDataset"(Y) and
-                "train"(X, Y, arrayOf(
-                    "max_epoch"(5), "batch_size"(1),
-                    "learning_rate"(0.001), "loss"("cross_entropy")
-                ), W) and
+                "train"(
+                    X,
+                    Y,
+                    arrayOf(
+                        "max_epoch"(5),
+                        "batch_size"(1),
+                        "learning_rate"(0.001),
+                        "loss"("cross_entropy")
+                    ),
+                    W
+                ) and
                 "predict"(W, Y, Z)
             val solution = solver.solveOnce(query)
             println(solution.substitution[Z])
@@ -87,14 +109,17 @@ class PredictorTest: PythonPrimitivesTestSuite() {
             val x = 3
             val query = "createModel"(X) and
                 "getDataset"(Y) and
-                "train"(X, Y, arrayOf(
-                    "max_epoch"(50), "loss"("cross_entropy")
-                ), W) and
+                "train"(
+                    X,
+                    Y,
+                    arrayOf("max_epoch"(50), "loss"("cross_entropy")),
+                    W
+                ) and
                 "predict"(W, "row"(x), Z) and
                 "classify"(Z, "argmax", arrayOf("odd", "even"), A)
             val solution = solver.solveOnce(query)
             println(solution.substitution[Z])
-            assertEquals(if(x%2 == 0) "even" else "odd", solution.substitution[A].toString())
+            assertEquals(if (x % 2 == 0) "even" else "odd", solution.substitution[A].toString())
             assertTrue(solution.isYes)
         }
     }
@@ -105,27 +130,37 @@ class PredictorTest: PythonPrimitivesTestSuite() {
         logicProgramming {
             val query = "createModel"(X) and
                 "getDataset"(Y) and
-                "train"(X, Y, arrayOf(
-                    "max_epoch"(5), "batch_size"(10),
-                    "learning_rate"(0.00001), "loss"("cross_entropy")
-                ), W) and
+                "train"(
+                    X,
+                    Y,
+                    arrayOf(
+                        "max_epoch"(5),
+                        "batch_size"(10),
+                        "learning_rate"(0.00001),
+                        "loss"("cross_entropy")
+                    ),
+                    W
+                ) and
                 "predict"(W, Y, Z) and
-                "mse"(Z,  arrayOf(
-                    arrayOf(0, 1),
-                    arrayOf(1, 0),
-                    arrayOf(0, 1),
-                    arrayOf(1, 0),
-                    arrayOf(0, 1),
-                    arrayOf(1, 0),
-                    arrayOf(0, 1),
-                    arrayOf(1, 0),
-                    arrayOf(0, 1),
-                    arrayOf(1, 0),
-                ), A)
+                "mse"(
+                    Z,
+                    arrayOf(
+                        arrayOf(0, 1),
+                        arrayOf(1, 0),
+                        arrayOf(0, 1),
+                        arrayOf(1, 0),
+                        arrayOf(0, 1),
+                        arrayOf(1, 0),
+                        arrayOf(0, 1),
+                        arrayOf(1, 0),
+                        arrayOf(0, 1),
+                        arrayOf(1, 0)
+                    ),
+                    A
+                )
             val solution = solver.solveOnce(query)
             println(solution.substitution[A])
             assertTrue(solution.isYes)
         }
     }
 }
-

@@ -1,7 +1,6 @@
 package it.unibo.tuprolog.primitives.db
 
 import com.mongodb.ConnectionString
-import com.mongodb.MongoException
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import org.litote.kmongo.KMongo
@@ -9,8 +8,8 @@ import org.litote.kmongo.SetTo
 import org.litote.kmongo.deleteOne
 import org.litote.kmongo.eq
 import org.litote.kmongo.find
-import org.litote.kmongo.updateOne
 import org.litote.kmongo.getCollection
+import org.litote.kmongo.updateOne
 
 class DbManagerImpl(url: String, port: Int) : DbManager {
     data class SerializedPrimitive(
@@ -63,12 +62,11 @@ class DbManagerImpl(url: String, port: Int) : DbManager {
     }
 
     override fun deletePrimitive(functor: String, arity: Int, libraryName: String) {
-        primitivesDB
-            .deleteOne(
-                SerializedPrimitive::functor eq functor,
-                SerializedPrimitive::arity eq arity,
-                SerializedPrimitive::libraryName eq libraryName
-            )
+        primitivesDB.deleteOne(
+            SerializedPrimitive::functor eq functor,
+            SerializedPrimitive::arity eq arity,
+            SerializedPrimitive::libraryName eq libraryName
+        )
     }
 
     override fun getLibrary(libraryName: String): Set<Pair<String, Int>> {

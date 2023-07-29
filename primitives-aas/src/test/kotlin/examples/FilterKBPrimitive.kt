@@ -6,19 +6,19 @@ import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimiti
 import it.unibo.tuprolog.primitives.server.session.Session
 
 val filterKBPrimitive = DistributedPrimitiveWrapper("filterKB", 2) { request ->
-        val arg1: Term = request.arguments[0]
-        val arg2: Term = request.arguments[1]
-        if (arg2.isVar) {
-            request.context.filterStaticKb(
-                filters = arrayOf(Pair(Session.KbFilter.STARTS_WITH, arg1.toString()))
-            ).map {
-               if(it == null) {
-                   request.replyFail()
-               } else {
-                   request.replySuccess(Substitution.of(arg2.castToVar(), it))
-               }
+    val arg1: Term = request.arguments[0]
+    val arg2: Term = request.arguments[1]
+    if (arg2.isVar) {
+        request.context.filterStaticKb(
+            filters = arrayOf(Pair(Session.KbFilter.STARTS_WITH, arg1.toString()))
+        ).map {
+            if (it == null) {
+                request.replyFail()
+            } else {
+                request.replySuccess(Substitution.of(arg2.castToVar(), it))
             }
-        } else {
-            sequenceOf(request.replyFail())
         }
+    } else {
+        sequenceOf(request.replyFail())
+    }
 }

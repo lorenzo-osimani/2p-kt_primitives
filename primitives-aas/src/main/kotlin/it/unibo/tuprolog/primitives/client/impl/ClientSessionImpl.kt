@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 class ClientSessionImpl(
     private val request: Solve.Request<ExecutionContext>,
     channelBuilder: ManagedChannelBuilder<*>
-): ClientSession {
+) : ClientSession {
 
     private var closed: Boolean = false
 
@@ -111,7 +111,7 @@ class ClientSessionImpl(
             override fun hasNext(): Boolean = !closed
 
             override fun next(): Solve.Response {
-                if(hasNext()) {
+                if (hasNext()) {
                     responseStream.onNext(
                         SolverMsg.newBuilder().setNext(EmptyMsg.getDefaultInstance()).build()
                     )

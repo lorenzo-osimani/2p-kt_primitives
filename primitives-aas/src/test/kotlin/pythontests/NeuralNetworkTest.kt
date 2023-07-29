@@ -2,9 +2,10 @@ package pythontests
 
 import PythonPrimitivesTestSuite
 import it.unibo.tuprolog.dsl.theory.logicProgramming
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
-class NeuralNetworkTest: PythonPrimitivesTestSuite() {
+class NeuralNetworkTest : PythonPrimitivesTestSuite() {
 
     @Test
     @Throws(Exception::class)
@@ -21,7 +22,7 @@ class NeuralNetworkTest: PythonPrimitivesTestSuite() {
     @Throws(Exception::class)
     fun testDenseLayer() {
         logicProgramming {
-            val query = "input_layer"(1, X) and "dense_layer"(X,1, "relu", Y)
+            val query = "input_layer"(1, X) and "dense_layer"(X, 1, "relu", Y)
             val solution = solver.solveOnce(query)
             assertTrue(solution.isYes)
             println(solution)
@@ -33,7 +34,7 @@ class NeuralNetworkTest: PythonPrimitivesTestSuite() {
     fun testOutputLayer() {
         logicProgramming {
             val query = "input_layer"(1, X) and
-                "output_layer"(X,1, "sigmoid", Y)
+                "output_layer"(X, 1, "sigmoid", Y)
             val solution = solver.solveOnce(query)
             assertTrue(solution.isYes)
             println(solution)
@@ -45,8 +46,8 @@ class NeuralNetworkTest: PythonPrimitivesTestSuite() {
     fun testNeuralNetworkBuild() {
         logicProgramming {
             val query = "input_layer"(1, X) and
-                "dense_layer"(X,1, "relu", Y) and
-                "output_layer"(Y,1, "sigmoid", W) and
+                "dense_layer"(X, 1, "relu", Y) and
+                "output_layer"(Y, 1, "sigmoid", W) and
                 "neural_network"(W, Z)
             val solution = solver.solveOnce(query)
             assertTrue(solution.isYes)

@@ -13,32 +13,46 @@ val customSumPrimitive = DistributedPrimitiveWrapper("customSum", 3) { request -
     val arg1: Term = request.arguments[0]
     val arg2: Term = request.arguments[1]
     val arg3: Term = request.arguments[2]
-    if(arg1.isNumber && arg2.isNumber) {
-        when(arg3) {
+    if (arg1.isNumber && arg2.isNumber) {
+        when (arg3) {
             is Var ->
-                sequenceOf(request.replySuccess(
-                    Substitution.of(arg3, Numeric.of(
-                        arg1.castToNumeric().decimalValue + arg2.castToNumeric().decimalValue)
-                    ))
+                sequenceOf(
+                    request.replySuccess(
+                        Substitution.of(
+                            arg3,
+                            Numeric.of(
+                                arg1.castToNumeric().decimalValue + arg2.castToNumeric().decimalValue
+                            )
+                        )
+                    )
                 )
             is Numeric -> {
-                if(arg1.castToNumeric().decimalValue + arg2.castToNumeric().decimalValue == arg3.decimalValue)
+                if (arg1.castToNumeric().decimalValue + arg2.castToNumeric().decimalValue == arg3.decimalValue) {
                     sequenceOf(request.replySuccess())
-                else sequenceOf(request.replyFail())
+                } else {
+                    sequenceOf(request.replyFail())
+                }
             }
             else ->
-                sequenceOf(request.replyError(DistributedError.TypeError(
-                    expectedType = TypeError.Expected.NUMBER,
-                    culprit = arg3
-                )))
+                sequenceOf(
+                    request.replyError(
+                        DistributedError.TypeError(
+                            expectedType = TypeError.Expected.NUMBER,
+                            culprit = arg3
+                        )
+                    )
+                )
         }
     } else {
-        sequenceOf(request.replyError(DistributedError.TypeError(
-            expectedType = TypeError.Expected.NUMBER,
-            culprit = if(arg1.isNumber) arg2 else arg1
-        )))
+        sequenceOf(
+            request.replyError(
+                DistributedError.TypeError(
+                    expectedType = TypeError.Expected.NUMBER,
+                    culprit = if (arg1.isNumber) arg2 else arg1
+                )
+            )
+        )
     }
-
 }
 
 fun main() {

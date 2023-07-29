@@ -16,16 +16,17 @@ val getEventsPrimitive = DistributedPrimitiveWrapper("testEvents", 0) { request 
             Pair(Solver.prolog.defaultStaticKb, request.context.staticKb),
             Pair(Solver.prolog.defaultDynamicKb, request.context.dynamicKb)
         ).forEach { pair ->
-            if(pair.first != pair.second) {
+            if (pair.first != pair.second) {
                 log.add(printDifference(pair.second, pair.first))
                 flag = false
             }
         }
 
-        if(flag)
+        if (flag) {
             yield(request.replySuccess())
-        else
+        } else {
             yield(request.replyError(DistributedError.ResolutionException(log.toString())))
+        }
     }
 }
 

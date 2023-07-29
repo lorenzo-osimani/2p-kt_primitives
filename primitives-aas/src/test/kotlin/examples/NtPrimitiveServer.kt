@@ -17,7 +17,7 @@ val ntPrimitive = DistributedPrimitiveWrapper("nt", 1) { request ->
 
     when (val arg1: Term = request.arguments[0]) {
         is Var ->
-            generateValues().map{request.replySuccess(Substitution.of(arg1, it))}
+            generateValues().map { request.replySuccess(Substitution.of(arg1, it)) }
         is Integer ->
             sequenceOf(request.replyWith(checkValue(arg1)))
         else ->

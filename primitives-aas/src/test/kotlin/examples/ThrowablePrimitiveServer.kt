@@ -4,12 +4,16 @@ import it.unibo.tuprolog.primitives.server.PrimitiveServerFactory.startService
 import it.unibo.tuprolog.primitives.server.distribuited.DistributedError
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
 
-val throwablePrimitive = DistributedPrimitiveWrapper("error",0) { request ->
+val throwablePrimitive = DistributedPrimitiveWrapper("error", 0) { request ->
     sequence {
-        yield(request.replyError(
-            DistributedError.HaltException(
-                message = "I was a mistake!",
-                exitStatus = 404)))
+        yield(
+            request.replyError(
+                DistributedError.HaltException(
+                    message = "I was a mistake!",
+                    exitStatus = 404
+                )
+            )
+        )
     }
 }
 

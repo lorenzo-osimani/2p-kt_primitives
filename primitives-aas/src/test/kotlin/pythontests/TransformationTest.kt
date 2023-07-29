@@ -3,9 +3,11 @@ package pythontests
 import PythonPrimitivesTestSuite
 import it.unibo.tuprolog.dsl.theory.logicProgramming
 import it.unibo.tuprolog.theory.Theory
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
-class TransformationTest: PythonPrimitivesTestSuite() {
+class TransformationTest : PythonPrimitivesTestSuite() {
 
     private val schemaName = "testSchema"
     private val target = "bye"
@@ -159,5 +161,3 @@ class TransformationTest: PythonPrimitivesTestSuite() {
         }
     }
 }
-
-

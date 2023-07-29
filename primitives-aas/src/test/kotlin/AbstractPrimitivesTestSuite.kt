@@ -25,7 +25,8 @@ abstract class AbstractPrimitivesTestSuite {
         logicProgramming {
             solver = Solver.prolog.mutableSolverWithDefaultBuiltins(
                 otherLibraries = Runtime.of(
-                    Library.of("customLibrary",
+                    Library.of(
+                        "customLibrary",
                         getActivePorts().associate {
                             PrimitiveClientFactory.connectToPrimitive(primitivesHost, it)
                         }
@@ -48,4 +49,3 @@ abstract class AbstractPrimitivesTestSuite {
         executor.awaitTermination(5, TimeUnit.SECONDS)
     }
 }
-

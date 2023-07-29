@@ -7,7 +7,7 @@ import it.unibo.tuprolog.solve.sideffects.SideEffect
 val customWritePrimitive = DistributedPrimitiveWrapper("customWrite", 2) { request ->
     val arg1: Term = request.arguments[0]
     val arg2: Term = request.arguments[1]
-    if(arg1.isAtom && arg2.isAtom) {
+    if (arg1.isAtom && arg2.isAtom) {
         sequenceOf(
             request.replySuccess(
                 SideEffect.WriteOnOutputChannels(
@@ -19,4 +19,3 @@ val customWritePrimitive = DistributedPrimitiveWrapper("customWrite", 2) { reque
         sequenceOf(request.replyFail())
     }
 }
-

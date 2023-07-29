@@ -10,9 +10,10 @@ import it.unibo.tuprolog.core.parsing.parse
 import it.unibo.tuprolog.dsl.theory.logicProgramming
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
 import it.unibo.tuprolog.theory.Theory
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
-class TestGetEvents: KotlinPrimitivesTestSuite() {
+class TestGetEvents : KotlinPrimitivesTestSuite() {
 
     override val primitives: List<DistributedPrimitiveWrapper> =
         listOf(filterKBPrimitive, getEventsPrimitive)
@@ -45,4 +46,3 @@ class TestGetEvents: KotlinPrimitivesTestSuite() {
         }
     }
 }
-

@@ -6,9 +6,12 @@ import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.parsing.parse
 import it.unibo.tuprolog.dsl.theory.logicProgramming
 import it.unibo.tuprolog.theory.Theory
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-class DataTest: PythonPrimitivesTestSuite() {
+class DataTest : PythonPrimitivesTestSuite() {
 
     val schemaName = "testSchema"
     private val target = "bye"
@@ -71,10 +74,15 @@ class DataTest: PythonPrimitivesTestSuite() {
         logicProgramming {
             val schemaName = "testSchema"
             val target = "hello"
-            val query = "schema"(X, schemaName, listOf(
-                "attribute"(0, "greet", "integer"),
-                "attribute"(1, "hello", "categorical"(listOf("red", "yellow")))
-            ), listOf(target))
+            val query = "schema"(
+                X,
+                schemaName,
+                listOf(
+                    "attribute"(0, "greet", "integer"),
+                    "attribute"(1, "hello", "categorical"(listOf("red", "yellow")))
+                ),
+                listOf(target)
+            )
             val solution1 = solver.solveOnce(query)
             assertTrue(solution1.isYes)
             assertTrue(solution1.substitution.contains(X))
@@ -131,7 +139,7 @@ class DataTest: PythonPrimitivesTestSuite() {
             val query = "theory_to_dataset"(schemaName, X) and "row"(X, 3, Z)
             val solution = solver.solveList(query)
             assertEquals(1, solution.size)
-            assertTrue(solution.first().isYes )
+            assertTrue(solution.first().isYes)
             println(solution)
         }
     }
@@ -143,7 +151,7 @@ class DataTest: PythonPrimitivesTestSuite() {
             val query = "theory_to_dataset"(schemaName, X) and "row"(X, Y, Z)
             val solution = solver.solveList(query)
             assertEquals(solver.solveList(schemaName(X, Y, Z)).size, solution.size)
-            assertTrue(solution.first().isYes )
+            assertTrue(solution.first().isYes)
             println(solution)
         }
     }
@@ -156,7 +164,7 @@ class DataTest: PythonPrimitivesTestSuite() {
             val solution = solver.solveList(query)
             println(solution)
             assertEquals(1, solution.size)
-            assertTrue(solution.first().isYes )
+            assertTrue(solution.first().isYes)
         }
     }
 
@@ -168,8 +176,7 @@ class DataTest: PythonPrimitivesTestSuite() {
             val solution = solver.solveList(query)
             println(solution)
             assertEquals(solver.solveList("attribute"(X, Y, Z)).size, solution.size)
-            assertTrue(solution.first().isYes )
-
+            assertTrue(solution.first().isYes)
         }
     }
 
@@ -181,8 +188,7 @@ class DataTest: PythonPrimitivesTestSuite() {
             val solution = solver.solveList(query)
             println(solution)
             assertEquals(1, solution.size)
-            assertTrue(solution.first().isYes )
-
+            assertTrue(solution.first().isYes)
         }
     }
 

@@ -21,7 +21,6 @@ import it.unibo.tuprolog.primitives.parsers.serializers.buildLogicStackTraceResp
 import it.unibo.tuprolog.primitives.parsers.serializers.buildOperatorsResponse
 import it.unibo.tuprolog.primitives.parsers.serializers.buildSubSolveSolutionMsg
 import it.unibo.tuprolog.primitives.parsers.serializers.buildUnificatorResponse
-import it.unibo.tuprolog.primitives.parsers.serializers.serialize
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.Solution
 import it.unibo.tuprolog.solve.Solver
@@ -72,14 +71,14 @@ class SessionSolverImpl(
                         { clause: Clause ->
                             clause.bodyItems.any {
                                 it.isStruct && it.castToStruct().functor == filter.argument
-                            } 
+                            }
                         }
                     }
                     InspectKbMsg.FilterType.CONTAINS_TERM -> {
                         { clause: Clause ->
                             clause.bodyItems.any {
                                 it.structurallyEquals(Term.parse(filter.argument))
-                            } 
+                            }
                         }
                     }
                     InspectKbMsg.FilterType.STARTS_WITH -> {

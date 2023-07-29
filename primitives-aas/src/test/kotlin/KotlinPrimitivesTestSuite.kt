@@ -5,7 +5,7 @@ import java.util.concurrent.CountDownLatch
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
-abstract class KotlinPrimitivesTestSuite: AbstractPrimitivesTestSuite() {
+abstract class KotlinPrimitivesTestSuite : AbstractPrimitivesTestSuite() {
 
     private val activeServices = mutableMapOf<Int, Server>()
     abstract val primitives: List<DistributedPrimitiveWrapper>

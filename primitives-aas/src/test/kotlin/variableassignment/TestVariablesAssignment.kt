@@ -8,9 +8,11 @@ import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.dsl.theory.logicProgramming
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
 import it.unibo.tuprolog.theory.Theory
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-class TestVariablesAssignment: KotlinPrimitivesTestSuite() {
+class TestVariablesAssignment : KotlinPrimitivesTestSuite() {
 
     override val primitives: List<DistributedPrimitiveWrapper> = listOf(innestedPrimitive, customSumPrimitive)
 
@@ -28,11 +30,13 @@ class TestVariablesAssignment: KotlinPrimitivesTestSuite() {
     @Throws(Exception::class)
     fun testCustomSum2() {
         logicProgramming {
-            solver.appendStaticKb(Theory.Companion.of(
-                rule{
-                    "summing"(X) `if` "customSum"(1, 2, X)
-                }
-            ))
+            solver.appendStaticKb(
+                Theory.Companion.of(
+                    rule {
+                        "summing"(X) `if` "customSum"(1, 2, X)
+                    }
+                )
+            )
             val solution = solver.solveOnce("summing"(X))
             assertTrue(solution.isYes)
             assertEquals(Substitution.of(X, Numeric.of(3)), solution.substitution)
@@ -50,6 +54,4 @@ class TestVariablesAssignment: KotlinPrimitivesTestSuite() {
             assertEquals(Substitution.of(X, Numeric.of(0)), solution.substitution)
         }
     }
-
 }
-

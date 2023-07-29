@@ -1,19 +1,30 @@
 package predicative
 
 import KotlinPrimitivesTestSuite
-import examples.*
+import examples.customSumPrimitive
+import examples.innestedPrimitive
+import examples.ntPrimitive
+import examples.readerPrimitive
+import examples.throwablePrimitive
+import examples.writerPrimitive
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.dsl.theory.logicProgramming
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
 import it.unibo.tuprolog.solve.exception.HaltException
 import it.unibo.tuprolog.solve.exception.error.TypeError
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-class TestPredicative: KotlinPrimitivesTestSuite() {
+class TestPredicative : KotlinPrimitivesTestSuite() {
 
     override val primitives: List<DistributedPrimitiveWrapper> = listOf(
-        innestedPrimitive, ntPrimitive, readerPrimitive,
-        throwablePrimitive, writerPrimitive, customSumPrimitive
+        innestedPrimitive,
+        ntPrimitive,
+        readerPrimitive,
+        throwablePrimitive,
+        writerPrimitive,
+        customSumPrimitive
     )
 
     /** Testing Basic Primitive **/
@@ -43,8 +54,9 @@ class TestPredicative: KotlinPrimitivesTestSuite() {
         logicProgramming {
             val solution = solver.solveOnce(Struct.of("error"))
             assertTrue(solution.isHalt)
-            assertTrue(solution.exception is HaltException &&
-                (solution.exception as HaltException).exitStatus == 404)
+            assertTrue(
+                solution.exception is HaltException && (solution.exception as HaltException).exitStatus == 404
+            )
         }
     }
 
