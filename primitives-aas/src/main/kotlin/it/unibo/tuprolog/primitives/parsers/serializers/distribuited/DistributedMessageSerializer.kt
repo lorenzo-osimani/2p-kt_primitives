@@ -8,7 +8,6 @@ import it.unibo.tuprolog.primitives.ReadLineMsg
 import it.unibo.tuprolog.primitives.ResponseMsg
 import it.unibo.tuprolog.primitives.SubRequestMsg
 import it.unibo.tuprolog.primitives.SubSolveRequest
-
 import it.unibo.tuprolog.primitives.parsers.serializers.serialize
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedResponse
 import it.unibo.tuprolog.primitives.server.session.Session

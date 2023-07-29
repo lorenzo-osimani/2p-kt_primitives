@@ -85,7 +85,9 @@ class SessionSolverImpl(
                         { clause: Clause ->
                             if (clause.head != null) {
                                 clause.head!!.toString().startsWith(filter.argument, true)
-                            } else false
+                            } else {
+                                false
+                            }
                         }
                     }
                     else -> throw ParsingException(this)

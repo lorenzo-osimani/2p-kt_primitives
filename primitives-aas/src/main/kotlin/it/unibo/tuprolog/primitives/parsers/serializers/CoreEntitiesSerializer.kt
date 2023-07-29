@@ -1,11 +1,11 @@
 package it.unibo.tuprolog.primitives.parsers.serializers
 
+import it.unibo.tuprolog.core.Atom
 import it.unibo.tuprolog.core.Numeric
+import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Truth
 import it.unibo.tuprolog.core.Var
-import it.unibo.tuprolog.core.Atom
-import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.primitives.messages.ArgumentMsg
 import it.unibo.tuprolog.primitives.messages.SignatureMsg
 import it.unibo.tuprolog.primitives.messages.StructMsg

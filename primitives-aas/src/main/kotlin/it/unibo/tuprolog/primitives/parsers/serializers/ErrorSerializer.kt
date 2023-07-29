@@ -1,23 +1,23 @@
 package it.unibo.tuprolog.primitives.parsers.serializers
 
-import it.unibo.tuprolog.primitives.parsers.ParsingException
 import it.unibo.tuprolog.primitives.ErrorMsg
-import it.unibo.tuprolog.primitives.errors.HaltExceptionMsg
-import it.unibo.tuprolog.primitives.errors.LogicErrorMsg
-import it.unibo.tuprolog.primitives.errors.ResolutionExceptionMsg
-import it.unibo.tuprolog.primitives.errors.TimeOutExceptionMsg
 import it.unibo.tuprolog.primitives.errors.DomainErrorMsg
 import it.unibo.tuprolog.primitives.errors.EvaluationErrorMsg
 import it.unibo.tuprolog.primitives.errors.ExistenceErrorMsg
+import it.unibo.tuprolog.primitives.errors.HaltExceptionMsg
+import it.unibo.tuprolog.primitives.errors.InitializationIssueMsg
 import it.unibo.tuprolog.primitives.errors.InstantiationErrorMsg
+import it.unibo.tuprolog.primitives.errors.LogicErrorMsg
 import it.unibo.tuprolog.primitives.errors.MessageErrorMsg
+import it.unibo.tuprolog.primitives.errors.MissingPredicateMsg
 import it.unibo.tuprolog.primitives.errors.PermissionErrorMsg
 import it.unibo.tuprolog.primitives.errors.RepresentationErrorMsg
+import it.unibo.tuprolog.primitives.errors.ResolutionExceptionMsg
 import it.unibo.tuprolog.primitives.errors.SyntaxErrorMsg
 import it.unibo.tuprolog.primitives.errors.SystemErrorMsg
-import it.unibo.tuprolog.primitives.errors.MissingPredicateMsg
-import it.unibo.tuprolog.primitives.errors.InitializationIssueMsg
+import it.unibo.tuprolog.primitives.errors.TimeOutExceptionMsg
 import it.unibo.tuprolog.primitives.errors.TypeErrorMsg
+import it.unibo.tuprolog.primitives.parsers.ParsingException
 import it.unibo.tuprolog.solve.exception.HaltException
 import it.unibo.tuprolog.solve.exception.LogicError
 import it.unibo.tuprolog.solve.exception.ResolutionException
@@ -43,8 +43,11 @@ fun ResolutionException.serialize(): ErrorMsg {
     }
     this.cause?.let {
         builder.setCause(
-            if (it is ResolutionException) it.serialize()
-            else ErrorMsg.newBuilder().setMessage(it.message).build()
+            if (it is ResolutionException) {
+                it.serialize()
+            } else {
+                ErrorMsg.newBuilder().setMessage(it.message).build()
+            }
         )
     }
     return when (this) {

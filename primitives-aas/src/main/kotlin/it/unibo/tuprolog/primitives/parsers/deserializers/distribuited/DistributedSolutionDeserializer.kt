@@ -21,7 +21,9 @@ fun SolutionMsg.deserializeAsDistributed(scope: Scope = Scope.empty()): Distribu
             ).asUnifier()
             if (substitution != null) {
                 DistributedSolution.yes(query, substitution)
-            } else DistributedSolution.yes(query)
+            } else {
+                DistributedSolution.yes(query)
+            }
         }
         SolutionMsg.SolutionType.FAIL -> {
             DistributedSolution.no(query)

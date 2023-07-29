@@ -92,8 +92,7 @@ class DemoTest : PythonPrimitivesTestSuite() {
                                 "Performance",
                                 "train_cv_fold"("Dataset", 5, "LearnParams", "Performance"),
                                 "AllPerformances"
-                            ) /* and
-                                "mean"("AllPerformances", "AveragePerformance")*/
+                            )
                             )
                     },
                     /* Trains a NN once, for the k-th round of CV. */

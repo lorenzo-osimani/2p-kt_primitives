@@ -32,7 +32,7 @@ class TestBacktracking : KotlinPrimitivesTestSuite() {
                     "nt"(0),
                     "nt"(1),
                     "nt"(2),
-                    "nt"(3),
+                    "nt"(3)
                 ).toList(),
                 solutions
             )
@@ -51,7 +51,7 @@ class TestBacktracking : KotlinPrimitivesTestSuite() {
             assertEquals(
                 listOf(
                     "solve"("natural"(0)),
-                    "solve"("natural"(1)),
+                    "solve"("natural"(1))
                 ).toList(),
                 solutions
             )

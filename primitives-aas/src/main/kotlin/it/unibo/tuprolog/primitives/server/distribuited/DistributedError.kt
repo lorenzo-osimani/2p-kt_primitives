@@ -51,7 +51,7 @@ sealed class DistributedError(
     class MessageError(
         message: String? = null,
         cause: Throwable? = null,
-        extraData: Term? = null,
+        extraData: Term? = null
     ) : LogicError(message, cause, Atom.of("message_error"), extraData)
 
     class PermissionError(
@@ -67,19 +67,19 @@ sealed class DistributedError(
         message: String? = null,
         cause: Throwable? = null,
         extraData: Term? = null,
-        val limit: it.unibo.tuprolog.solve.exception.error.RepresentationError.Limit,
+        val limit: it.unibo.tuprolog.solve.exception.error.RepresentationError.Limit
     ) : LogicError(message, cause, Atom.of("representation_error"), extraData)
 
     class SyntaxError(
         message: String? = null,
         cause: Throwable? = null,
-        extraData: Term? = null,
+        extraData: Term? = null
     ) : LogicError(message, cause, Atom.of("syntax_error"), extraData)
 
     class SystemError(
         message: String? = null,
         cause: Throwable? = null,
-        extraData: Term? = null,
+        extraData: Term? = null
     ) : LogicError(message, cause, Atom.of("system_error"), extraData)
 
     class TypeError(
@@ -110,7 +110,7 @@ sealed class DistributedError(
 
     class ResolutionException(
         message: String? = null,
-        cause: Throwable? = null,
+        cause: Throwable? = null
     ) : DistributedError(message, cause)
 
     class TimeOutException(

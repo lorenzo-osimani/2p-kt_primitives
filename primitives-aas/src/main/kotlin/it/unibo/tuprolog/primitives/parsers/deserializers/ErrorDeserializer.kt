@@ -25,10 +25,14 @@ import it.unibo.tuprolog.solve.exception.warning.MissingPredicate
 fun ErrorMsg.deserialize(scope: Scope = Scope.empty(), actualContext: ExecutionContext): ResolutionException {
     val message = if (this.hasMessage()) {
         this.message
-    } else null
+    } else {
+        null
+    }
     val cause = if (this.hasCause()) {
         this.cause.deserialize(scope, actualContext)
-    } else null
+    } else {
+        null
+    }
     return when (this.errorCase) {
         ErrorMsg.ErrorCase.LOGICERROR -> {
             this.logicError.deserialize(message, cause, actualContext)
@@ -61,7 +65,9 @@ fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: Exec
     val extraData =
         if (this.extraData != ArgumentMsg.getDefaultInstance()) {
             this.extraData.deserialize()
-        } else null
+        } else {
+            null
+        }
     return when (this.errorCase) {
         LogicErrorMsg.ErrorCase.DOMAINERROR -> {
             val error = this.domainError

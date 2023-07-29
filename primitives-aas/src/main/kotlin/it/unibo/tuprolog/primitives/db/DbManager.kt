@@ -51,7 +51,9 @@ interface DbManager {
         fun get(): DbManager {
             if (manager != null) {
                 return manager!!
-            } else throw IllegalStateException("Must be initialized first")
+            } else {
+                throw IllegalStateException("Must be initialized first")
+            }
         }
     }
 }

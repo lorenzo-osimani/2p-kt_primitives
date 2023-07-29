@@ -29,7 +29,7 @@ import it.unibo.tuprolog.unify.Unificator
 class ServerSessionImpl(
     primitive: DistributedPrimitive,
     request: RequestMsg,
-    private val responseObserver: StreamObserver<GeneratorMsg>,
+    private val responseObserver: StreamObserver<GeneratorMsg>
 ) : ServerSession {
 
     private val stream: Iterator<DistributedResponse>
@@ -70,13 +70,15 @@ class ServerSessionImpl(
                 hasNext
 
             override fun next(): DistributedResponse {
-                if(hasNext()) {
+                if (hasNext()) {
                     val request = SingleSubSolveEvent(id, query, timeout)
                     return enqueueRequestAndAwait<DistributedResponse>(request)
                         .also {
                             hasNext = request.hasNext()!!
                         }
-                } else throw NoSuchElementException()
+                } else {
+                    throw NoSuchElementException()
+                }
             }
         }.asSequence()
 
@@ -98,11 +100,13 @@ class ServerSessionImpl(
                 hasNext
 
             override fun next(): Clause? {
-                if(hasNext()) {
+                if (hasNext()) {
                     val request = SingleInspectKbEvent(id, kbType, maxClauses, *filters)
                     return enqueueRequestAndAwait<Clause?>(request)
                         .also { hasNext = (it != null) }
-                } else throw NoSuchElementException()
+                } else {
+                    throw NoSuchElementException()
+                }
             }
         }.asSequence()
 

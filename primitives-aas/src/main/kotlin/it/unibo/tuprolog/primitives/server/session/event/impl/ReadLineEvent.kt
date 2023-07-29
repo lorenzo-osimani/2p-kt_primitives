@@ -7,7 +7,6 @@ import it.unibo.tuprolog.primitives.parsers.serializers.distribuited.buildReadLi
 import it.unibo.tuprolog.primitives.server.session.event.SubRequestEvent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
-import java.io.IOException
 
 const val END_OF_READ_EVENT = ""
 
@@ -24,9 +23,11 @@ class ReadLineEvent(
         val result = runBlocking {
             result.await()
         }
-        if (result.hasContent()) {
-            return result.content
-        } else return END_OF_READ_EVENT
+        return if (result.hasContent()) {
+            result.content
+        } else {
+            END_OF_READ_EVENT
+        }
     }
 
     override fun signalResponse(msg: SubResponseMsg) {

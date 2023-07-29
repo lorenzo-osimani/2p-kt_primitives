@@ -7,7 +7,7 @@ import it.unibo.tuprolog.primitives.utils.DummyContext
 import it.unibo.tuprolog.solve.ExecutionContext
 
 fun ExecutionContextMsg.deserialize(
-    scope: Scope = Scope.empty(),
+    scope: Scope = Scope.empty()
 ): ExecutionContext {
     val source = this
     return object : DummyContext() {

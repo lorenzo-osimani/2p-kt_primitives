@@ -79,7 +79,7 @@ sealed interface DistributedSolution {
             Yes(query)
 
         fun no(
-            query: Struct,
+            query: Struct
         ): DistributedSolution =
             No(query)
 

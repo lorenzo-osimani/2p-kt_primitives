@@ -16,10 +16,14 @@ import it.unibo.tuprolog.solve.exception.error.TypeError
 fun ErrorMsg.deserializeAsDistributed(scope: Scope = Scope.empty()): DistributedError {
     val message = if (this.hasMessage()) {
         this.message
-    } else null
+    } else {
+        null
+    }
     val cause = if (this.hasCause()) {
         this.cause.deserializeAsDistributed(scope)
-    } else null
+    } else {
+        null
+    }
     return when (this.errorCase) {
         ErrorMsg.ErrorCase.LOGICERROR -> {
             this.logicError.deserializeAsDistributed(message, cause)
@@ -58,45 +62,57 @@ fun ErrorMsg.deserializeAsDistributed(scope: Scope = Scope.empty()): Distributed
 
 fun LogicErrorMsg.deserializeAsDistributed(
     message: String?,
-    cause: Throwable?,
+    cause: Throwable?
 ): DistributedError {
     val extraData =
         if (this.extraData.isInitialized) {
             this.extraData.deserialize()
-        } else null
+        } else {
+            null
+        }
     return when (this.errorCase) {
         LogicErrorMsg.ErrorCase.DOMAINERROR -> {
             val error = this.domainError
             DistributedError.DomainError(
-                message, cause, extraData,
+                message,
+                cause,
+                extraData,
                 DomainError.Expected.valueOf(error.expectedDomain),
                 error.culprit.deserialize()
             )
         }
         LogicErrorMsg.ErrorCase.EVALUATIONERROR -> {
             DistributedError.EvaluationError(
-                message, cause, extraData,
+                message,
+                cause,
+                extraData,
                 EvaluationError.Type.valueOf(this.evaluationError.errorType)
             )
         }
         LogicErrorMsg.ErrorCase.EXISTENCEERROR -> {
             val error = this.existenceError
             DistributedError.ExistenceError(
-                message, cause, extraData,
+                message,
+                cause,
+                extraData,
                 ExistenceError.ObjectType.valueOf(error.expectedObject),
                 error.culprit.deserialize()
             )
         }
         LogicErrorMsg.ErrorCase.INSTANTIATIONERROR -> {
             DistributedError.InstantiationError(
-                message, cause, extraData,
+                message,
+                cause,
+                extraData,
                 this.instantiationError.culprit.deserialize().castToVar()
             )
         }
         LogicErrorMsg.ErrorCase.PERMISSIONERROR -> {
             val error = this.permissionError
             DistributedError.PermissionError(
-                message, cause, extraData,
+                message,
+                cause,
+                extraData,
                 PermissionError.Operation.valueOf(error.operation),
                 PermissionError.Permission.valueOf(error.permission),
                 this.permissionError.culprit.deserialize().castToVar()
@@ -104,7 +120,9 @@ fun LogicErrorMsg.deserializeAsDistributed(
         }
         LogicErrorMsg.ErrorCase.REPRESENTATIONERROR -> {
             DistributedError.RepresentationError(
-                message, cause, extraData,
+                message,
+                cause,
+                extraData,
                 RepresentationError.Limit.valueOf(this.representationError.limit)
             )
         }
@@ -117,14 +135,17 @@ fun LogicErrorMsg.deserializeAsDistributed(
         LogicErrorMsg.ErrorCase.TYPEERROR -> {
             val error = this.typeError
             DistributedError.TypeError(
-                message, cause, extraData,
+                message,
+                cause,
+                extraData,
                 TypeError.Expected.valueOf(error.expectedType),
                 this.typeError.culprit.deserialize()
             )
         }
         else -> {
             DistributedError.LogicError(
-                message, cause,
+                message,
+                cause,
                 type.deserialize().castToStruct(),
                 extraData
             )

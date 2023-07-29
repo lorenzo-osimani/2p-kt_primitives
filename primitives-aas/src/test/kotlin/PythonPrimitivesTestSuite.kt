@@ -33,7 +33,9 @@ abstract class PythonPrimitivesTestSuite : AbstractPrimitivesTestSuite() {
                 startingPort = ports.first()
                 maxPort = ports.last()
                 true
-            } else false
+            } else {
+                false
+            }
         }
         submit {
             process.inputStream.bufferedReader().useLines {

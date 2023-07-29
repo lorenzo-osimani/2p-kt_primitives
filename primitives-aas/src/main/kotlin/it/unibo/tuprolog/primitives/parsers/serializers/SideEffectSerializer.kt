@@ -2,16 +2,16 @@ package it.unibo.tuprolog.primitives.parsers.serializers
 
 import it.unibo.tuprolog.primitives.messages.ArgumentMsg
 import it.unibo.tuprolog.primitives.parsers.ParsingException
+import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg
 import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg.CloseChannels
 import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg.ModifyChannels
+import it.unibo.tuprolog.primitives.sideEffects.AlterCustomDataMsg
 import it.unibo.tuprolog.primitives.sideEffects.AlterFlagsMsg
+import it.unibo.tuprolog.primitives.sideEffects.AlterOperatorsMsg
 import it.unibo.tuprolog.primitives.sideEffects.AlterRuntimeMsg
 import it.unibo.tuprolog.primitives.sideEffects.SetClausesOfKBMsg
 import it.unibo.tuprolog.primitives.sideEffects.SideEffectMsg
-import it.unibo.tuprolog.primitives.sideEffects.AlterOperatorsMsg
-import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg
 import it.unibo.tuprolog.primitives.sideEffects.WriteOnOutputChannelMsg
-import it.unibo.tuprolog.primitives.sideEffects.AlterCustomDataMsg
 import it.unibo.tuprolog.solve.sideffects.SideEffect
 
 fun SideEffect.serialize(): SideEffectMsg =

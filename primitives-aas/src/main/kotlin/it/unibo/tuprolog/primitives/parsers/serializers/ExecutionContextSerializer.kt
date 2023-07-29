@@ -1,15 +1,15 @@
 package it.unibo.tuprolog.primitives.parsers.serializers
 
 import it.unibo.tuprolog.core.operators.OperatorSet
+import it.unibo.tuprolog.primitives.messages.CustomDataMsg
 import it.unibo.tuprolog.primitives.messages.ExecutionContextMsg
+import it.unibo.tuprolog.primitives.messages.FlagsMsg
 import it.unibo.tuprolog.primitives.messages.LibrariesMsg
 import it.unibo.tuprolog.primitives.messages.LibraryMsg
-import it.unibo.tuprolog.primitives.messages.UnificatorMsg
-import it.unibo.tuprolog.primitives.messages.FlagsMsg
-import it.unibo.tuprolog.primitives.messages.TheoryMsg
-import it.unibo.tuprolog.primitives.messages.OperatorSetMsg
 import it.unibo.tuprolog.primitives.messages.OperatorMsg
-import it.unibo.tuprolog.primitives.messages.CustomDataMsg
+import it.unibo.tuprolog.primitives.messages.OperatorSetMsg
+import it.unibo.tuprolog.primitives.messages.TheoryMsg
+import it.unibo.tuprolog.primitives.messages.UnificatorMsg
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.data.CustomDataStore
 import it.unibo.tuprolog.solve.flags.FlagStore

@@ -116,7 +116,9 @@ class ClientSessionImpl(
                         SolverMsg.newBuilder().setNext(EmptyMsg.getDefaultInstance()).build()
                     )
                     return queue.takeFirst()
-                } else throw NoSuchElementException()
+                } else {
+                    throw NoSuchElementException()
+                }
             }
         }
 }

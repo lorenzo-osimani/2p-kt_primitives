@@ -21,7 +21,9 @@ fun SolutionMsg.deserialize(scope: Scope = Scope.empty(), actualContext: Executi
             ).asUnifier()
             if (substitution != null) {
                 Solution.yes(query, substitution)
-            } else Solution.yes(query)
+            } else {
+                Solution.yes(query)
+            }
         }
         SolutionMsg.SolutionType.FAIL -> {
             Solution.no(query)
