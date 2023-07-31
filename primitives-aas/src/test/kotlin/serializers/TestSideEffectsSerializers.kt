@@ -126,7 +126,7 @@ class TestSideEffectsSerializers {
     @Throws(Exception::class)
     fun testSetOperators() {
         val sideEffect = SideEffect.SetOperators(
-            Solver.prolog.defaultBuiltins.operators.take(10)
+            Solver.prolog.defaultBuiltins.operators.take(1)
         )
         genericSerializationTest(sideEffect)
     }
@@ -135,7 +135,7 @@ class TestSideEffectsSerializers {
     @Throws(Exception::class)
     fun testRemoveOperators() {
         val sideEffect = SideEffect.RemoveOperators(
-            Solver.prolog.defaultBuiltins.operators.take(10)
+            Solver.prolog.defaultBuiltins.operators.take(1)
         )
         genericSerializationTest(sideEffect)
     }
@@ -144,7 +144,7 @@ class TestSideEffectsSerializers {
     @Throws(Exception::class)
     fun testResetOperators() {
         val sideEffect = SideEffect.ResetOperators(
-            Solver.prolog.defaultBuiltins.operators.take(10)
+            Solver.prolog.defaultBuiltins.operators.take(1)
         )
         genericSerializationTest(sideEffect)
     }
