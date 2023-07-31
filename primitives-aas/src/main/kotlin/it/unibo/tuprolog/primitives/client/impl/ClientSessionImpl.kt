@@ -77,7 +77,6 @@ class ClientSessionImpl(
                     else -> throw ParsingException(this)
                 }
             }
-            println("Response sent")
         }
     }
 

@@ -70,7 +70,7 @@ fun DistributedError.LogicError.serialize(builder: ErrorMsg.Builder): ErrorMsg {
             logicErrorBuilder.setDomainError(
                 DomainErrorMsg.newBuilder()
                     .setCulprit(this.culprit.serialize())
-                    .setExpectedDomain(this.expected.domain)
+                    .setExpectedDomain(this.expected.name)
             )
         is DistributedError.EvaluationError ->
             logicErrorBuilder.setEvaluationError(
@@ -95,14 +95,14 @@ fun DistributedError.LogicError.serialize(builder: ErrorMsg.Builder): ErrorMsg {
         is DistributedError.PermissionError ->
             logicErrorBuilder.setPermissionError(
                 PermissionErrorMsg.newBuilder()
-                    .setOperation(this.operation.operation)
-                    .setPermission(this.permission.permission)
+                    .setOperation(this.operation.name)
+                    .setPermission(this.permission.name)
                     .setCulprit(this.culprit.serialize())
             )
         is DistributedError.RepresentationError ->
             logicErrorBuilder.setRepresentationError(
                 RepresentationErrorMsg.newBuilder()
-                    .setLimit(this.limit.limit)
+                    .setLimit(this.limit.name)
             )
         is DistributedError.SyntaxError ->
             logicErrorBuilder.setSyntaxError(

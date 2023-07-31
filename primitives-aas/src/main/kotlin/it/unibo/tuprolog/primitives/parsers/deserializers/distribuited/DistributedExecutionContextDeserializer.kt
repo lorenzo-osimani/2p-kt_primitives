@@ -10,7 +10,7 @@ import it.unibo.tuprolog.primitives.server.session.ContextRequester
 
 fun ExecutionContextMsg.deserializeAsDistributed(
     scope: Scope = Scope.empty(),
-    contextRequester: ContextRequester
+    contextRequester: ContextRequester? = null
 ): DistributedExecutionContext =
     DistributedExecutionContext(
         procedure = this.procedure.deserialize(scope),

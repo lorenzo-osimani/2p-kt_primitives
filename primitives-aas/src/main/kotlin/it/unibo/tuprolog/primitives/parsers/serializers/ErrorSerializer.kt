@@ -76,7 +76,7 @@ fun LogicError.serialize(builder: ErrorMsg.Builder): ErrorMsg {
             logicErrorBuilder.setDomainError(
                 DomainErrorMsg.newBuilder()
                     .setCulprit(this.culprit.serialize())
-                    .setExpectedDomain(this.expectedDomain.domain)
+                    .setExpectedDomain(this.expectedDomain.name)
             )
         is EvaluationError ->
             logicErrorBuilder.setEvaluationError(
@@ -101,14 +101,14 @@ fun LogicError.serialize(builder: ErrorMsg.Builder): ErrorMsg {
         is PermissionError ->
             logicErrorBuilder.setPermissionError(
                 PermissionErrorMsg.newBuilder()
-                    .setOperation(this.operation.operation)
-                    .setPermission(this.permission.permission)
+                    .setOperation(this.operation.name)
+                    .setPermission(this.permission.name)
                     .setCulprit(this.culprit.serialize())
             )
         is RepresentationError ->
             logicErrorBuilder.setRepresentationError(
                 RepresentationErrorMsg.newBuilder()
-                    .setLimit(this.limit.limit)
+                    .setLimit(this.limit.name)
             )
         is SyntaxError ->
             logicErrorBuilder.setSyntaxError(

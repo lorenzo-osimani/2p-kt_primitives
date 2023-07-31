@@ -23,35 +23,35 @@ data class DistributedExecutionContext(
     val remainingTime: Long,
     val elapsedTime: Long,
     val maxDuration: Long,
-    private val contextRequester: ContextRequester
+    private val contextRequester: ContextRequester?
 ) {
 
     val logicStackTrace: List<Struct>
-        get() = contextRequester.getLogicStackTrace()
+        get() = contextRequester!!.getLogicStackTrace()
     val customData: CustomDataStore
-        get() = contextRequester.getCustomDataStore()
+        get() = contextRequester!!.getCustomDataStore()
     val unificator: Unificator
-        get() = contextRequester.getUnificator()
+        get() = contextRequester!!.getUnificator()
     val runtime: DistributedRuntime
-        get() = contextRequester.getLibraries()
+        get() = contextRequester!!.getLibraries()
     val flags: FlagStore
-        get() = contextRequester.getFlagStore()
+        get() = contextRequester!!.getFlagStore()
     val staticKb: Theory
-        get() = Theory.of(contextRequester.inspectKB(Session.KbType.STATIC).filterNotNull().toList())
+        get() = Theory.of(contextRequester!!.inspectKB(Session.KbType.STATIC).filterNotNull().toList())
     val dynamicKb: Theory
-        get() = Theory.of(contextRequester.inspectKB(Session.KbType.DYNAMIC).filterNotNull().toList())
+        get() = Theory.of(contextRequester!!.inspectKB(Session.KbType.DYNAMIC).filterNotNull().toList())
     val operators: OperatorSet
-        get() = contextRequester.getOperators()
+        get() = contextRequester!!.getOperators()
     val inputStore: Set<String>
-        get() = contextRequester.getInputStoreAliases()
+        get() = contextRequester!!.getInputStoreAliases()
     val outputStore: Set<String>
-        get() = contextRequester.getOutputStoreAliases()
+        get() = contextRequester!!.getOutputStoreAliases()
 
     fun filterStaticKb(
         maxClauses: Long = -1,
         vararg filters: Pair<Session.KbFilter, String>
     ): Sequence<Clause?> {
-        return contextRequester.inspectKB(Session.KbType.STATIC, maxClauses, *filters)
+        return contextRequester!!.inspectKB(Session.KbType.STATIC, maxClauses, *filters)
             .filterNotNull()
     }
 
@@ -60,7 +60,7 @@ data class DistributedExecutionContext(
         vararg filters: Pair<Session.KbFilter, String>
     ): Theory {
         return Theory.of(
-            contextRequester.inspectKB(Session.KbType.DYNAMIC, maxClauses, *filters)
+            contextRequester!!.inspectKB(Session.KbType.DYNAMIC, maxClauses, *filters)
                 .filterNotNull().toList()
         )
     }

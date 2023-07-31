@@ -117,7 +117,7 @@ fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: Exec
                 context,
                 PermissionError.Operation.valueOf(error.operation),
                 PermissionError.Permission.valueOf(error.permission),
-                this.permissionError.culprit.deserialize().castToVar(),
+                this.permissionError.culprit.deserialize(),
                 extraData
             )
         }

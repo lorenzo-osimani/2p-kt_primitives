@@ -1,5 +1,6 @@
 package it.unibo.tuprolog.primitives.utils
 
+import it.unibo.tuprolog.core.Atom
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.operators.OperatorSet
@@ -21,7 +22,7 @@ open class DummyContext : ExecutionContext {
 
     override val unificator: Unificator = Unificator.default
 
-    override val procedure: Struct? = null
+    override val procedure: Struct? = Struct.of("dummy", Atom.of("hello"))
 
     override val substitution: Substitution.Unifier = Substitution.empty()
 

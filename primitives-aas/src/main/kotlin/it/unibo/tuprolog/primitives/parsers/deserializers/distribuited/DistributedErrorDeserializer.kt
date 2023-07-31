@@ -115,7 +115,7 @@ fun LogicErrorMsg.deserializeAsDistributed(
                 extraData,
                 PermissionError.Operation.valueOf(error.operation),
                 PermissionError.Permission.valueOf(error.permission),
-                this.permissionError.culprit.deserialize().castToVar()
+                this.permissionError.culprit.deserialize()
             )
         }
         LogicErrorMsg.ErrorCase.REPRESENTATIONERROR -> {
