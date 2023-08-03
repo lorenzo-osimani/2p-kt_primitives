@@ -1,6 +1,5 @@
 package it.unibo.tuprolog.primitives.parsers.serializers
 
-import it.unibo.tuprolog.core.Clause
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.operators.OperatorSet
 import it.unibo.tuprolog.primitives.GenericGetResponse
@@ -11,7 +10,6 @@ import it.unibo.tuprolog.primitives.SolverMsg
 import it.unibo.tuprolog.primitives.SubResponseMsg
 import it.unibo.tuprolog.primitives.messages.ChannelsMsg
 import it.unibo.tuprolog.primitives.messages.LogicStacktraceMsg
-import it.unibo.tuprolog.primitives.messages.StructMsg
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.data.CustomDataStore
 import it.unibo.tuprolog.solve.flags.FlagStore
@@ -116,15 +114,4 @@ fun buildSubSolveSolutionMsg(id: String, response: Solve.Response, hasNext: Bool
         SubResponseMsg.newBuilder().setId(id).setSolution(
             response.serialize(hasNext)
         )
-    )
-        .build()
-
-fun buildClauseMsg(id: String, clause: Clause?): SolverMsg {
-    val builder = SubResponseMsg.newBuilder().setId(id)
-    if (clause != null) {
-        builder.setClause(clause.serialize())
-    } else {
-        builder.setClause(StructMsg.getDefaultInstance())
-    }
-    return SolverMsg.newBuilder().setResponse(builder).build()
-}
+    ).build()

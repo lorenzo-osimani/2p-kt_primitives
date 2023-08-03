@@ -9,17 +9,6 @@ import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.unify.Unificator
 
 interface ContextRequester {
-    fun getLogicStackTrace(): List<Struct>
-
-    fun getCustomDataStore(): CustomDataStore
-
-    fun getUnificator(): Unificator
-
-    fun getLibraries(): DistributedRuntime
-
-    fun getFlagStore(): FlagStore
-
-    fun getOperators(): OperatorSet
 
     /** Inspect the KB of the Client Solver and returns part of it, optionally applying a filter.
      * If maxSolutions is -1 no max is applied.
@@ -32,7 +21,27 @@ interface ContextRequester {
         vararg filters: Pair<Session.KbFilter, String>
     ): Sequence<Clause?>
 
+    fun getLogicStackTrace(): List<Struct>
+
+    fun getCustomDataStore(): CustomDataStore
+
+    fun getUnificator(): Unificator
+
+    fun getLibraries(): DistributedRuntime
+
+    fun getFlagStore(): FlagStore
+
+    fun getOperators(): OperatorSet
+
     fun getInputStoreAliases(): Set<String>
 
     fun getOutputStoreAliases(): Set<String>
+
+    companion object {
+
+        fun of(
+            session: ServerSession
+        ): ContextRequester =
+            ContextRequesterImpl(session)
+    }
 }

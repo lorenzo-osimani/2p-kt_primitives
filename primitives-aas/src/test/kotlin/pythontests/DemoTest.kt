@@ -69,7 +69,7 @@ class DemoTest : PythonPrimitivesTestSuite() {
         super.beforeEach()
         logicProgramming {
             solver.appendStaticKb(
-                Theory.Companion.of(
+                Theory.of(
                     rule {
                         "createModel"("NInput", "NOutput", E) `if` (
                             "input_layer"("NInput", A) and

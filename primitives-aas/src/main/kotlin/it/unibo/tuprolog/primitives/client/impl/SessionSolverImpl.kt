@@ -1,9 +1,9 @@
 package it.unibo.tuprolog.primitives.client.impl
 
-import io.grpc.stub.StreamObserver
 import it.unibo.tuprolog.core.Clause
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.parsing.parse
+import it.unibo.tuprolog.primitives.GenericGetMsg
 import it.unibo.tuprolog.primitives.InspectKbMsg
 import it.unibo.tuprolog.primitives.ReadLineMsg
 import it.unibo.tuprolog.primitives.SolverMsg
@@ -21,13 +21,13 @@ import it.unibo.tuprolog.primitives.parsers.serializers.buildLogicStackTraceResp
 import it.unibo.tuprolog.primitives.parsers.serializers.buildOperatorsResponse
 import it.unibo.tuprolog.primitives.parsers.serializers.buildSubSolveSolutionMsg
 import it.unibo.tuprolog.primitives.parsers.serializers.buildUnificatorResponse
+import it.unibo.tuprolog.primitives.utils.END_OF_READ_EVENT
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.Solution
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.primitive.Solve
 
 class SessionSolverImpl(
-    private val responseObserver: StreamObserver<SolverMsg>,
     private val actualContext: ExecutionContext
 ) : SessionSolver {
 
@@ -37,27 +37,26 @@ class SessionSolverImpl(
 
     private val theoryIterator: MutableMap<String, Iterator<Clause>> = mutableMapOf()
 
-    override fun solve(id: String, event: SubSolveRequest) {
+    override fun solve(id: String, event: SubSolveRequest): SolverMsg {
         val query = event.query.deserialize()
         computations.putIfAbsent(id, sessionSolver.solve(query, event.timeout).iterator())
         val solution: Solution = computations[id]!!.next()
-        responseObserver.onNext(
-            buildSubSolveSolutionMsg(
-                id,
-                Solve.Response(solution),
-                computations[id]!!.hasNext()
-            )
+        return buildSubSolveSolutionMsg(
+            id,
+            Solve.Response(solution),
+            computations[id]!!.hasNext()
         )
     }
 
-    override fun readLine(id: String, event: ReadLineMsg) {
+    override fun readLine(id: String, event: ReadLineMsg): SolverMsg {
+        var line: String = END_OF_READ_EVENT
         sessionSolver.inputChannels[event.channelName]?.let { channel ->
-            val line = channel.read()
-            responseObserver.onNext(buildLineMsg(id, event.channelName, line.orEmpty()))
+            line = channel.read().orEmpty()
         }
+        return buildLineMsg(id, event.channelName, line)
     }
 
-    override fun inspectKb(id: String, event: InspectKbMsg) {
+    override fun inspectKb(id: String, event: InspectKbMsg): SolverMsg {
         if (!theoryIterator.containsKey(id)) {
             val inspectedKB = when (event.kbType) {
                 InspectKbMsg.KbType.STATIC -> sessionSolver.staticKb
@@ -104,52 +103,36 @@ class SessionSolverImpl(
                 }
         }
 
-        responseObserver.onNext(
-            buildClauseMsg(
-                id,
-                if (theoryIterator[id]!!.hasNext()) {
-                    theoryIterator[id]!!.next()
-                } else {
-                    theoryIterator.remove(id)
-                    null
-                }
-            )
+        return buildClauseMsg(
+            id,
+            if (theoryIterator[id]!!.hasNext()) {
+                theoryIterator[id]!!.next()
+            } else {
+                theoryIterator.remove(id)
+                null
+            }
         )
     }
 
-    override fun getLogicStackTrace(id: String) {
-        responseObserver.onNext(buildLogicStackTraceResponse(id, actualContext.logicStackTrace))
-    }
-
-    override fun getCustomDataStore(id: String) {
-        responseObserver.onNext(buildCustomDataStoreResponse(id, actualContext.customData))
-    }
-
-    override fun getUnificator(id: String) {
-        responseObserver.onNext(buildUnificatorResponse(id, sessionSolver.unificator))
-    }
-
-    override fun getLibraries(id: String) {
-        responseObserver.onNext(buildLibrariesResponse(id, sessionSolver.libraries))
-    }
-
-    override fun getFlagStore(id: String) {
-        responseObserver.onNext(buildFlagStoreResponse(id, sessionSolver.flags))
-    }
-
-    override fun getOperators(id: String) {
-        responseObserver.onNext(buildOperatorsResponse(id, sessionSolver.operators))
-    }
-
-    override fun getInputStoreAliases(id: String) {
-        responseObserver.onNext(
-            buildChannelResponse(id, sessionSolver.inputChannels.map { it.key })
-        )
-    }
-
-    override fun getOutputStoreAliases(id: String) {
-        responseObserver.onNext(
-            buildChannelResponse(id, sessionSolver.outputChannels.map { it.key })
-        )
+    override fun getExecutionContextElement(id: String, type: GenericGetMsg.Element): SolverMsg {
+        return when (type) {
+            GenericGetMsg.Element.LOGIC_STACKTRACE ->
+                buildLogicStackTraceResponse(id, actualContext.logicStackTrace)
+            GenericGetMsg.Element.CUSTOM_DATA_STORE ->
+                buildCustomDataStoreResponse(id, actualContext.customData)
+            GenericGetMsg.Element.LIBRARIES ->
+                buildLibrariesResponse(id, sessionSolver.libraries)
+            GenericGetMsg.Element.UNIFICATOR ->
+                buildUnificatorResponse(id, sessionSolver.unificator)
+            GenericGetMsg.Element.FLAGS ->
+                buildFlagStoreResponse(id, sessionSolver.flags)
+            GenericGetMsg.Element.OPERATORS ->
+                buildOperatorsResponse(id, sessionSolver.operators)
+            GenericGetMsg.Element.INPUT_CHANNELS ->
+                buildChannelResponse(id, sessionSolver.inputChannels.map { it.key })
+            GenericGetMsg.Element.OUTPUT_CHANNELS ->
+                buildChannelResponse(id, sessionSolver.outputChannels.map { it.key })
+            else -> throw ParsingException(this)
+        }
     }
 }

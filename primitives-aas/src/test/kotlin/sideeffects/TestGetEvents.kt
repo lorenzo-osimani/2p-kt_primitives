@@ -41,8 +41,21 @@ class TestGetEvents : KotlinPrimitivesTestSuite() {
             )
             val query = "filterKB"(Term.parse("f"), X)
             val solution = solver.solveList(query)
-            assertTrue(solution.size >= 2)
-            solution.forEach { println(it) }
+            solution.forEach {
+                println(it)
+                assertTrue(it.isYes)
+            }
+            assertTrue(solution.size == 2)
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testEmptyFilterKB() {
+        logicProgramming {
+            val query = "filterKB"(Term.parse("f"), X)
+            val solution = solver.solveOnce(query)
+            assertTrue(solution.isNo)
         }
     }
 }

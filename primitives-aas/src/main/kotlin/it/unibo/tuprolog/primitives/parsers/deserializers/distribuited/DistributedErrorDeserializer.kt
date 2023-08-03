@@ -65,90 +65,57 @@ fun LogicErrorMsg.deserializeAsDistributed(
     cause: Throwable?
 ): DistributedError {
     val extraData =
-        if (this.extraData.isInitialized) {
-            this.extraData.deserialize()
-        } else {
-            null
-        }
+        if (this.extraData.isInitialized) { this.extraData.deserialize() } else { null }
     return when (this.errorCase) {
-        LogicErrorMsg.ErrorCase.DOMAINERROR -> {
-            val error = this.domainError
-            DistributedError.DomainError(
-                message,
-                cause,
-                extraData,
-                DomainError.Expected.valueOf(error.expectedDomain),
-                error.culprit.deserialize()
-            )
-        }
-        LogicErrorMsg.ErrorCase.EVALUATIONERROR -> {
-            DistributedError.EvaluationError(
-                message,
-                cause,
-                extraData,
-                EvaluationError.Type.valueOf(this.evaluationError.errorType)
-            )
-        }
-        LogicErrorMsg.ErrorCase.EXISTENCEERROR -> {
-            val error = this.existenceError
-            DistributedError.ExistenceError(
-                message,
-                cause,
-                extraData,
-                ExistenceError.ObjectType.valueOf(error.expectedObject),
-                error.culprit.deserialize()
-            )
-        }
-        LogicErrorMsg.ErrorCase.INSTANTIATIONERROR -> {
-            DistributedError.InstantiationError(
-                message,
-                cause,
-                extraData,
-                this.instantiationError.culprit.deserialize().castToVar()
-            )
-        }
-        LogicErrorMsg.ErrorCase.PERMISSIONERROR -> {
-            val error = this.permissionError
-            DistributedError.PermissionError(
-                message,
-                cause,
-                extraData,
-                PermissionError.Operation.valueOf(error.operation),
-                PermissionError.Permission.valueOf(error.permission),
-                this.permissionError.culprit.deserialize()
-            )
-        }
-        LogicErrorMsg.ErrorCase.REPRESENTATIONERROR -> {
-            DistributedError.RepresentationError(
-                message,
-                cause,
-                extraData,
-                RepresentationError.Limit.valueOf(this.representationError.limit)
-            )
-        }
-        LogicErrorMsg.ErrorCase.SYNTAXERROR -> {
-            DistributedError.SyntaxError(message, cause, extraData)
-        }
-        LogicErrorMsg.ErrorCase.SYSTEMERROR -> {
-            DistributedError.SystemError(message, cause, extraData)
-        }
-        LogicErrorMsg.ErrorCase.TYPEERROR -> {
-            val error = this.typeError
-            DistributedError.TypeError(
-                message,
-                cause,
-                extraData,
-                TypeError.Expected.valueOf(error.expectedType),
-                this.typeError.culprit.deserialize()
-            )
-        }
-        else -> {
-            DistributedError.LogicError(
-                message,
-                cause,
-                type.deserialize().castToStruct(),
-                extraData
-            )
-        }
+        LogicErrorMsg.ErrorCase.DOMAINERROR -> DistributedError.DomainError(
+            message,
+            cause,
+            extraData,
+            DomainError.Expected.valueOf(this.domainError.expectedDomain),
+            this.domainError.culprit.deserialize()
+        )
+        LogicErrorMsg.ErrorCase.EVALUATIONERROR -> DistributedError.EvaluationError(
+            message,
+            cause,
+            extraData,
+            EvaluationError.Type.valueOf(this.evaluationError.errorType)
+        )
+        LogicErrorMsg.ErrorCase.EXISTENCEERROR -> DistributedError.ExistenceError(
+            message,
+            cause,
+            extraData,
+            ExistenceError.ObjectType.valueOf(this.existenceError.expectedObject),
+            this.existenceError.culprit.deserialize()
+        )
+        LogicErrorMsg.ErrorCase.INSTANTIATIONERROR -> DistributedError.InstantiationError(
+            message,
+            cause,
+            extraData,
+            this.instantiationError.culprit.deserialize().castToVar()
+        )
+        LogicErrorMsg.ErrorCase.PERMISSIONERROR -> DistributedError.PermissionError(
+            message,
+            cause,
+            extraData,
+            PermissionError.Operation.valueOf(this.permissionError.operation),
+            PermissionError.Permission.valueOf(this.permissionError.permission),
+            this.permissionError.culprit.deserialize()
+        )
+        LogicErrorMsg.ErrorCase.REPRESENTATIONERROR -> DistributedError.RepresentationError(
+            message,
+            cause,
+            extraData,
+            RepresentationError.Limit.valueOf(this.representationError.limit)
+        )
+        LogicErrorMsg.ErrorCase.SYNTAXERROR -> DistributedError.SyntaxError(message, cause, extraData)
+        LogicErrorMsg.ErrorCase.SYSTEMERROR -> DistributedError.SystemError(message, cause, extraData)
+        LogicErrorMsg.ErrorCase.TYPEERROR -> DistributedError.TypeError(
+            message,
+            cause,
+            extraData,
+            TypeError.Expected.valueOf(this.typeError.expectedType),
+            this.typeError.culprit.deserialize()
+        )
+        else -> DistributedError.LogicError(message, cause, type.deserialize().castToStruct(), extraData)
     }
 }

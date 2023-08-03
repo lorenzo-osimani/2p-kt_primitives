@@ -5,13 +5,15 @@ import it.unibo.tuprolog.primitives.GeneratorMsg
 import it.unibo.tuprolog.primitives.RequestMsg
 import it.unibo.tuprolog.primitives.SolverMsg
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitive
+import it.unibo.tuprolog.primitives.server.session.event.SubRequestEvent
 
-interface ServerSession : Session, ContextRequester {
+interface ServerSession : Session {
 
     fun handleMessage(msg: SolverMsg)
 
-    companion object {
+    fun enqueueRequestAndAwait(request: SubRequestEvent): Any?
 
+    companion object {
         fun of(
             primitive: DistributedPrimitive,
             request: RequestMsg,

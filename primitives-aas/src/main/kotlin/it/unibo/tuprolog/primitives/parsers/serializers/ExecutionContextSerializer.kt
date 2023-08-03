@@ -8,14 +8,12 @@ import it.unibo.tuprolog.primitives.messages.LibrariesMsg
 import it.unibo.tuprolog.primitives.messages.LibraryMsg
 import it.unibo.tuprolog.primitives.messages.OperatorMsg
 import it.unibo.tuprolog.primitives.messages.OperatorSetMsg
-import it.unibo.tuprolog.primitives.messages.TheoryMsg
 import it.unibo.tuprolog.primitives.messages.UnificatorMsg
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.data.CustomDataStore
 import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.solve.library.Library
 import it.unibo.tuprolog.solve.library.Runtime
-import it.unibo.tuprolog.theory.Theory
 import it.unibo.tuprolog.unify.Unificator
 
 fun ExecutionContext.serialize(): ExecutionContextMsg =
@@ -61,11 +59,6 @@ fun Library.serialize(): LibraryMsg =
 fun FlagStore.serialize(): FlagsMsg =
     FlagsMsg.newBuilder()
         .putAllFlags(this.mapValues { it.value.serialize() })
-        .build()
-
-fun Theory.serialize(): TheoryMsg =
-    TheoryMsg.newBuilder()
-        .addAllClauses(this.clauses.map { it.serialize() })
         .build()
 
 fun OperatorSet.serialize(): OperatorSetMsg =

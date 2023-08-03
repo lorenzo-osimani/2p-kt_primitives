@@ -63,98 +63,64 @@ fun ErrorMsg.deserialize(scope: Scope = Scope.empty(), actualContext: ExecutionC
 
 fun LogicErrorMsg.deserialize(message: String?, cause: Throwable?, context: ExecutionContext): LogicError {
     val extraData =
-        if (this.extraData != ArgumentMsg.getDefaultInstance()) {
-            this.extraData.deserialize()
-        } else {
-            null
-        }
+        if (this.extraData != ArgumentMsg.getDefaultInstance()) { this.extraData.deserialize() } else { null }
     return when (this.errorCase) {
-        LogicErrorMsg.ErrorCase.DOMAINERROR -> {
-            val error = this.domainError
-            DomainError(
-                message,
-                cause,
-                context,
-                DomainError.Expected.valueOf(error.expectedDomain),
-                error.culprit.deserialize(),
-                extraData
-            )
-        }
-        LogicErrorMsg.ErrorCase.EVALUATIONERROR -> {
-            EvaluationError(
-                message,
-                cause,
-                context,
-                EvaluationError.Type.valueOf(this.evaluationError.errorType),
-                extraData
-            )
-        }
-        LogicErrorMsg.ErrorCase.EXISTENCEERROR -> {
-            val error = this.existenceError
-            ExistenceError(
-                message,
-                cause,
-                context,
-                ExistenceError.ObjectType.valueOf(error.expectedObject),
-                error.culprit.deserialize(),
-                extraData
-            )
-        }
-        LogicErrorMsg.ErrorCase.INSTANTIATIONERROR -> {
-            InstantiationError(
-                message,
-                cause,
-                context,
-                this.instantiationError.culprit.deserialize().castToVar(),
-                extraData
-            )
-        }
-        LogicErrorMsg.ErrorCase.PERMISSIONERROR -> {
-            val error = this.permissionError
-            PermissionError(
-                message,
-                cause,
-                context,
-                PermissionError.Operation.valueOf(error.operation),
-                PermissionError.Permission.valueOf(error.permission),
-                this.permissionError.culprit.deserialize(),
-                extraData
-            )
-        }
-        LogicErrorMsg.ErrorCase.REPRESENTATIONERROR -> {
-            RepresentationError(
-                message,
-                cause,
-                context,
-                RepresentationError.Limit.valueOf(this.representationError.limit),
-                extraData
-            )
-        }
-        LogicErrorMsg.ErrorCase.SYNTAXERROR -> {
-            SyntaxError(message, cause, context, extraData)
-        }
-        LogicErrorMsg.ErrorCase.SYSTEMERROR -> {
-            SystemError(message, cause, context, extraData)
-        }
-        LogicErrorMsg.ErrorCase.TYPEERROR -> {
-            val error = this.typeError
-            TypeError(
-                message,
-                cause,
-                context,
-                TypeError.Expected.valueOf(error.expectedType),
-                this.typeError.culprit.deserialize(),
-                extraData
-            )
-        }
-        else -> {
-            LogicError.of(
-                message,
-                cause,
-                context,
-                type.deserialize().castToStruct(),
-                extraData
-            )
-        }
+        LogicErrorMsg.ErrorCase.DOMAINERROR -> DomainError(
+            message,
+            cause,
+            context,
+            DomainError.Expected.valueOf(this.domainError.expectedDomain),
+            this.domainError.culprit.deserialize(),
+            extraData
+        )
+        LogicErrorMsg.ErrorCase.EVALUATIONERROR -> EvaluationError(
+            message,
+            cause,
+            context,
+            EvaluationError.Type.valueOf(this.evaluationError.errorType),
+            extraData
+        )
+        LogicErrorMsg.ErrorCase.EXISTENCEERROR -> ExistenceError(
+            message,
+            cause,
+            context,
+            ExistenceError.ObjectType.valueOf(this.existenceError.expectedObject),
+            this.existenceError.culprit.deserialize(),
+            extraData
+        )
+        LogicErrorMsg.ErrorCase.INSTANTIATIONERROR -> InstantiationError(
+            message,
+            cause,
+            context,
+            this.instantiationError.culprit.deserialize().castToVar(),
+            extraData
+        )
+        LogicErrorMsg.ErrorCase.PERMISSIONERROR -> PermissionError(
+            message,
+            cause,
+            context,
+            PermissionError.Operation.valueOf(this.permissionError.operation),
+            PermissionError.Permission.valueOf(this.permissionError.permission),
+            this.permissionError.culprit.deserialize(),
+            extraData
+        )
+        LogicErrorMsg.ErrorCase.REPRESENTATIONERROR -> RepresentationError(
+            message,
+            cause,
+            context,
+            RepresentationError.Limit.valueOf(this.representationError.limit),
+            extraData
+        )
+        LogicErrorMsg.ErrorCase.SYNTAXERROR -> SyntaxError(message, cause, context, extraData)
+        LogicErrorMsg.ErrorCase.SYSTEMERROR -> SystemError(message, cause, context, extraData)
+        LogicErrorMsg.ErrorCase.TYPEERROR -> TypeError(
+            message,
+            cause,
+            context,
+            TypeError.Expected.valueOf(this.typeError.expectedType),
+            this.typeError.culprit.deserialize(),
+            extraData
+        )
+        else -> LogicError.of(message, cause, context, type.deserialize().castToStruct(), extraData)
     }
 }

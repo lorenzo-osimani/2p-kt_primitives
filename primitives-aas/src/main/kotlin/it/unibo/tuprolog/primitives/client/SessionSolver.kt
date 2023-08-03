@@ -1,6 +1,6 @@
 package it.unibo.tuprolog.primitives.client
 
-import io.grpc.stub.StreamObserver
+import it.unibo.tuprolog.primitives.GenericGetMsg
 import it.unibo.tuprolog.primitives.InspectKbMsg
 import it.unibo.tuprolog.primitives.ReadLineMsg
 import it.unibo.tuprolog.primitives.SolverMsg
@@ -12,38 +12,25 @@ interface SessionSolver {
 
     /** Solve a query requested by the primitive server and sends the result.
      *  It can be blocking */
-    fun solve(id: String, event: SubSolveRequest)
+    fun solve(id: String, event: SubSolveRequest): SolverMsg
 
     /** Reads a character from an Input channel and sends it to the Primitive Server.
      *  It returns 'failed' if the read fails.
      */
-    fun readLine(id: String, event: ReadLineMsg)
+    fun readLine(id: String, event: ReadLineMsg): SolverMsg
 
     /** Inspect a Kb with eventual filters and returns a filtered Theory
      */
-    fun inspectKb(id: String, event: InspectKbMsg)
+    fun inspectKb(id: String, event: InspectKbMsg): SolverMsg
 
-    fun getLogicStackTrace(id: String)
-
-    fun getCustomDataStore(id: String)
-
-    fun getUnificator(id: String)
-
-    fun getLibraries(id: String)
-
-    fun getFlagStore(id: String)
-
-    fun getOperators(id: String)
-
-    fun getInputStoreAliases(id: String)
-
-    fun getOutputStoreAliases(id: String)
+    /** Returns a specific element of the execution context
+     */
+    fun getExecutionContextElement(id: String, type: GenericGetMsg.Element): SolverMsg
 
     companion object {
         fun of(
-            responseObserver: StreamObserver<SolverMsg>,
             executionContext: ExecutionContext
         ): SessionSolverImpl =
-            SessionSolverImpl(responseObserver, executionContext)
+            SessionSolverImpl(executionContext)
     }
 }

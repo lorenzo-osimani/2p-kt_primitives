@@ -8,6 +8,7 @@ import it.unibo.tuprolog.primitives.sideEffects.AlterOperatorsMsg
 import it.unibo.tuprolog.primitives.sideEffects.AlterRuntimeMsg
 import it.unibo.tuprolog.primitives.sideEffects.SetClausesOfKBMsg
 import it.unibo.tuprolog.primitives.sideEffects.SideEffectMsg
+import it.unibo.tuprolog.primitives.sideEffects.WriteOnOutputChannelMsg
 import it.unibo.tuprolog.solve.channel.InputChannel
 import it.unibo.tuprolog.solve.channel.OutputChannel
 import it.unibo.tuprolog.solve.library.Library
@@ -15,146 +16,192 @@ import it.unibo.tuprolog.solve.library.Runtime
 import it.unibo.tuprolog.solve.sideffects.SideEffect
 
 fun SideEffectMsg.deserialize(): SideEffect {
-    when (this.msgCase) {
+    return when (this.msgCase) {
         SideEffectMsg.MsgCase.CLAUSES -> {
-            val effect = this.clauses
-            val clauses = effect.clausesList
-                .map { it.deserialize().castToClause() }
-            when (effect.kbType) {
-                SetClausesOfKBMsg.KbType.STATIC -> {
-                    when (effect.operationType) {
-                        SetClausesOfKBMsg.OpType.RESET ->
-                            return SideEffect.ResetStaticKb(clauses)
-                        SetClausesOfKBMsg.OpType.ADD ->
-                            return SideEffect.AddStaticClauses(clauses, effect.onTop)
-                        SetClausesOfKBMsg.OpType.REMOVE ->
-                            return SideEffect.RemoveStaticClauses(clauses)
-                        else -> {}
-                    }
-                }
-                SetClausesOfKBMsg.KbType.DYNAMIC -> {
-                    when (effect.operationType) {
-                        SetClausesOfKBMsg.OpType.RESET ->
-                            return SideEffect.ResetDynamicKb(clauses)
-                        SetClausesOfKBMsg.OpType.ADD ->
-                            return SideEffect.AddDynamicClauses(clauses, effect.onTop)
-                        SetClausesOfKBMsg.OpType.REMOVE ->
-                            return SideEffect.RemoveDynamicClauses(clauses)
-                        else -> {}
-                    }
-                }
-                else -> {}
-            }
+            this.clauses.deserialize()
         }
         SideEffectMsg.MsgCase.FLAGS -> {
-            val effect = this.flags
-            val flags = effect.flagsMap.map {
-                Pair(it.key, it.value.deserialize())
-            }.toMap()
-            when (effect.operationType) {
-                AlterFlagsMsg.OpType.RESET ->
-                    return SideEffect.ResetFlags(flags)
-                AlterFlagsMsg.OpType.SET ->
-                    return SideEffect.SetFlags(flags)
-                AlterFlagsMsg.OpType.CLEAR ->
-                    return SideEffect.ClearFlags(flags.keys)
-                else -> {}
-            }
+            this.flags.deserialize()
         }
         SideEffectMsg.MsgCase.RUNTIME -> {
-            val effect = this.runtime
-            when (effect.operationType) {
-                AlterRuntimeMsg.OpType.LOAD ->
-                    return SideEffect.LoadLibrary(Library.of(effect.getLibraries(0)))
-                AlterRuntimeMsg.OpType.UNLOAD ->
-                    return SideEffect.UnloadLibraries(effect.librariesList)
-                AlterRuntimeMsg.OpType.RESET ->
-                    return SideEffect.ResetRuntime(Runtime.empty())
-                else -> {}
-            }
+            this.runtime.deserialize()
         }
         SideEffectMsg.MsgCase.OPERATORS -> {
-            val effect = this.operators
-            val operators = effect.operatorsList.map { it.deserialize() }
-            when (effect.operationType) {
-                AlterOperatorsMsg.OpType.SET ->
-                    return SideEffect.SetOperators(operators)
-                AlterOperatorsMsg.OpType.RESET ->
-                    return SideEffect.ResetOperators(operators)
-                AlterOperatorsMsg.OpType.REMOVE ->
-                    return SideEffect.RemoveOperators(operators)
-                else -> {}
-            }
+            this.operators.deserialize()
         }
         SideEffectMsg.MsgCase.CHANNELS -> {
-            val effect = this.channels
-            if (effect.hasClose()) {
-                when (effect.close.channelType) {
-                    AlterChannelsMsg.ChannelType.INPUT -> {
-                        return SideEffect.CloseInputChannels(effect.close.channelsList)
-                    }
-                    AlterChannelsMsg.ChannelType.OUTPUT -> {
-                        return SideEffect.CloseOutputChannels(effect.close.channelsList)
-                    }
-                    else -> {}
-                }
-            } else if (effect.hasModify()) {
-                when (effect.modify.channelType) {
-                    AlterChannelsMsg.ChannelType.INPUT -> {
-                        val inputs = effect.modify.channelsMap.map {
-                            Pair(
-                                it.key,
-                                InputChannel.of(it.value)
-                            )
-                        }.toMap()
-                        when (effect.modify.opType) {
-                            AlterChannelsMsg.ModifyChannels.OpType.OPEN -> {
-                                return SideEffect.OpenInputChannels(inputs)
-                            }
-                            AlterChannelsMsg.ModifyChannels.OpType.RESET -> {
-                                return SideEffect.ResetInputChannels(inputs)
-                            }
-                            else -> {}
-                        }
-                    }
-                    AlterChannelsMsg.ChannelType.OUTPUT -> {
-                        val outputs = effect.modify.channelsMap.map {
-                            Pair(it.key, OutputChannel.of<String> { })
-                        }
-                            .toMap()
-                        when (effect.modify.opType) {
-                            AlterChannelsMsg.ModifyChannels.OpType.OPEN -> {
-                                return SideEffect.OpenOutputChannels(outputs)
-                            }
-                            AlterChannelsMsg.ModifyChannels.OpType.RESET -> {
-                                return SideEffect.ResetOutputChannels(outputs)
-                            }
-                            else -> {}
-                        }
-                    }
-                    else -> {}
-                }
-            } else if (effect.hasWrite()) {
-                return SideEffect.WriteOnOutputChannels(
-                    effect.write.messagesMap.mapValues {
-                        it.value.messageList
-                    }
-                )
-            }
+            this.channels.deserialize()
         }
         SideEffectMsg.MsgCase.CUSTOMDATA -> {
-            val effect = this.customData
-            when (effect.type) {
-                AlterCustomDataMsg.OpType.SET_PERSISTENT ->
-                    return SideEffect.SetPersistentData(effect.dataMap)
-                AlterCustomDataMsg.OpType.SET_DURABLE ->
-                    return SideEffect.SetDurableData(effect.dataMap)
-                AlterCustomDataMsg.OpType.SET_EPHEMERAL ->
-                    return SideEffect.SetEphemeralData(effect.dataMap)
-                else -> {}
+            this.customData.deserialize()
+        }
+        else -> throw ParsingException(this)
+    }
+}
+
+private fun SetClausesOfKBMsg.deserialize(): SideEffect.SetClausesOfKb {
+    val clauses = this.clausesList
+        .map { it.deserialize().castToClause() }
+    val effect = when (this.kbType) {
+        SetClausesOfKBMsg.KbType.STATIC -> {
+            when (this.operationType) {
+                SetClausesOfKBMsg.OpType.RESET ->
+                    SideEffect.ResetStaticKb(clauses)
+                SetClausesOfKBMsg.OpType.ADD ->
+                    SideEffect.AddStaticClauses(clauses, this.onTop)
+                SetClausesOfKBMsg.OpType.REMOVE ->
+                    SideEffect.RemoveStaticClauses(clauses)
+                else -> { null }
             }
         }
-        else -> {}
+        SetClausesOfKBMsg.KbType.DYNAMIC -> {
+            when (this.operationType) {
+                SetClausesOfKBMsg.OpType.RESET ->
+                    SideEffect.ResetDynamicKb(clauses)
+                SetClausesOfKBMsg.OpType.ADD ->
+                    SideEffect.AddDynamicClauses(clauses, this.onTop)
+                SetClausesOfKBMsg.OpType.REMOVE ->
+                    SideEffect.RemoveDynamicClauses(clauses)
+                else -> { null }
+            }
+        }
+        else -> { null }
     }
-    throw ParsingException(this)
+
+    if (effect != null) {
+        return effect
+    } else {
+        throw ParsingException(this)
+    }
+}
+
+private fun AlterFlagsMsg.deserialize(): SideEffect.AlterFlags {
+    val flags = this.flagsMap.map {
+        Pair(it.key, it.value.deserialize())
+    }.toMap()
+    return when (this.operationType) {
+        AlterFlagsMsg.OpType.RESET ->
+            SideEffect.ResetFlags(flags)
+        AlterFlagsMsg.OpType.SET ->
+            SideEffect.SetFlags(flags)
+        AlterFlagsMsg.OpType.CLEAR ->
+            SideEffect.ClearFlags(flags.keys)
+        else -> throw ParsingException(this)
+    }
+}
+
+private fun AlterRuntimeMsg.deserialize(): SideEffect.AlterRuntime {
+    return when (this.operationType) {
+        AlterRuntimeMsg.OpType.LOAD ->
+            SideEffect.LoadLibrary(Library.of(this.getLibraries(0)))
+        AlterRuntimeMsg.OpType.UNLOAD ->
+            SideEffect.UnloadLibraries(this.librariesList)
+        AlterRuntimeMsg.OpType.RESET ->
+            SideEffect.ResetRuntime(Runtime.empty())
+        else -> throw ParsingException(this)
+    }
+}
+
+private fun AlterOperatorsMsg.deserialize(): SideEffect.AlterOperators {
+    val operators = this.operatorsList.map { it.deserialize() }
+    return when (this.operationType) {
+        AlterOperatorsMsg.OpType.SET ->
+            SideEffect.SetOperators(operators)
+        AlterOperatorsMsg.OpType.RESET ->
+            SideEffect.ResetOperators(operators)
+        AlterOperatorsMsg.OpType.REMOVE ->
+            SideEffect.RemoveOperators(operators)
+        else -> throw ParsingException(this)
+    }
+}
+
+private fun AlterChannelsMsg.deserialize(): SideEffect.AlterChannels {
+    val effect: SideEffect.AlterChannels? = if (this.hasClose()) {
+        closeChannels(this.close.channelType, this.close.channelsList)
+    } else if (this.hasModify()) {
+        modifyChannels(this.modify.channelType, this.modify.opType, this.modify.channelsMap)
+    } else if (this.hasWrite()) {
+        writeOnChannels(this.write.messagesMap)
+    } else { null }
+
+    if (effect != null) {
+        return effect
+    } else {
+        throw ParsingException(this)
+    }
+}
+
+private fun closeChannels(
+    channelType: AlterChannelsMsg.ChannelType,
+    channelsList: Iterable<String>
+): SideEffect.AlterChannels? =
+    when (channelType) {
+        AlterChannelsMsg.ChannelType.INPUT -> {
+            SideEffect.CloseInputChannels(channelsList)
+        }
+        AlterChannelsMsg.ChannelType.OUTPUT -> {
+            SideEffect.CloseOutputChannels(channelsList)
+        }
+        else -> { null }
+    }
+
+private fun modifyChannels(
+    channelType: AlterChannelsMsg.ChannelType,
+    opType: AlterChannelsMsg.ModifyChannels.OpType,
+    channelsMap: Map<String, String>
+): SideEffect.AlterChannels? =
+    when (channelType) {
+        AlterChannelsMsg.ChannelType.INPUT -> {
+            val inputs = channelsMap.map {
+                Pair(
+                    it.key,
+                    InputChannel.of(it.value)
+                )
+            }.toMap()
+            when (opType) {
+                AlterChannelsMsg.ModifyChannels.OpType.OPEN -> {
+                    SideEffect.OpenInputChannels(inputs)
+                }
+                AlterChannelsMsg.ModifyChannels.OpType.RESET -> {
+                    SideEffect.ResetInputChannels(inputs)
+                }
+                else -> { null }
+            }
+        }
+        AlterChannelsMsg.ChannelType.OUTPUT -> {
+            val outputs = channelsMap.map {
+                Pair(it.key, OutputChannel.of<String> { })
+            }
+                .toMap()
+            when (opType) {
+                AlterChannelsMsg.ModifyChannels.OpType.OPEN -> {
+                    SideEffect.OpenOutputChannels(outputs)
+                }
+                AlterChannelsMsg.ModifyChannels.OpType.RESET -> {
+                    SideEffect.ResetOutputChannels(outputs)
+                }
+                else -> { null }
+            }
+        }
+        else -> { null }
+    }
+
+private fun writeOnChannels(
+    messagesMap: Map<String, WriteOnOutputChannelMsg.Messages>
+): SideEffect.AlterChannels =
+    SideEffect.WriteOnOutputChannels(
+        messagesMap.mapValues {
+            it.value.messageList
+        }
+    )
+private fun AlterCustomDataMsg.deserialize(): SideEffect.AlterCustomData {
+    return when (this.type) {
+        AlterCustomDataMsg.OpType.SET_PERSISTENT ->
+            SideEffect.SetPersistentData(this.dataMap)
+        AlterCustomDataMsg.OpType.SET_DURABLE ->
+            SideEffect.SetDurableData(this.dataMap)
+        AlterCustomDataMsg.OpType.SET_EPHEMERAL ->
+            SideEffect.SetEphemeralData(this.dataMap)
+        else -> throw ParsingException(this)
+    }
 }

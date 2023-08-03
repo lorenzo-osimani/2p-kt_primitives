@@ -5,10 +5,9 @@ import it.unibo.tuprolog.primitives.LineMsg
 import it.unibo.tuprolog.primitives.SubResponseMsg
 import it.unibo.tuprolog.primitives.parsers.serializers.distribuited.buildReadLineMsg
 import it.unibo.tuprolog.primitives.server.session.event.SubRequestEvent
+import it.unibo.tuprolog.primitives.utils.END_OF_READ_EVENT
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
-
-const val END_OF_READ_EVENT = ""
 
 class ReadLineEvent(
     override val id: String,

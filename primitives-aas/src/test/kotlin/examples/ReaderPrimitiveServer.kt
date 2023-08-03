@@ -5,7 +5,7 @@ import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.primitives.server.PrimitiveServerFactory.startService
 import it.unibo.tuprolog.primitives.server.distribuited.DistributedError
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
-import it.unibo.tuprolog.primitives.server.session.event.impl.END_OF_READ_EVENT
+import it.unibo.tuprolog.primitives.utils.END_OF_READ_EVENT
 
 val readerPrimitive = DistributedPrimitiveWrapper("readLine", 2) { request ->
     sequence {

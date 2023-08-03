@@ -1,15 +1,20 @@
 package it.unibo.tuprolog.primitives.parsers.serializers
 
 import it.unibo.tuprolog.core.Atom
+import it.unibo.tuprolog.core.Clause
 import it.unibo.tuprolog.core.Numeric
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Truth
 import it.unibo.tuprolog.core.Var
+import it.unibo.tuprolog.primitives.SolverMsg
+import it.unibo.tuprolog.primitives.SubResponseMsg
 import it.unibo.tuprolog.primitives.messages.ArgumentMsg
 import it.unibo.tuprolog.primitives.messages.SignatureMsg
 import it.unibo.tuprolog.primitives.messages.StructMsg
+import it.unibo.tuprolog.primitives.messages.TheoryMsg
 import it.unibo.tuprolog.solve.Signature
+import it.unibo.tuprolog.theory.Theory
 
 fun Term.serialize(): ArgumentMsg {
     val builder = ArgumentMsg.newBuilder()
@@ -34,3 +39,18 @@ fun Struct.serialize(): StructMsg {
 
 fun Signature.serialize(): SignatureMsg =
     SignatureMsg.newBuilder().setName(this.name).setArity(this.arity).build()
+
+fun Theory.serialize(): TheoryMsg =
+    TheoryMsg.newBuilder()
+        .addAllClauses(this.clauses.map { it.serialize() })
+        .build()
+
+fun buildClauseMsg(id: String, clause: Clause?): SolverMsg {
+    val builder = SubResponseMsg.newBuilder().setId(id)
+    if (clause != null) {
+        builder.setClause(clause.serialize())
+    } else {
+        builder.setClause(StructMsg.getDefaultInstance())
+    }
+    return SolverMsg.newBuilder().setResponse(builder).build()
+}

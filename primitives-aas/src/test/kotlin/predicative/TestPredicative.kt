@@ -76,4 +76,14 @@ class TestPredicative : KotlinPrimitivesTestSuite() {
             assertEquals(exception.expectedType, TypeError.Expected.NUMBER)
         }
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun testReadLineOnNonExistingChannel() {
+        val solution = logicProgramming {
+            val query = "readLine"("null", X)
+            solver.solveOnce(query)
+        }
+        assertTrue { solution.isNo }
+    }
 }

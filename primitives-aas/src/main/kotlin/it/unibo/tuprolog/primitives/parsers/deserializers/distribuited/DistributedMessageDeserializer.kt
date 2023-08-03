@@ -6,13 +6,14 @@ import it.unibo.tuprolog.primitives.ResponseMsg
 import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedRequest
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedResponse
+import it.unibo.tuprolog.primitives.server.session.ContextRequester
 import it.unibo.tuprolog.primitives.server.session.ServerSession
 
 fun RequestMsg.deserializeAsDistributed(session: ServerSession): DistributedRequest =
     DistributedRequest(
         this.signature.deserialize(),
         this.argumentsList.map { it.deserialize() },
-        this.context.deserializeAsDistributed(contextRequester = session),
+        this.context.deserializeAsDistributed(contextRequester = ContextRequester.of(session)),
         session
     )
 
