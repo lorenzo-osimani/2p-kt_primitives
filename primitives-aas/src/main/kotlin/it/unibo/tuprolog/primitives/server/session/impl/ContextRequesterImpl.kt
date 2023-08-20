@@ -1,9 +1,12 @@
-package it.unibo.tuprolog.primitives.server.session
+package it.unibo.tuprolog.primitives.server.session.impl
 
 import it.unibo.tuprolog.core.Clause
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.operators.OperatorSet
 import it.unibo.tuprolog.primitives.server.distribuited.DistributedRuntime
+import it.unibo.tuprolog.primitives.server.session.ContextRequester
+import it.unibo.tuprolog.primitives.server.session.ServerSession
+import it.unibo.tuprolog.primitives.server.session.Session
 import it.unibo.tuprolog.primitives.server.session.event.impl.GetEvent
 import it.unibo.tuprolog.primitives.server.session.event.impl.SingleInspectKbEvent
 import it.unibo.tuprolog.primitives.utils.checkType

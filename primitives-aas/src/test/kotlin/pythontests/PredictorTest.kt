@@ -101,29 +101,6 @@ class PredictorTest : PythonPrimitivesTestSuite() {
         }
     }
 
-    @Ignore
-    @Test
-    @Throws(Exception::class)
-    fun testClassify() {
-        logicProgramming {
-            val x = 3
-            val query = "createModel"(X) and
-                "getDataset"(Y) and
-                "train"(
-                    X,
-                    Y,
-                    arrayOf("max_epoch"(50), "loss"("cross_entropy")),
-                    W
-                ) and
-                "predict"(W, "row"(x), Z) and
-                "classify"(Z, "argmax", arrayOf("odd", "even"), A)
-            val solution = solver.solveOnce(query)
-            println(solution.substitution[Z])
-            assertEquals(if (x % 2 == 0) "even" else "odd", solution.substitution[A].toString())
-            assertTrue(solution.isYes)
-        }
-    }
-
     @Test
     @Throws(Exception::class)
     fun testScore() {

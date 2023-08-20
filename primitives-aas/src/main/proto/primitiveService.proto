@@ -9,11 +9,11 @@ package primitives;
 import "basicMessages.proto";
 
 service GenericPrimitiveService {
-  rpc callPrimitive(stream SolverMsg) returns (stream GeneratorMsg) {}
+  rpc callPrimitive(stream SolverMsg) returns (stream PrimitiveMsg) {}
   rpc getSignature(EmptyMsg) returns (SignatureMsg) {}
 }
 
-message GeneratorMsg {
+message PrimitiveMsg {
   oneof msg {
     ResponseMsg response = 1;
     SubRequestMsg request = 2;

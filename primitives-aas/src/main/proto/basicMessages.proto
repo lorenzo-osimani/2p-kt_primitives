@@ -36,10 +36,6 @@ message ArgumentMsg {
   }
 }
 
-message TheoryMsg {
-  repeated StructMsg clauses = 1;
-}
-
 message LogicStacktraceMsg {
   repeated StructMsg logicStackTrace = 1;
 }

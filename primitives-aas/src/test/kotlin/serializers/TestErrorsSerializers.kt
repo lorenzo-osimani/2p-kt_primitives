@@ -5,10 +5,10 @@ import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.core.parsing.parse
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
-import it.unibo.tuprolog.primitives.parsers.deserializers.distribuited.deserializeAsDistributed
-import it.unibo.tuprolog.primitives.parsers.serializers.distribuited.serialize
-import it.unibo.tuprolog.primitives.parsers.serializers.serialize
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserialize
+import it.unibo.tuprolog.primitives.serialization.deserializers.distribuited.deserializeAsDistributed
+import it.unibo.tuprolog.primitives.serialization.serializers.distribuited.serialize
+import it.unibo.tuprolog.primitives.serialization.serializers.serialize
 import it.unibo.tuprolog.primitives.utils.DummyContext
 import it.unibo.tuprolog.solve.Signature
 import it.unibo.tuprolog.solve.exception.HaltException

@@ -1,7 +1,7 @@
-package it.unibo.tuprolog.primitives.parsers.serializers.distribuited
+package it.unibo.tuprolog.primitives.serialization.serializers.distribuited
 
 import it.unibo.tuprolog.primitives.SolutionMsg
-import it.unibo.tuprolog.primitives.parsers.serializers.serialize
+import it.unibo.tuprolog.primitives.serialization.serializers.serialize
 import it.unibo.tuprolog.primitives.server.distribuited.DistributedSolution
 
 fun DistributedSolution.serialize(hasNext: Boolean = true): SolutionMsg {

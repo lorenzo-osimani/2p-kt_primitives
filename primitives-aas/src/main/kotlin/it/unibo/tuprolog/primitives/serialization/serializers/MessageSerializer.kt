@@ -1,4 +1,4 @@
-package it.unibo.tuprolog.primitives.parsers.serializers
+package it.unibo.tuprolog.primitives.serialization.serializers
 
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.operators.OperatorSet

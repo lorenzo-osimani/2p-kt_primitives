@@ -1,9 +1,9 @@
-package it.unibo.tuprolog.primitives.parsers.deserializers.distribuited
+package it.unibo.tuprolog.primitives.serialization.deserializers.distribuited
 
 import it.unibo.tuprolog.core.Scope
 import it.unibo.tuprolog.primitives.RequestMsg
 import it.unibo.tuprolog.primitives.ResponseMsg
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserialize
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedRequest
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedResponse
 import it.unibo.tuprolog.primitives.server.session.ContextRequester

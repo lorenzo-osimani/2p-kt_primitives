@@ -1,4 +1,4 @@
-package it.unibo.tuprolog.primitives.parsers.serializers.distribuited
+package it.unibo.tuprolog.primitives.serialization.serializers.distribuited
 
 import it.unibo.tuprolog.primitives.ErrorMsg
 import it.unibo.tuprolog.primitives.errors.DomainErrorMsg
@@ -17,8 +17,8 @@ import it.unibo.tuprolog.primitives.errors.SyntaxErrorMsg
 import it.unibo.tuprolog.primitives.errors.SystemErrorMsg
 import it.unibo.tuprolog.primitives.errors.TimeOutExceptionMsg
 import it.unibo.tuprolog.primitives.errors.TypeErrorMsg
-import it.unibo.tuprolog.primitives.parsers.ParsingException
-import it.unibo.tuprolog.primitives.parsers.serializers.serialize
+import it.unibo.tuprolog.primitives.serialization.ParsingException
+import it.unibo.tuprolog.primitives.serialization.serializers.serialize
 import it.unibo.tuprolog.primitives.server.distribuited.DistributedError
 
 fun DistributedError.serialize(): ErrorMsg {

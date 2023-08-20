@@ -1,4 +1,4 @@
-package it.unibo.tuprolog.primitives.parsers
+package it.unibo.tuprolog.primitives.serialization
 
 import com.google.protobuf.GeneratedMessageV3
 

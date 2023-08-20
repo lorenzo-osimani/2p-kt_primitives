@@ -8,10 +8,11 @@ import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimiti
 import it.unibo.tuprolog.primitives.utils.END_OF_READ_EVENT
 
 val readerPrimitive = DistributedPrimitiveWrapper("readLine", 2) { request ->
+    var line = END_OF_READ_EVENT
     sequence {
-        while (true) {
+        do {
             try {
-                val line = request.readLine(request.arguments[0].castToAtom().toString())
+                line = request.readLine(request.arguments[0].castToAtom().toString())
                 if (line != END_OF_READ_EVENT) {
                     yield(request.replySuccess(Substitution.of(request.arguments[1].castToVar(), Atom.of(line))))
                 } else {
@@ -21,6 +22,7 @@ val readerPrimitive = DistributedPrimitiveWrapper("readLine", 2) { request ->
                 yield(request.replyError(DistributedError.ResolutionException(e.toString(), e)))
             }
         }
+        while (line != END_OF_READ_EVENT)
     }
 }
 

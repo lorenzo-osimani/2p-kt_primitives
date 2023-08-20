@@ -58,11 +58,9 @@ data class DistributedExecutionContext(
     fun filterDynamicKb(
         maxClauses: Long = -1,
         vararg filters: Pair<Session.KbFilter, String>
-    ): Theory {
-        return Theory.of(
-            contextRequester!!.inspectKB(Session.KbType.DYNAMIC, maxClauses, *filters)
-                .filterNotNull().toList()
-        )
+    ): Sequence<Clause?> {
+        return contextRequester!!.inspectKB(Session.KbType.DYNAMIC, maxClauses, *filters)
+            .filterNotNull()
     }
 
     fun toDummyContext(): ExecutionContext {

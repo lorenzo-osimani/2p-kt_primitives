@@ -4,6 +4,7 @@ import it.unibo.tuprolog.core.Clause
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.operators.OperatorSet
 import it.unibo.tuprolog.primitives.server.distribuited.DistributedRuntime
+import it.unibo.tuprolog.primitives.server.session.impl.ContextRequesterImpl
 import it.unibo.tuprolog.solve.data.CustomDataStore
 import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.unify.Unificator

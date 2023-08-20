@@ -20,7 +20,7 @@ import it.unibo.tuprolog.unify.Unificator
 
 open class DummyContext : ExecutionContext {
 
-    override val unificator: Unificator = Unificator.default
+    final override val unificator: Unificator = Unificator.default
 
     override val procedure: Struct? = Struct.of("dummy", Atom.of("hello"))
 

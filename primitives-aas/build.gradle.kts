@@ -10,7 +10,6 @@ plugins {
 }
 dependencies {
     implementation(project(mapOf("path" to ":solve")))
-    implementation(project(mapOf("path" to ":solve")))
 }
 
 kotlin {

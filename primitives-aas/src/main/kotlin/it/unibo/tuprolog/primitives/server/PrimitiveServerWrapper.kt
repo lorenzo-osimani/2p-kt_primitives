@@ -3,12 +3,12 @@ package it.unibo.tuprolog.primitives.server
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
 import io.grpc.stub.StreamObserver
-import it.unibo.tuprolog.primitives.GeneratorMsg
 import it.unibo.tuprolog.primitives.GenericPrimitiveServiceGrpc
+import it.unibo.tuprolog.primitives.PrimitiveMsg
 import it.unibo.tuprolog.primitives.SolverMsg
 import it.unibo.tuprolog.primitives.messages.EmptyMsg
 import it.unibo.tuprolog.primitives.messages.SignatureMsg
-import it.unibo.tuprolog.primitives.parsers.serializers.serialize
+import it.unibo.tuprolog.primitives.serialization.serializers.serialize
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitive
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitiveWrapper
 import it.unibo.tuprolog.primitives.server.session.ServerSession
@@ -24,7 +24,7 @@ class PrimitiveServerWrapper private constructor(
 
     val signature: Signature by lazy { Signature(functor, arity) }
 
-    override fun callPrimitive(responseObserver: StreamObserver<GeneratorMsg>): StreamObserver<SolverMsg> {
+    override fun callPrimitive(responseObserver: StreamObserver<PrimitiveMsg>): StreamObserver<SolverMsg> {
         return object : StreamObserver<SolverMsg> {
 
             private var session: ServerSession? = null

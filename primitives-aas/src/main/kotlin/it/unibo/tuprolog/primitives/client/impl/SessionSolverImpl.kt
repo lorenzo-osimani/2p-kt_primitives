@@ -9,18 +9,18 @@ import it.unibo.tuprolog.primitives.ReadLineMsg
 import it.unibo.tuprolog.primitives.SolverMsg
 import it.unibo.tuprolog.primitives.SubSolveRequest
 import it.unibo.tuprolog.primitives.client.SessionSolver
-import it.unibo.tuprolog.primitives.parsers.ParsingException
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
-import it.unibo.tuprolog.primitives.parsers.serializers.buildChannelResponse
-import it.unibo.tuprolog.primitives.parsers.serializers.buildClauseMsg
-import it.unibo.tuprolog.primitives.parsers.serializers.buildCustomDataStoreResponse
-import it.unibo.tuprolog.primitives.parsers.serializers.buildFlagStoreResponse
-import it.unibo.tuprolog.primitives.parsers.serializers.buildLibrariesResponse
-import it.unibo.tuprolog.primitives.parsers.serializers.buildLineMsg
-import it.unibo.tuprolog.primitives.parsers.serializers.buildLogicStackTraceResponse
-import it.unibo.tuprolog.primitives.parsers.serializers.buildOperatorsResponse
-import it.unibo.tuprolog.primitives.parsers.serializers.buildSubSolveSolutionMsg
-import it.unibo.tuprolog.primitives.parsers.serializers.buildUnificatorResponse
+import it.unibo.tuprolog.primitives.serialization.ParsingException
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserialize
+import it.unibo.tuprolog.primitives.serialization.serializers.buildChannelResponse
+import it.unibo.tuprolog.primitives.serialization.serializers.buildClauseMsg
+import it.unibo.tuprolog.primitives.serialization.serializers.buildCustomDataStoreResponse
+import it.unibo.tuprolog.primitives.serialization.serializers.buildFlagStoreResponse
+import it.unibo.tuprolog.primitives.serialization.serializers.buildLibrariesResponse
+import it.unibo.tuprolog.primitives.serialization.serializers.buildLineMsg
+import it.unibo.tuprolog.primitives.serialization.serializers.buildLogicStackTraceResponse
+import it.unibo.tuprolog.primitives.serialization.serializers.buildOperatorsResponse
+import it.unibo.tuprolog.primitives.serialization.serializers.buildSubSolveSolutionMsg
+import it.unibo.tuprolog.primitives.serialization.serializers.buildUnificatorResponse
 import it.unibo.tuprolog.primitives.utils.END_OF_READ_EVENT
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.Solution
@@ -68,16 +68,20 @@ class SessionSolverImpl(
                 when (filter.type) {
                     InspectKbMsg.FilterType.CONTAINS_FUNCTOR -> {
                         { clause: Clause ->
-                            clause.bodyItems.any {
-                                it.isStruct && it.castToStruct().functor == filter.argument
-                            }
+                            (clause.head?.functor == filter.argument) or
+                                ((clause.head?.args?.plus(clause.bodyItems))?.any {
+                                    println(it.toString() + " " + it.isStruct)
+                                    it.isStruct && it.castToStruct().functor == filter.argument
+                                } == true)
                         }
                     }
                     InspectKbMsg.FilterType.CONTAINS_TERM -> {
                         { clause: Clause ->
-                            clause.bodyItems.any {
-                                it.structurallyEquals(Term.parse(filter.argument))
-                            }
+                            val argument = Term.parse(filter.argument)
+                            (clause.head?.structurallyEquals(argument) == true) or
+                                ((clause.head?.args?.plus(clause.bodyItems))?.any {
+                                    it.structurallyEquals(argument)
+                                } == true)
                         }
                     }
                     InspectKbMsg.FilterType.STARTS_WITH -> {

@@ -7,6 +7,7 @@ import it.unibo.tuprolog.core.Clause
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.dsl.logicProgramming
+import it.unibo.tuprolog.solve.Solution
 import it.unibo.tuprolog.theory.Theory
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -79,11 +80,6 @@ class DemoTest : PythonPrimitivesTestSuite() {
                                 "neural_network"(D, E)
                             )
                     },
-                    rule {
-                        "getDataset"(X) `if` (
-                            "theory_to_dataset"(schemaName, X)
-                            )
-                    },
                     /* Trains a NN multiple times, over Dataset, using the provided Params. */
                     /* Returns the AveragePerformance over a 10-fold CV. */
                     rule {
@@ -137,9 +133,7 @@ class DemoTest : PythonPrimitivesTestSuite() {
     private val schemaName = "autoMpg"
     val path = "/auto-mpg.csv"
 
-    @Test
-    fun testDemo() {
-        val startingTime = System.currentTimeMillis()
+    fun demoFunction(): Solution {
         val csv = readStrictCsv(path)
         solver.appendStaticKb(
             fromCSVtoTheory(
@@ -148,22 +142,46 @@ class DemoTest : PythonPrimitivesTestSuite() {
                 arrayOf(csv.first().keys.first())
             )
         )
-        logicProgramming {
+        return logicProgramming {
             val performancesVar = Var.of("AllPerformances")
             solver.solveOnce(
-                "getDataset"("Dataset") and
+                "theory_to_dataset"(schemaName, "Dataset") and
                     "preprocessing"("Dataset", csv.first().keys.drop(1).map { Atom.of(it) }, "Transformed") and
                     "train_cv"(
                         "Transformed",
                         arrayOf("max_epoch"(100), "loss"("mse")),
                         performancesVar
                     )
-            ).let {
-                println(it)
-                assertTrue(it.isYes)
-                assertFalse(it.substitution[performancesVar]!!.castToList().isEmptyList)
-            }
+            )
+        }.also { println(it) }
+    }
+
+    @Test
+    fun testDemo() {
+        demoFunction().let {
+            assertTrue(it.isYes)
+            val maes = it.substitution.getByName("AllPerformances")!!.castToList().unfoldedList.dropLast(1)
+            assertFalse(maes.isEmpty())
+            println("List is $maes")
+            println("Mean Absolute Error Average: ${
+                maes.sumOf { mae ->
+                    mae.castToNumeric().decimalValue.toDouble()
+                } / maes.size
+            }")
         }
-        println("Execution time was ${(System.currentTimeMillis() - startingTime) / 1000.0}")
     }
 }
+
+fun main() {
+    val times = mutableListOf<Double>()
+    (0 until 50).forEach { _ ->
+        val testSuite = DemoTest()
+        testSuite.beforeEach()
+        val startingTime = System.currentTimeMillis()
+        testSuite.demoFunction()
+        times.add((System.currentTimeMillis() - startingTime) / 1000.0)
+        testSuite.afterEach()
+    }
+    println("Average time ${times.sum() / times.size}")
+}
+

@@ -1,4 +1,4 @@
-package it.unibo.tuprolog.primitives.parsers.deserializers
+package it.unibo.tuprolog.primitives.serialization.deserializers
 
 import it.unibo.tuprolog.core.Atom
 import it.unibo.tuprolog.core.Clause
@@ -15,9 +15,7 @@ import it.unibo.tuprolog.primitives.messages.ArgumentMsg
 import it.unibo.tuprolog.primitives.messages.OperatorMsg
 import it.unibo.tuprolog.primitives.messages.SignatureMsg
 import it.unibo.tuprolog.primitives.messages.StructMsg
-import it.unibo.tuprolog.primitives.messages.TheoryMsg
 import it.unibo.tuprolog.solve.Signature
-import it.unibo.tuprolog.theory.Theory
 
 fun ArgumentMsg.deserialize(scope: Scope = Scope.empty()): Term =
     if (this.hasVar()) {
@@ -54,10 +52,3 @@ fun SignatureMsg.deserialize(): Signature = Signature(this.name, this.arity)
 
 fun OperatorMsg.deserialize(): Operator =
     Operator(this.functor, Specifier.valueOf(this.specifier), this.priority)
-
-fun TheoryMsg.deserialize(): Theory =
-    Theory.of(
-        this.clausesList.map {
-            it.deserialize().castToClause()
-        }
-    )

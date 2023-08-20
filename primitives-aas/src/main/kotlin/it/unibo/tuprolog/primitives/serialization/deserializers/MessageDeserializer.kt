@@ -1,4 +1,4 @@
-package it.unibo.tuprolog.primitives.parsers.deserializers
+package it.unibo.tuprolog.primitives.serialization.deserializers
 
 import it.unibo.tuprolog.core.Scope
 import it.unibo.tuprolog.primitives.RequestMsg

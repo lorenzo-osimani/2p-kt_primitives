@@ -1,10 +1,10 @@
-package it.unibo.tuprolog.primitives.parsers.deserializers.distribuited
+package it.unibo.tuprolog.primitives.serialization.deserializers.distribuited
 
 import it.unibo.tuprolog.core.Scope
 import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.primitives.messages.ExecutionContextMsg
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserializeVar
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserialize
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserializeVar
 import it.unibo.tuprolog.primitives.server.distribuited.DistributedExecutionContext
 import it.unibo.tuprolog.primitives.server.session.ContextRequester
 

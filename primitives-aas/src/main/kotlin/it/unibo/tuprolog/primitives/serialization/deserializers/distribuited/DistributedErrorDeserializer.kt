@@ -1,10 +1,10 @@
-package it.unibo.tuprolog.primitives.parsers.deserializers.distribuited
+package it.unibo.tuprolog.primitives.serialization.deserializers.distribuited
 
 import it.unibo.tuprolog.core.Scope
 import it.unibo.tuprolog.primitives.ErrorMsg
 import it.unibo.tuprolog.primitives.errors.LogicErrorMsg
-import it.unibo.tuprolog.primitives.parsers.ParsingException
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
+import it.unibo.tuprolog.primitives.serialization.ParsingException
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserialize
 import it.unibo.tuprolog.primitives.server.distribuited.DistributedError
 import it.unibo.tuprolog.solve.exception.error.DomainError
 import it.unibo.tuprolog.solve.exception.error.EvaluationError

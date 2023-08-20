@@ -1,15 +1,16 @@
-package it.unibo.tuprolog.primitives.server.session
+package it.unibo.tuprolog.primitives.server.session.impl
 
 import io.grpc.stub.StreamObserver
 import it.unibo.tuprolog.core.Struct
-import it.unibo.tuprolog.primitives.GeneratorMsg
+import it.unibo.tuprolog.primitives.PrimitiveMsg
 import it.unibo.tuprolog.primitives.RequestMsg
 import it.unibo.tuprolog.primitives.SolverMsg
-import it.unibo.tuprolog.primitives.parsers.deserializers.distribuited.deserializeAsDistributed
-import it.unibo.tuprolog.primitives.parsers.serializers.distribuited.serialize
+import it.unibo.tuprolog.primitives.serialization.deserializers.distribuited.deserializeAsDistributed
+import it.unibo.tuprolog.primitives.serialization.serializers.distribuited.serialize
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimitive
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedRequest
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedResponse
+import it.unibo.tuprolog.primitives.server.session.ServerSession
 import it.unibo.tuprolog.primitives.server.session.event.SubRequestEvent
 import it.unibo.tuprolog.primitives.server.session.event.impl.ReadLineEvent
 import it.unibo.tuprolog.primitives.server.session.event.impl.SingleSubSolveEvent
@@ -23,7 +24,7 @@ import it.unibo.tuprolog.primitives.utils.idGenerator
 class ServerSessionImpl(
     primitive: DistributedPrimitive,
     request: RequestMsg,
-    private val responseObserver: StreamObserver<GeneratorMsg>
+    private val responseObserver: StreamObserver<PrimitiveMsg>
 ) : ServerSession {
 
     private val stream: Iterator<DistributedResponse>
@@ -36,24 +37,19 @@ class ServerSessionImpl(
             this.request
         ).iterator()
     }
+
     override fun handleMessage(msg: SolverMsg) {
         /** Handling Next Request */
         if (msg.hasNext()) {
-            try {
-                val solution = stream.next().serialize(stream.hasNext())
-                responseObserver.onNext(
-                    GeneratorMsg.newBuilder().setResponse(solution).build()
-                )
-                if (!solution.solution.hasNext) responseObserver.onCompleted()
+            val response = try {
+                stream.next().serialize(stream.hasNext())
             } catch (_: NoSuchElementException) {
-                responseObserver.onNext(
-                    GeneratorMsg.newBuilder()
-                        .setResponse(
-                            request.replyFail().serialize(false)
-                        ).build()
-                )
-                responseObserver.onCompleted()
+                request.replyFail().serialize(false)
             }
+            responseObserver.onNext(
+                PrimitiveMsg.newBuilder().setResponse(response).build()
+            )
+            if (!response.solution.hasNext) responseObserver.onCompleted()
         }
         /** Handling SubRequest Event */
         else if (msg.hasResponse()) {

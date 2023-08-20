@@ -2,12 +2,12 @@ package it.unibo.tuprolog.primitives.server.session.event.impl
 
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.operators.OperatorSet
-import it.unibo.tuprolog.primitives.GeneratorMsg
 import it.unibo.tuprolog.primitives.GenericGetMsg
 import it.unibo.tuprolog.primitives.GenericGetResponse
+import it.unibo.tuprolog.primitives.PrimitiveMsg
 import it.unibo.tuprolog.primitives.SubResponseMsg
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
-import it.unibo.tuprolog.primitives.parsers.serializers.distribuited.buildGetMsg
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserialize
+import it.unibo.tuprolog.primitives.serialization.serializers.distribuited.buildGetMsg
 import it.unibo.tuprolog.primitives.server.distribuited.DistributedRuntime
 import it.unibo.tuprolog.primitives.server.session.event.SubRequestEvent
 import it.unibo.tuprolog.solve.data.CustomDataStore
@@ -21,7 +21,7 @@ abstract class GetEvent<T : Any>(
     type: GenericGetMsg.Element
 ) : SubRequestEvent {
 
-    override val message: GeneratorMsg = buildGetMsg(id, type)
+    override val message: PrimitiveMsg = buildGetMsg(id, type)
 
     private val result: CompletableDeferred<GenericGetResponse> = CompletableDeferred()
 

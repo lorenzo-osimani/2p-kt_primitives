@@ -1,9 +1,9 @@
 package serializers
 
 import it.unibo.tuprolog.primitives.ErrorMsg
-import it.unibo.tuprolog.primitives.parsers.ParsingException
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
-import it.unibo.tuprolog.primitives.parsers.serializers.serialize
+import it.unibo.tuprolog.primitives.serialization.ParsingException
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserialize
+import it.unibo.tuprolog.primitives.serialization.serializers.serialize
 import it.unibo.tuprolog.primitives.utils.DummyContext
 import kotlin.test.Test
 import kotlin.test.assertEquals

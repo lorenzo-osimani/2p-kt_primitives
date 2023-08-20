@@ -1,11 +1,11 @@
 package it.unibo.tuprolog.primitives.server.session.event
 
-import it.unibo.tuprolog.primitives.GeneratorMsg
+import it.unibo.tuprolog.primitives.PrimitiveMsg
 import it.unibo.tuprolog.primitives.SubResponseMsg
 
 interface SubRequestEvent {
 
-    val message: GeneratorMsg
+    val message: PrimitiveMsg
 
     val id: String
 

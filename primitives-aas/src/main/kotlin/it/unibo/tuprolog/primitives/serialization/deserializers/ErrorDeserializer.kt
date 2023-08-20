@@ -1,10 +1,10 @@
-package it.unibo.tuprolog.primitives.parsers.deserializers
+package it.unibo.tuprolog.primitives.serialization.deserializers
 
 import it.unibo.tuprolog.core.Scope
 import it.unibo.tuprolog.primitives.ErrorMsg
 import it.unibo.tuprolog.primitives.errors.LogicErrorMsg
 import it.unibo.tuprolog.primitives.messages.ArgumentMsg
-import it.unibo.tuprolog.primitives.parsers.ParsingException
+import it.unibo.tuprolog.primitives.serialization.ParsingException
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.exception.HaltException
 import it.unibo.tuprolog.solve.exception.LogicError

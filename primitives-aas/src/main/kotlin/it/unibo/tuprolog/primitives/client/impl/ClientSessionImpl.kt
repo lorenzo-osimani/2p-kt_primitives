@@ -4,14 +4,14 @@ import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.stub.StreamObserver
 import it.unibo.tuprolog.core.Scope
-import it.unibo.tuprolog.primitives.GeneratorMsg
 import it.unibo.tuprolog.primitives.GenericPrimitiveServiceGrpc
+import it.unibo.tuprolog.primitives.PrimitiveMsg
 import it.unibo.tuprolog.primitives.SolverMsg
 import it.unibo.tuprolog.primitives.client.ClientSession
 import it.unibo.tuprolog.primitives.client.SessionSolver
 import it.unibo.tuprolog.primitives.messages.EmptyMsg
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
-import it.unibo.tuprolog.primitives.parsers.serializers.serialize
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserialize
+import it.unibo.tuprolog.primitives.serialization.serializers.serialize
 import it.unibo.tuprolog.primitives.utils.TERMINATION_TIMEOUT
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.exception.ResolutionException
@@ -39,7 +39,7 @@ class ClientSessionImpl(
         sessionSolver = SessionSolver.of(request.context)
     }
 
-    override fun onNext(value: GeneratorMsg) {
+    override fun onNext(value: PrimitiveMsg) {
         if (value.hasResponse()) {
             if (!value.response.solution.hasNext) {
                 responseStream.onCompleted()

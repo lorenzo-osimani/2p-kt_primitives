@@ -1,4 +1,4 @@
-package it.unibo.tuprolog.primitives.parsers.serializers
+package it.unibo.tuprolog.primitives.serialization.serializers
 
 import it.unibo.tuprolog.primitives.ErrorMsg
 import it.unibo.tuprolog.primitives.errors.DomainErrorMsg
@@ -17,7 +17,7 @@ import it.unibo.tuprolog.primitives.errors.SyntaxErrorMsg
 import it.unibo.tuprolog.primitives.errors.SystemErrorMsg
 import it.unibo.tuprolog.primitives.errors.TimeOutExceptionMsg
 import it.unibo.tuprolog.primitives.errors.TypeErrorMsg
-import it.unibo.tuprolog.primitives.parsers.ParsingException
+import it.unibo.tuprolog.primitives.serialization.ParsingException
 import it.unibo.tuprolog.solve.exception.HaltException
 import it.unibo.tuprolog.solve.exception.LogicError
 import it.unibo.tuprolog.solve.exception.ResolutionException

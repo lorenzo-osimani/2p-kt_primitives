@@ -1,9 +1,9 @@
 package it.unibo.tuprolog.primitives.server.session.event.impl
 
-import it.unibo.tuprolog.primitives.GeneratorMsg
 import it.unibo.tuprolog.primitives.LineMsg
+import it.unibo.tuprolog.primitives.PrimitiveMsg
 import it.unibo.tuprolog.primitives.SubResponseMsg
-import it.unibo.tuprolog.primitives.parsers.serializers.distribuited.buildReadLineMsg
+import it.unibo.tuprolog.primitives.serialization.serializers.distribuited.buildReadLineMsg
 import it.unibo.tuprolog.primitives.server.session.event.SubRequestEvent
 import it.unibo.tuprolog.primitives.utils.END_OF_READ_EVENT
 import kotlinx.coroutines.CompletableDeferred
@@ -14,7 +14,7 @@ class ReadLineEvent(
     channelName: String
 ) : SubRequestEvent {
 
-    override val message: GeneratorMsg = buildReadLineMsg(id, channelName)
+    override val message: PrimitiveMsg = buildReadLineMsg(id, channelName)
 
     private val result: CompletableDeferred<LineMsg> = CompletableDeferred()
 

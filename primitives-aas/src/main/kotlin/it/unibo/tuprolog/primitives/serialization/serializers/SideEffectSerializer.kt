@@ -1,7 +1,7 @@
-package it.unibo.tuprolog.primitives.parsers.serializers
+package it.unibo.tuprolog.primitives.serialization.serializers
 
 import it.unibo.tuprolog.primitives.messages.ArgumentMsg
-import it.unibo.tuprolog.primitives.parsers.ParsingException
+import it.unibo.tuprolog.primitives.serialization.ParsingException
 import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg
 import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg.CloseChannels
 import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg.ModifyChannels

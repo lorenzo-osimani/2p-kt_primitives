@@ -4,8 +4,8 @@ import it.unibo.tuprolog.core.Atom
 import it.unibo.tuprolog.core.Clause
 import it.unibo.tuprolog.core.Numeric
 import it.unibo.tuprolog.core.Struct
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
-import it.unibo.tuprolog.primitives.parsers.serializers.serialize
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserialize
+import it.unibo.tuprolog.primitives.serialization.serializers.serialize
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.sideffects.SideEffect
 import kotlin.test.Test

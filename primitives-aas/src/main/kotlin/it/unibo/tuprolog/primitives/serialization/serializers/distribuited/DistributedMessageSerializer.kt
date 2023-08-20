@@ -1,14 +1,14 @@
-package it.unibo.tuprolog.primitives.parsers.serializers.distribuited
+package it.unibo.tuprolog.primitives.serialization.serializers.distribuited
 
 import it.unibo.tuprolog.core.Struct
-import it.unibo.tuprolog.primitives.GeneratorMsg
 import it.unibo.tuprolog.primitives.GenericGetMsg
 import it.unibo.tuprolog.primitives.InspectKbMsg
+import it.unibo.tuprolog.primitives.PrimitiveMsg
 import it.unibo.tuprolog.primitives.ReadLineMsg
 import it.unibo.tuprolog.primitives.ResponseMsg
 import it.unibo.tuprolog.primitives.SubRequestMsg
 import it.unibo.tuprolog.primitives.SubSolveRequest
-import it.unibo.tuprolog.primitives.parsers.serializers.serialize
+import it.unibo.tuprolog.primitives.serialization.serializers.serialize
 import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedResponse
 import it.unibo.tuprolog.primitives.server.session.Session
 import it.unibo.tuprolog.solve.SolveOptions
@@ -25,16 +25,16 @@ fun buildSubSolveMsg(
     lazy: Boolean = true,
     timeout: Long = SolveOptions.MAX_TIMEOUT,
     limit: Int = SolveOptions.ALL_SOLUTIONS
-): GeneratorMsg =
-    GeneratorMsg.newBuilder().setRequest(
+): PrimitiveMsg =
+    PrimitiveMsg.newBuilder().setRequest(
         SubRequestMsg.newBuilder().setId(id).setSubSolve(
             SubSolveRequest.newBuilder().setQuery(query.serialize())
                 .setLazy(lazy).setTimeout(timeout).setLimit(limit)
         )
     ).build()
 
-fun buildReadLineMsg(id: String, channelName: String): GeneratorMsg =
-    GeneratorMsg.newBuilder().setRequest(
+fun buildReadLineMsg(id: String, channelName: String): PrimitiveMsg =
+    PrimitiveMsg.newBuilder().setRequest(
         SubRequestMsg.newBuilder().setId(id).setReadLine(
             ReadLineMsg.newBuilder().setChannelName(channelName)
         )
@@ -45,8 +45,8 @@ fun buildInspectKbMsg(
     kbType: Session.KbType,
     maxClauses: Long,
     vararg filters: Pair<Session.KbFilter, String>
-): GeneratorMsg =
-    GeneratorMsg.newBuilder().setRequest(
+): PrimitiveMsg =
+    PrimitiveMsg.newBuilder().setRequest(
         SubRequestMsg.newBuilder().setId(id).setInspectKb(
             InspectKbMsg.newBuilder()
                 .setKbType(
@@ -72,8 +72,8 @@ fun buildInspectKbMsg(
         )
     ).build()
 
-fun buildGetMsg(id: String, type: GenericGetMsg.Element): GeneratorMsg =
-    GeneratorMsg.newBuilder().setRequest(
+fun buildGetMsg(id: String, type: GenericGetMsg.Element): PrimitiveMsg =
+    PrimitiveMsg.newBuilder().setRequest(
         SubRequestMsg.newBuilder().setId(id).setGenericGet(
             GenericGetMsg.newBuilder().setElement(type)
         )

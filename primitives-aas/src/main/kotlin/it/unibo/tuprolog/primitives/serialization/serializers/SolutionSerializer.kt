@@ -1,4 +1,4 @@
-package it.unibo.tuprolog.primitives.parsers.serializers
+package it.unibo.tuprolog.primitives.serialization.serializers
 
 import it.unibo.tuprolog.primitives.SolutionMsg
 import it.unibo.tuprolog.solve.Solution

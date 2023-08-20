@@ -1,6 +1,6 @@
-package it.unibo.tuprolog.primitives.parsers.deserializers
+package it.unibo.tuprolog.primitives.serialization.deserializers
 
-import it.unibo.tuprolog.primitives.parsers.ParsingException
+import it.unibo.tuprolog.primitives.serialization.ParsingException
 import it.unibo.tuprolog.primitives.sideEffects.AlterChannelsMsg
 import it.unibo.tuprolog.primitives.sideEffects.AlterCustomDataMsg
 import it.unibo.tuprolog.primitives.sideEffects.AlterFlagsMsg

@@ -3,7 +3,7 @@ package it.unibo.tuprolog.primitives.client
 import io.grpc.ManagedChannelBuilder
 import it.unibo.tuprolog.primitives.GenericPrimitiveServiceGrpc
 import it.unibo.tuprolog.primitives.messages.EmptyMsg
-import it.unibo.tuprolog.primitives.parsers.deserializers.deserialize
+import it.unibo.tuprolog.primitives.serialization.deserializers.deserialize
 import it.unibo.tuprolog.primitives.utils.TERMINATION_TIMEOUT
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.Signature
