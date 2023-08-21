@@ -13,8 +13,8 @@ import it.unibo.tuprolog.primitives.server.distribuited.solve.DistributedPrimiti
 import it.unibo.tuprolog.primitives.server.session.Session
 import it.unibo.tuprolog.theory.Theory
 import kotlin.test.Test
-import kotlin.test.assertTrue
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class TestGetEvents : KotlinPrimitivesTestSuite() {
 
@@ -59,7 +59,7 @@ class TestGetEvents : KotlinPrimitivesTestSuite() {
             solver.appendDynamicKb(
                 Theory.of(
                     Clause.of("p"("f"("a"))),
-                    Clause.of("f"("b")),
+                    Clause.of("f"("b"))
                 )
             )
             val query = "filterKB"(Term.parse("f"), Atom.of(Session.KbFilter.CONTAINS_FUNCTOR.name), X)

@@ -163,11 +163,11 @@ class DemoTest : PythonPrimitivesTestSuite() {
             val maes = it.substitution.getByName("AllPerformances")!!.castToList().unfoldedList.dropLast(1)
             assertFalse(maes.isEmpty())
             println("List is $maes")
-            println("Mean Absolute Error Average: ${
-                maes.sumOf { mae ->
+            println(
+                "Mean Absolute Error Average: ${maes.sumOf { mae ->
                     mae.castToNumeric().decimalValue.toDouble()
-                } / maes.size
-            }")
+                } / maes.size}"
+            )
         }
     }
 }
@@ -184,4 +184,3 @@ fun main() {
     }
     println("Average time ${times.sum() / times.size}")
 }
-

@@ -11,8 +11,10 @@ val filterKBPrimitive = DistributedPrimitiveWrapper("filterKB", 3) { request ->
     val arg2: Term = request.arguments[2]
     if (type.isAtom && arg2.isVar) {
         val filters = arrayOf(Pair(Session.KbFilter.valueOf(type.castToAtom().value), filter.toString()))
-        (request.context.filterStaticKb(filters = filters) +
-            request.context.filterDynamicKb(filters = filters))
+        (
+            request.context.filterStaticKb(filters = filters) +
+                request.context.filterDynamicKb(filters = filters)
+            )
             .map {
                 request.replySuccess(Substitution.of(arg2.castToVar(), it!!))
             }

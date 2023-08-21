@@ -69,19 +69,23 @@ class SessionSolverImpl(
                     InspectKbMsg.FilterType.CONTAINS_FUNCTOR -> {
                         { clause: Clause ->
                             (clause.head?.functor == filter.argument) or
-                                ((clause.head?.args?.plus(clause.bodyItems))?.any {
-                                    println(it.toString() + " " + it.isStruct)
-                                    it.isStruct && it.castToStruct().functor == filter.argument
-                                } == true)
+                                (
+                                    clause.head?.args?.plus(clause.bodyItems)?.any {
+                                        println(it.toString() + " " + it.isStruct)
+                                        it.isStruct && it.castToStruct().functor == filter.argument
+                                    } == true
+                                    )
                         }
                     }
                     InspectKbMsg.FilterType.CONTAINS_TERM -> {
                         { clause: Clause ->
                             val argument = Term.parse(filter.argument)
-                            (clause.head?.structurallyEquals(argument) == true) or
-                                ((clause.head?.args?.plus(clause.bodyItems))?.any {
-                                    it.structurallyEquals(argument)
-                                } == true)
+                            clause.head?.structurallyEquals(argument) == true or
+                                (
+                                    clause.head?.args?.plus(clause.bodyItems)?.any {
+                                        it.structurallyEquals(argument)
+                                    } == true
+                                    )
                         }
                     }
                     InspectKbMsg.FilterType.STARTS_WITH -> {

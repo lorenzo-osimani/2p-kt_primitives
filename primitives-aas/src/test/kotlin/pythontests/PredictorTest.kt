@@ -5,9 +5,7 @@ import PythonPrimitivesTestSuite
 import it.unibo.tuprolog.dsl.theory.logicProgramming
 import it.unibo.tuprolog.theory.Theory
 import kotlin.test.BeforeTest
-import kotlin.test.Ignore
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class PredictorTest : PythonPrimitivesTestSuite() {
