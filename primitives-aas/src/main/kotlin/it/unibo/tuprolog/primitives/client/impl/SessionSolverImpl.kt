@@ -80,7 +80,7 @@ class SessionSolverImpl(
                     InspectKbMsg.FilterType.CONTAINS_TERM -> {
                         { clause: Clause ->
                             val argument = Term.parse(filter.argument)
-                            clause.head?.structurallyEquals(argument) == true or
+                            (clause.head?.structurallyEquals(argument) == true) or
                                 (
                                     clause.head?.args?.plus(clause.bodyItems)?.any {
                                         it.structurallyEquals(argument)
